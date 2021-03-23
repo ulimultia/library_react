@@ -1,33 +1,29 @@
-/*!
-
-=========================================================
-* Paper Dashboard React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // reactstrap components
 import {
-  Card,
-  CardBody,
-  Row,
-  Col,
+  Card,CardBody,
+  FormGroup,Label,Input,
+  Row,Col,
 } from "reactstrap";
-
+import DetailBukuModal from "../../components/DetailBukuModal/index"
+import CardRekomendasi from "../../components/CardRekomendasi/index"
 import Buku from "../../assets/data/Buku"
+import CardFooter from "reactstrap/lib/CardFooter";
 
 class Catalog extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+
+    }
+  }
+
+  // componentDidMount(){
+
+  // }
+
+  // 
+
   render() {
     return (
       <>
@@ -35,13 +31,43 @@ class Catalog extends React.Component {
           <Row>
             <Col xs="12" sm="8">
               <Row>
+              <Col xs="12" sm="4">
+                <FormGroup>
+                  <Label for="inputState">Filter Kategori</Label>
+                  <Input type="select" name="select" id="inputState" >
+                    <option>Semua Kategori</option>
+                    <option value="1">Buku</option>
+                    <option value="2">Novel</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col xs="12" sm="4">
+                <FormGroup>
+                  <Label for="inputState">Filter Genre</Label>
+                  <Input type="select" name="select" id="inputState" >
+                    <option>Semua Kategori</option>
+                    <option value="1">Buku</option>
+                    <option value="2">Novel</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col xs="12" sm="4" className="mb-3">
+                <FormGroup>
+                  <Label for="inputState">Urutkan </Label>
+                  <Input type="select" name="select" id="inputState" >
+                    <option>Semua Kategori</option>
+                    <option value="1">Buku</option>
+                    <option value="2">Novel</option>
+                  </Input>
+                </FormGroup>
+              </Col>
                 {Buku.map((val)=> {
                   return (
                     <Col xs="6" sm="4" className="catalog-book">      
                       <Card className="card-stats">
-                        <a type="button" data-toggle="modal" data-target="#">
+                        {/* <a type="button" data-toggle="modal" data-target="#"> */}
                           <img src={val.sampul} alt=" " className="card-img-top catalog-img "/>
-                        </a> 
+                        {/* </a>  */}
                         <CardBody>
                           <a type="button" data-toggle="modal" data-target="#">
                             <p><b>{val.judul}</b></p>
@@ -50,8 +76,29 @@ class Catalog extends React.Component {
                                 <br></br><span class="text-success"> Tersedia: {val.jumlah} </span>
                                 <br></br><strong>Rp {val.harga},-/minggu</strong> 
                               </p>
-                          </a>   
+                          </a>  
                         </CardBody>
+                        <CardFooter>
+                          <DetailBukuModal 
+                            id = {val.id}
+                            kode = {val.kode}
+                            judul = {val.judul}
+                            kategori = {val.kategori}
+                            genre = {val.genre}
+                            isbn = {val.isbn}
+                            harga = {val.harga}
+                            pengarang = {val.pengarang}
+                            penerbit = {val.penerbit}
+                            tanggal_terbit = {val.tanggal_terbit }
+                            halaman = {val.halaman}
+                            jumlah = {val.jumlah}
+                            lokasi = {val.lokasi}
+                            deskripsi = {val.deskripsi}
+                            sampul = {val.sampul}
+                            buttonLabel = "Detail"
+                            className ="modal-lg"
+                          /> 
+                        </CardFooter>
                       </Card>
                     </Col>
                   )
@@ -59,8 +106,42 @@ class Catalog extends React.Component {
               </Row>
             </Col>
             <Col xs="12" sm="4">
+              <Card className="card-stats">
+                <CardBody>
+                  <Row>
+                    <Col md="4" xs="5">
+                      <div className="icon-big text-center icon-warning">
+                        <i className="nc-icon nc-money-coins text-success" />
+                      </div>
+                    </Col>
+                    <Col md="8" xs="7">
+                      <div className="numbers">
+                        <p className="card-category">Saldo</p>
+                        <b>Rp 123.904,-</b>
+                        <p/>
+                      </div>
+                    </Col>
+                  </Row>
+                  <hr></hr>
+                  <Row className="mb-3">
+                    <Col md="4" xs="5">
+                      <div className="icon-big text-center icon-warning">
+                        <i className="nc-icon nc-bell-55 text-danger" />
+                      </div>
+                    </Col>
+                    <Col md="8" xs="7">
+                      <div className="numbers">
+                        <p className="card-category">Denda</p>
+                        <b>Rp 11.500,-</b>
+                        <p/>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+              <CardRekomendasi jenisRekomendasi = "Buku Terpopuler"/>
+              <CardRekomendasi jenisRekomendasi = "Buku Terbaru"/>
             </Col>
-            
           </Row>
         </div>
       </>
