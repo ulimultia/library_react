@@ -24,16 +24,6 @@ p {
     color: white;
     font-family: 'Bree Serif', serif;
 } */
-p, h3 {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.catalog-img-modal {
-    max-height: 300px;
-    width: 100%;
-    object-fit: cover;
-}
 
 .catalog-book .card .card-body {
     height: 150px;
@@ -47,10 +37,4 @@ p, h3 {
 
 .catalog-book p {
     line-height: 1.25;
-}
-
-@media(max-width:800px) {
-    .catalog-book .card .card-body {
-        height: 175px;
-    }
 }
