@@ -18,16 +18,18 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-
+import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/paper-dashboard.scss?v=1.2.0";
 // import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import "assets/css/style.css"
+import "./index.css";
 import Peminjam from "./app/Peminjam/index"
+import Index from "./app/Home/index"
 ReactDOM.render(
   <React.StrictMode>
-    <Peminjam />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
