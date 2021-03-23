@@ -26,8 +26,8 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import "assets/css/style.css"
 import Peminjam from "./app/Peminjam/index"
 ReactDOM.render(
-  <React.StrictMode>
+
     <Peminjam />
-  </React.StrictMode>,
+  ,
   document.getElementById("root")
 );
