@@ -34,7 +34,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      backgroundColor: "black",
+      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
       activeColor: "warning",
     };
     this.mainPanel = React.createRef();

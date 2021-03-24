@@ -70,7 +70,7 @@ class Sidebar extends React.Component {
             href="#"
             className="simple-text logo-normal"
           >
-            Kreasi-Lib
+            KreasiTech Library
           </a>
         </div>
         <div className="sidebar-wrapper" ref={this.sidebar}>
