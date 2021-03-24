@@ -7,16 +7,67 @@ class Profile extends React.Component {
       <>
         <div className="content">
           <Container>
+          <Card>
             <Row>
               <Col xs="12" md="6">
                 <div className="info-box mb-3">
                   <span
                     className="info-box-icon elevation-1"
                     style={{
-                      background: "linear-gradient(to left, #44a08d, #093637)",
+                      backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
                     }}
                   >
-                    <div></div>
+                    <i className="fas fa-venus-mars text-light"></i>
+                  </span>
+                  <div className="info-box-content">
+                    <span className="info-box-text">Jenis Kelamin</span>
+                    <span className="info-box-number">Laki-laki</span>
+                  </div>
+                </div>
+              </Col>
+              <Col xs="12" md="6">
+                <div className="info-box mb-3">
+                  <span
+                    className="info-box-icon elevation-1"
+                    style={{
+                      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
+                    }}
+                  >
+                    
+                    <i className="fas fa-venus-mars text-light"></i>
+                  </span>
+                  <div className="info-box-content">
+                    <span className="info-box-text">Jenis Kelamin</span>
+                    <span className="info-box-number">Laki-laki</span>
+                  </div>
+                </div>
+              </Col>
+              <Col xs="12" md="6">
+                <div className="info-box mb-3">
+                  <span
+                    className="info-box-icon elevation-1"
+                    style={{
+                      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
+                    }}
+                  >
+                    
+                    <i className="fas fa-venus-mars text-light"></i>
+                  </span>
+                  <div className="info-box-content">
+                    <span className="info-box-text">Jenis Kelamin</span>
+                    <span className="info-box-number">Laki-laki</span>
+                  </div>
+                </div>
+              </Col>
+              <Col xs="12" md="6">
+                <div className="info-box mb-3">
+                  <span
+                    className="info-box-icon elevation-1"
+                    style={{
+                      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
+                    }}
+                  >
+                    
                     <i className="fas fa-venus-mars text-light"></i>
                   </span>
                   <div className="info-box-content">
@@ -26,6 +77,7 @@ class Profile extends React.Component {
                 </div>
               </Col>
             </Row>
+            </Card>
           </Container>
         </div>
       </>

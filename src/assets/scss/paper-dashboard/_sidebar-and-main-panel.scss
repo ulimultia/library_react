@@ -271,7 +271,9 @@
     &[data-color="gradient2"]{
       @include sidebar-color($brown-gradient);
     }
-
+    &[data-color="gradient3"]{
+      @include sidebar-color($green-gradient);
+    }
 
 
     // Active color changing
