@@ -49,6 +49,16 @@ p, h3 {
     line-height: 1.25;
 }
 
+.book-recomendation, .img-recomendation{
+    height: 300px;
+    width: auto;
+    object-fit: cover;
+}
+
+.book-recomendation:hover{
+    opacity: 1;
+}
+
 @media(max-width:800px) {
     .catalog-book .card .card-body {
         height: 175px;
