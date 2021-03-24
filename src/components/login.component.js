@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Button from "./Button";
 import ReactDOM from "react-dom";
 import Peminjam from "../app/Peminjam/index";
+import Admin from "../app/Admin/index";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
@@ -22,15 +23,21 @@ export default class Login extends Component {
     if (email == "admin@admin.com" && password == "admin123") {
       ReactDOM.render(
         <React.StrictMode>
-          <Peminjam />
+          <Admin />
         </React.StrictMode>,
         document.getElementById("root")
       );
     } else {
-        MySwal.fire({
-            title: "Gagal!!!",
-            text: "Username atau Password Salah",
-        })
+      ReactDOM.render(
+        <React.StrictMode>
+          <Peminjam />
+        </React.StrictMode>,
+        document.getElementById("root")
+      );
+        // MySwal.fire({
+        //     title: "Gagal!!!",
+        //     text: "Username atau Password Salah",
+        // })
     }
 
   };
