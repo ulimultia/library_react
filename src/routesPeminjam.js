@@ -29,6 +29,7 @@ import TableList from "views/Tables.js";
 import Maps from "views/Map.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
+import Logout from "views/Peminjam/Logout.js"
 
 // routes peminjam ini digunakan untuk mengisi sidebar aplikasi
 var routesPeminjam = [
@@ -78,7 +79,7 @@ var routesPeminjam = [
     path: "/logout",
     name: "Logout",
     icon: "nc-icon nc-button-power",
-    component: Donasi,
+    component: Logout,
     layout: "/peminjam",
   },
   {
