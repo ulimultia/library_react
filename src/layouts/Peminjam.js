@@ -19,7 +19,7 @@
 import React from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
@@ -36,10 +36,12 @@ class Dashboard extends React.Component {
     this.state = {
       backgroundColor: "gradient2",
       activeColor: "warning",
+      session: localStorage.getItem('user')
     };
     this.mainPanel = React.createRef();
   }
   componentDidMount() {
+    // this.getSession(this.state.session);
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(this.mainPanel.current);
       document.body.classList.toggle("perfect-scrollbar-on");
@@ -57,13 +59,25 @@ class Dashboard extends React.Component {
       document.scrollingElement.scrollTop = 0;
     }
   }
+
+  // getSession = (session) => {
+  //   // const data = localStorage.getItem('user');
+  //   // console.log("isi session:", data);
+  //   if(session!="1"){
+  //     return <Redirect to="/register"/>
+  //   }
+  // }
+
   handleActiveClick = (color) => {
     this.setState({ activeColor: color });
   };
+
   handleBgClick = (color) => {
     this.setState({ backgroundColor: color });
   };
+  
   render() {
+    // this.getSession()
     return (
       <div className="wrapper">
         <Sidebar

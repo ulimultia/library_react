@@ -1,58 +1,58 @@
-import React, { Component } from "react";
-import PerfectScrollbar from "perfect-scrollbar";
-import { Route, Switch } from "react-router-dom";
+import React  from "react";
+// import ComponentLogin from "components/login.component"
+// import Card from "reactstrap/lib/Card";
+// import CardBody from "reactstrap/lib/CardBody";
+import LoginForm from "components/LoginForm"
+// import RegisterForm from "components/RegisterForm"
+import "./login.css"
+
 
 class Login extends React.Component {
+
   render() {
     return (
-      <div className="app">
-          <div className="container">
-            <form>
-              <h3>Sign In</h3>
+      <>
+        <div>
+            <LoginForm/>
+            {/* <RegisterForm /> */}
+          {/* <ComponentLogin /> */}
+          {/* <Card>
+                  <CardBody>
+                      <p class="login-box-msg">Silahkan masuk untuk mendapatkan fitur katalog!</p>
 
-              <div className="form-group">
-                <label>Email address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Enter email"
-                />
-              </div>
+                      <form action="#" method="post" id="login-form">
+                          <span class="font-weight-lighter" id="emailHelp"></span>
+                          <div class="input-group mb-3">
+                              <input type="email" class="form-control" id="email" placeholder="Email">
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-envelope"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <span class="font-weight-lighter" id="passwordHelp"></span>
+                          <div class="input-group mb-3">
+                              <input type="password" class="form-control" id="password" placeholder="Kata sandi">
+                              <div class="input-group-append">
+                                  <div class="input-group-text">
+                                      <span class="fas fa-lock"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="icheck-primary">
+                              <input type="checkbox" id="remember">
+                              <label for="remember"> Remember Me</label>
+                          </div>
+                          <button type="button" class="btn btn-primary btn-block mt-3" id="login-button">Masuk</button>
+                      </form>
 
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Enter password"
-                />
-              </div>
-
-              <div className="form-group">
-                <div className="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="customCheck1"
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor="customCheck1"
-                  >
-                    Remember me
-                  </label>
-                </div>
-              </div>
-
-              <button type="submit" className="btn btn-primary btn-block">
-                Submit
-              </button>
-              <p className="forgot-password text-right">
-                Forgot <a href="#">password?</a>
-              </p>
-            </form>
+                      <p class="text-center mt-3">
+                          Belum punya akun? <a href="register.html">Daftar</a> sekarang.
+                      </p>
+                  </CardBody>
+            </Card> */}
           </div>
-      </div>
+      </>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 // reactstrap components
 import {
   Card,CardBody,
@@ -7,24 +8,48 @@ import {
 } from "reactstrap";
 import DetailBukuModal from "../../components/DetailBukuModal/index"
 import CardRekomendasi from "../../components/CardRekomendasi/index"
-import Buku from "../../assets/data/Buku"
+import CatalogJs from "../../assets/data/datacatalog"
+import TerbaruJs from "../../assets/data/dataterbaru"
+import TerpopulerJs from "../../assets/data/dataterpopuler"
 import CardFooter from "reactstrap/lib/CardFooter";
+// import data from "../../assets/data/Catalog.json" untuk cek link hehehe
 
 class Catalog extends React.Component {
   constructor(){
     super()
     this.state = {
-
+      // data: []
     }
   }
 
-  // componentDidMount(){
+  componentDidMount(){
+    //panggil fungsi getAllCatalog diawal
+    // this.getAllCatalog();
+  }
 
+  // mengambil data json dengan axios
+  // getAllCatalog = () => {
+  //   fetch('.././../assets/data/datacatalog.json')
+  //   .then(res => {
+  //     console.log(res);
+  //     return res.json()
+  //   })
+  //   .then(datajson => {
+  //     this.setState({ data: datajson })
+  //   // axios.get("https://jsonplaceholder.typicode.com/users")
+  //   // .then(res=> { 
+  //   //   console.log("res: ", res);
+  //   //   // this.setState({
+  //   //   //   data: res.data
+  //   //   // })
+  //   // })
+  //   })
+  //   console.log(this.state.data);
   // }
 
-  // 
-
   render() {
+    // const {data} = this.state;
+
     return (
       <>
         <div className="content">
@@ -61,7 +86,7 @@ class Catalog extends React.Component {
                   </Input>
                 </FormGroup>
               </Col>
-                {Buku.map((val)=> {
+                { CatalogJs.map((val)=> {
                   return (
                     <Col xs="6" sm="4" className="catalog-book">      
                       <Card className="card-stats">
@@ -139,8 +164,8 @@ class Catalog extends React.Component {
                   </Row>
                 </CardBody>
               </Card>
-              <CardRekomendasi jenisRekomendasi = "Buku Terpopuler"/>
-              <CardRekomendasi jenisRekomendasi = "Buku Terbaru"/>
+              <CardRekomendasi jenisRekomendasi = "Buku Terpopuler" data={TerpopulerJs}/>
+              <CardRekomendasi jenisRekomendasi = "Buku Terbaru" data={TerbaruJs}/>
             </Col>
           </Row>
         </div>
