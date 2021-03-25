@@ -4,10 +4,9 @@ import {
   Table,
   Row, Col,
 } from "reactstrap";
-import TabelUser from "components/Tabel/TabelUser/index";
+import TabelPengembalian from "../../components/Tabel/TabelPengembalian/index";
 import User from "../../assets/data/User"
-import ModalAddUser from "../../components/Modal/ModalAddUser/index"
-import Button from "../../../src/components/Button"
+import Button from "../../components/Button"
 
 class Tables extends React.Component {
   // handleAdd = (id) => {
@@ -27,23 +26,10 @@ class Tables extends React.Component {
       <>
         <div className="content">
           <Row>
-          
             <Col md="12">
               <Card>
                 <CardBody>
-                <ModalAddUser
-                  classButton="btn-primary btn-sm fa fa-plus float-right"
-                  modalName="Edit Buku"
-                  buttonLabel=" Edit Buku"
-                />
-                </CardBody>
-              </Card>
-
-            </Col>
-            <Col md="12">
-              <Card>
-                <CardBody>
-                  <TabelUser />
+                  <TabelPengembalian />
                 </CardBody>
               </Card>
 
