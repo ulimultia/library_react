@@ -31,8 +31,8 @@ class Tables extends React.Component {
                 <CardBody>
                 <ModalAddUser
                   classButton="btn-primary btn-sm fa fa-plus float-right"
-                  modalName="Edit Buku"
-                  buttonLabel=" Edit Buku"
+                  modalName="Tambah User"
+                  buttonLabel="Tambah User"
                 />
                 </CardBody>
               </Card>
