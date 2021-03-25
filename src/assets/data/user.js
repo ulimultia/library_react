@@ -1,34 +1,48 @@
-const users =
+const User = 
 [
     {
         "id": 1,
+        "role": 1,
         "nama": "Alfian",
-        "nik": "35182939401012342",
-        "role": "0",
-        "email": "alfian@kreasitech.com",
-        "username": "alfian",
-        "password": "admin",
-        "tempat_lahir": "Pati",
-        "tanggal_lahir": "01-01-1998",
-        "alamat": "D.I.Yogyakarta",
-        "telp": "081234567890",
-        "kelamin": "Laki-laki",
-        "foto": "https://icons-for-free.com/iconfiles/png/512/business+costume+male+man+office+user+icon-1320196264882354682.png"
-    },
-    {
+        "password": "123",
+        "kelamin": "Laki-Laki",
+        "tempat": "Pati",
+        "tanggal_lahir": "1998-01-28",
+        "alamat": "Pati, Jawa Tengah",
+        "saldo": "10000"
+        
+    },{
         "id": 2,
-        "nama": "Uli Multia Wijayanti",
-        "nik": "3402121234567890",
-        "role": "1",
-        "email": "ulimultia@kreasitech.com",
-        "username": "ulimultia",
-        "password": "11111",
-        "tempat_lahir": "Bantul",
-        "tanggal_lahir": "23-07-1996",
-        "alamat": "D.I.Yogyakarta",
-        "telp": "089612341234",
+        "role": 1,
+        "nama": "Uli",
+        "password": "123",
         "kelamin": "Perempuan",
-        "foto": "https://image.shutterstock.com/image-vector/vector-silhouettes-girl-hairstyles-profile-600w-486277216.jpg"
+        "tempat": "Jogja",
+        "tanggal_lahir": "1998-01-28",
+        "alamat": "Jogjakarta",
+        "saldo": "10000"
+    
+    },{
+        "id": 3,
+        "role": 2,
+        "nama": "Ali",
+        "password": "123",
+        "kelamin": "Laki-Laki",
+        "tempat": "Semarang",
+        "tanggal_lahir": "1998-01-28",
+        "alamat": "Semarang",
+        "saldo": "10000"
+    },{
+        "id": 4,
+        "role": 2,
+        "nama": "Tono",
+        "password": "123",
+        "kelamin": "Laki-Laki",
+        "tempat": "Cilacap",
+        "tanggal_lahir": "1998-01-28",
+        "alamat": "Cilacap",
+        "saldo": "10000"
     }
 ]
-export default users
+
+export default User
