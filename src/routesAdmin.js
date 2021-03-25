@@ -21,7 +21,7 @@ import Profile from "views/Admin/Profile.js";
 import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
 import Typography from "views/Typography.js";
-import TableList from "views/Tables.js";
+import TableList from "views/Admin/ManageUser.js";
 import Maps from "views/Map.js";
 import UserPage from "views/User.js";
 
@@ -70,7 +70,7 @@ var routesAdmin = [
   },
   {
     path: "/tables",
-    name: "Table List",
+    name: "Daftar User",
     icon: "nc-icon nc-tile-56",
     component: TableList,
     layout: "/admin",

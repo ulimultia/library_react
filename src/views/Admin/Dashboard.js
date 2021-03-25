@@ -63,7 +63,7 @@ class Dashboard extends React.Component {
                 <CardFooter>
                   <hr />
                   <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
                   </div>
                 </CardFooter>
               </Card>
@@ -89,7 +89,7 @@ class Dashboard extends React.Component {
                 <CardFooter>
                   <hr />
                   <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
                   </div>
                 </CardFooter>
               </Card>
@@ -115,7 +115,7 @@ class Dashboard extends React.Component {
                 <CardFooter>
                   <hr />
                   <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
                   </div>
                 </CardFooter>
               </Card>
@@ -141,7 +141,7 @@ class Dashboard extends React.Component {
                 <CardFooter>
                   <hr />
                   <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
                   </div>
                 </CardFooter>
               </Card>
