@@ -21,7 +21,7 @@ const DetailBukuModal = (props) => {
     <div>
       <Button color={warna} onClick={toggle} className={classBtn}><i className="fas fa-info-circle"> </i>  {buttonLabel}</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>Detail Buku</ModalHeader>
+        <ModalHeader toggle={toggle} style={{backgroundImage: "linear-gradient(to bottom right, #23150d,#845f3e)",color: "#ffffff"}}>Detail Buku</ModalHeader>
         <ModalBody>
           <Row>
               <Col xs="12" sm ="4">
