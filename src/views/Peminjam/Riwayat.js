@@ -1,7 +1,6 @@
 import React from "react";
 import {
-  Card,CardHeader,CardBody,CardTitle,
-  Table,
+  Card, CardBody,
   Row,Col,
 } from "reactstrap";
 import TabelRiwayat from "components/TabelRiwayatPeminjam/index";

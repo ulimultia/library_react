@@ -1,11 +1,10 @@
 import React , { Fragment } from 'react';
+import { BrowserRouter, Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import App from "./App";
 // import './App.css';
-import { BrowserRouter, Router, Switch, Route, Redirect, Link } from "react-router-dom";
-
-import Login from "./components/login.component";
-import SignUp from "./components/signup.component";
+// import Login from "./components/login.component";
+// import SignUp from "./components/signup.component";
 import LayoutPeminjam from "layouts/Peminjam"
 import LayoutdAdmin from "layouts/Admin";
 import Index from "layouts/Login.js"

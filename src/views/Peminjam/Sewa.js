@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Card,CardHeader,CardBody,CardFooter,CardTitle,
   Row,Col,
 } from "reactstrap";
 import CardSedangDipinjam from "components/CardSedangDisewa/index"

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Col, Row, Button, Badge, Card, CardHeader, CardTitle, CardBody, CardFooter } from 'reactstrap';
+import React from 'react';
+import { Col, Row, Card, CardTitle, CardBody } from 'reactstrap';
 
 const WidgetProfil = (props) => {
   const { icon, kategori, info } = props;

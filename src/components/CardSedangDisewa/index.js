@@ -1,17 +1,19 @@
 
-import React, { useState } from 'react';
-import { Col, Row, Button, Badge, Card, CardHeader, CardTitle, CardBody, CardFooter } from 'reactstrap';
+import React from 'react';
+import { Badge, Card, CardBody, CardFooter } from 'reactstrap';
 import DetailSewaModal from "../../components/DetailSewaModal/index"
 
-const CardSedangDipinjam = (props) => {
-  const { id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul } = props;
+const CardSedangDipinjam = () => {
+//   const {
+    //    id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul 
+    // } = props;
 
   return (
     <div>
         <Card className="catalog-book">
-            <img src="https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg" alt=" " className="card-img-top catalog-img "/>
+            <img src="https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg" alt="disewa-img" className="card-img-top catalog-img "/>
             <CardBody>
-                <a type="button" data-toggle="modal" data-target="#">
+                {/* <a type="button" data-toggle="modal" data-target="#"> */}
                 <p><b>judul</b></p>
                 <p className="description text-end">
                     <Badge color="warning">Disewa</Badge>  <Badge style={{backgroundColor: "red"}}>Kadaluardasa</Badge>
@@ -19,7 +21,7 @@ const CardSedangDipinjam = (props) => {
                     <br></br><span className="font-weight-light"><i className="fas fa-calendar-times text-danger"></i> dd/mm/yyyy </span>
                     <br></br><strong>Denda: Rp harga,-</strong> 
                     </p>
-                </a>  
+                {/* </a>   */}
             </CardBody>
             <CardFooter>
                 <DetailSewaModal 

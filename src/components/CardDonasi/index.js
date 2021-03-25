@@ -1,23 +1,25 @@
 
-import React, { useState } from 'react';
-import { Col, Row, Button, Badge, Card, CardHeader, CardTitle, CardBody, CardFooter } from 'reactstrap';
+import React from 'react';
+import { Badge, Card, CardBody, CardFooter } from 'reactstrap';
 import DetailBukuModal from "../../components/DetailBukuModal/index"
 
-const CardDonasi = (props) => {
-  const { id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul } = props;
+const CardDonasi = () => {
+  // const { 
+    //   id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul 
+    // } = props;
 
   return (
     <div>
         <Card className="catalog-book">
             <img src="https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg" alt=" " className="card-img-top catalog-img "/>
             <CardBody>
-                <a type="button" data-toggle="modal" data-target="#">
+                {/* <a type="button" data-toggle="modal" data-target="#"> */}
                 <p><b>judul</b></p>
                 <p className="description text-end">
                     <Badge style={{backgroundColor: "#f5007f"}}>Didonasikan</Badge>
                     <br></br><span className="font-weight-light"><i className="fas fa-calendar-alt"></i> dd/mm/yyyy </span>
                     </p>
-                </a>  
+                {/* </a>   */}
             </CardBody>
             <CardFooter>
                 <DetailBukuModal 

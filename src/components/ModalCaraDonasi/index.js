@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
-import { Col, Row, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const ModalCaraDonasi = (props) => {
-  const { id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul, className
-  } = props;
+  const { className } = props;
 
   const [modal, setModal] = useState(false);
 
@@ -15,7 +14,7 @@ const ModalCaraDonasi = (props) => {
       <Button color="default" round outline onClick={toggle} className="btn-block btn-sm"><i className="fas fa-info-circle"> </i>  Lihat Cara Berdonasi</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle} style={{backgroundImage: "linear-gradient(to bottom right, #23150d,#845f3e)",color: "#ffffff"}}>Cara Donasi Buku</ModalHeader>
-        <ModalBody>
+        <ModalBody className="mr-4 my-4">
         <ol>
             <li className="text-justify font-weight-lighter">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem, laborum, sed ex, eveniet ratione iste fugit quos est provident praesentium magnam voluptatem fuga autem! Sequi, possimus.
                 Architecto ipsa doloremque quos!</li>

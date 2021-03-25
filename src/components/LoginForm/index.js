@@ -2,7 +2,7 @@ import React, { useState }from "react";
 import { Link, Redirect } from "react-router-dom";
 
 import {
-  FormGroup, Label, Input, FormText,
+  FormGroup, Label, Input,
   Card, CardBody,CardHeader,
   Button
 } from "reactstrap";
@@ -38,7 +38,7 @@ const LoginForm = () => {
         var getUserData;
         //harusnya pake axios buat cek, sementara pake js aja\
         {users.map(val => {
-            if(val.username == data.username){
+            if(val.username === data.username){
                 getUserData = val
                 // console.log(getUserData)
             }
@@ -50,7 +50,7 @@ const LoginForm = () => {
         //kalau berhasil ditemukan
         if(getUserData){
             console.log(getUserData.role);
-            if(getUserData.role == 0){
+            if(getUserData.role === 0){
                 localStorage.setItem("user", getUserData.role)
                 setRedirect(true)
                 setRole("0")
@@ -64,14 +64,14 @@ const LoginForm = () => {
     }
 
     const cekRoles = (role) => {
-        if(role=="1") return <Redirect to="peminjam/dashboard"/>
-        else if(role=="0") return <Redirect to="admin/dashboard"/>
+        if(role==="1") return <Redirect to="peminjam/dashboard"/>
+        else if(role==="0") return <Redirect to="admin/dashboard"/>
     }
 
     return (
       <>
         { 
-        console.log("isirole",role),
+        // console.log("isirole",role)
         cekRoles(role)
             // cekRoles(role)
             // role=="1" && (

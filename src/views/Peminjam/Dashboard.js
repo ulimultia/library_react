@@ -15,9 +15,9 @@ import Terbaru from "assets/data/dataterbaru"
 // } from "variables/charts.js";
 
 class Dashboard extends React.Component {
-  constructor(){
-    super();
-  }
+  // constructor(){
+  //   super();
+  // }
 
   //fungsi yang digunakan untuk memotong judul yang terlalu panjang
   cutTitle = (judul) => {

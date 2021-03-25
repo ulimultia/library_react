@@ -71,37 +71,37 @@ const CardProfil = (props) => {
         // console.log("klik edit profil");
         var isValid = true
         // validasi NIK
-        if (isNaN(edNik) == true) {isValid = false; setEdNikHelp("Harus Angka")} 
-        else if (edNik == "") {isValid = false; setEdNikHelp("Tidak boleh kosong")}
+        if (isNaN(edNik) === true) {isValid = false; setEdNikHelp("Harus Angka")} 
+        else if (edNik === "") {isValid = false; setEdNikHelp("Tidak boleh kosong")}
         else if (edNik.length < 16) { isValid = false; setEdNikHelp("Harus 16 digit")}
         else {setEdNikHelp("")}
         // validasi Nama
-        if (edNama == "") {isValid = false; setEdNamaHelp("Tidak boleh kosong")}
+        if (edNama === "") {isValid = false; setEdNamaHelp("Tidak boleh kosong")}
         else {setEdNamaHelp("")}
         // validasi Tempat Lahir
-        if (edTempat == "") {isValid = false; setEdTempatHelp("Tidak boleh kosong")}
+        if (edTempat === "") {isValid = false; setEdTempatHelp("Tidak boleh kosong")}
         else {setEdTempatHelp("")}
         // validasi Tanggal
-        if (edTanggal == null) {isValid = false; setEdTanggalHelp("Tidak boleh kosong")}
+        if (edTanggal === null) {isValid = false; setEdTanggalHelp("Tidak boleh kosong")}
         else {setEdTanggalHelp("")}
         // validasi Email
-        if (edEmail == "") {isValid = false; setEdEmailHelp("Tidak boleh kosong")}
-        else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(edEmail) == false) {isValid = false; setEdEmailHelp("Tidak valid")}
+        if (edEmail === "") {isValid = false; setEdEmailHelp("Tidak boleh kosong")}
+        else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(edEmail) === false) {isValid = false; setEdEmailHelp("Tidak valid")}
         else {setEdEmailHelp("")}
         // validasi Usernamw
-        if (edUsername == "") {isValid =false; setEdUsernameHelp("Tidak boleh kosong")}
+        if (edUsername === "") {isValid =false; setEdUsernameHelp("Tidak boleh kosong")}
         else if (edUsername.length < 5) { isValid = false; setEdUsernameHelp("Minimal 5 karkater")}
         else {setEdUsernameHelp("")}
         // validasi Telepon
-        if (edTelp == "") {isValid = false; setEdTelpHelp("Tidak boleh kosong")}
+        if (edTelp === "") {isValid = false; setEdTelpHelp("Tidak boleh kosong")}
         else if (isNaN(edTelp) === true) {isValid = false; setEdTelpHelp("Harus Angka")} 
         else {setEdTelpHelp("")}
         // validasi Alamat
-        if (edAlamat == "") {isValid = false; setEdAlamatHelp("Tidak boleh kosong")}
+        if (edAlamat === "") {isValid = false; setEdAlamatHelp("Tidak boleh kosong")}
         else {setEdAlamatHelp("")}
 
         //feedback
-        if(isValid == true){
+        if(isValid === true){
             MySwal.fire({
                 icon: "success",
                 title: "Sukses!!!",
@@ -132,20 +132,20 @@ const CardProfil = (props) => {
     const editPassNow = () => {
         var isValid = true;
         // validasi pass saat ini 
-        if(passNow == "") {isValid = false; setPassNowHelp("Tidak boleh kosong");}      
+        if(passNow === "") {isValid = false; setPassNowHelp("Tidak boleh kosong");}      
         else if(passNow.length < 5) {isValid = false; setPassNowHelp("Minimal 5 karakter")}
         else setPassNowHelp("");
         // validasi pass baru
-        if(newPass == "") {isValid = false; setNewPassHelp("Tidak boleh kosong")}
-        else if(newPass == passNow) {isValid = false; setNewPassHelp("Password baru harus berbeda")}
+        if(newPass === "") {isValid = false; setNewPassHelp("Tidak boleh kosong")}
+        else if(newPass === passNow) {isValid = false; setNewPassHelp("Password baru harus berbeda")}
         else if (newPass.length < 5) {isValid = false; setNewPassHelp("Minimal 5 karakter")}
         else setNewPassHelp("")
         // validasi konfirmasi password
-        if(confirmPass == "") {isValid = false; setConfirmPassHelp("Tidak boleh kosong")}
-        else if (confirmPass != newPass) {isValid= false; setConfirmPassHelp("Tidak sesuai")}
+        if(confirmPass === "") {isValid = false; setConfirmPassHelp("Tidak boleh kosong")}
+        else if (confirmPass !== newPass) {isValid= false; setConfirmPassHelp("Tidak sesuai")}
         else setConfirmPassHelp("")
 
-        if(isValid == true){
+        if(isValid === true){
             MySwal.fire({
                 icon: "success",
                 title: "Sukses!!!",

@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { Col, Row, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const DetailSewaModal = (props) => {
-  const { id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul, buttonLabel, className
+  const { 
+    // id, kode, 
+    judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul, buttonLabel, className
   } = props;
 
   const [modal, setModal] = useState(false);
@@ -15,9 +17,9 @@ const DetailSewaModal = (props) => {
       <Button color="info" onClick={toggle} className="btn-block btn-sm"><i className="fas fa-info-circle"> </i>  {buttonLabel}</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle} style={{backgroundImage: "linear-gradient(to bottom right, #23150d,#845f3e)", color: "#ffffff"}}>Detail Buku</ModalHeader>
-        <ModalBody>
+        <ModalBody className="mx-4">
           <Row>
-              <Col xs="12" sm ="4">
+              <Col xs="12" sm ="4" className="my-4">
                 <img src={sampul} alt="" className="catalog-img-modal"/>
               </Col>
               <Col xs="12" sm ="8" className="mt-4">
@@ -28,13 +30,13 @@ const DetailSewaModal = (props) => {
                 </p>
                 <hr></hr>
                 <Row>
-                    <Col xs="12" sm="8">
+                    <Col xs="12" sm="7">
                         <p> <i class="fas fa-user fa-sm"></i> {pengarang}</p>
                         <p><i class="fas fa-calendar-alt fa-sm"></i> {tanggal_terbit}</p>
                         <p><i class="fas fa-building fa-sm"></i> {penerbit}</p>
                         <p> <i class="fas fa-barcode fa-sm"></i> {isbn} </p>
                     </Col>
-                    <Col xs="12" sm="4">
+                    <Col xs="12" sm="5">
                         <p> <i class="fas fa-file fa-sm"></i> Halaman: {halaman} </p>
                         <p> <i class="fas fa-map-marker-alt fa-sm"></i> Lokasi: {lokasi} </p>
                         <p> <i class="fas fa-book-open fa-sm"></i> Tersedia: {jumlah} buah</p>

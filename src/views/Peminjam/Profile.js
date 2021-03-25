@@ -3,9 +3,6 @@ import CardProfil from "components/CardProfil"
 import WidgetProfil from "components/WidgetProfil"
 // reactstrap components
 import {
-  Button,
-  Card,CardHeader,CardBody,CardFooter,CardTitle,
-  FormGroup,Form,Input,
   Row,Col,
 } from "reactstrap";
 

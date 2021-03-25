@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Col, Row, Button, Badge, Card, CardHeader, CardTitle, CardBody, CardFooter } from 'reactstrap';
+import React from 'react';
+import { Col, Row, Badge, Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
 
 // function getData(jenis) {
 //   if(jenis == "")
@@ -21,7 +21,7 @@ const CardRekomendasi = (props) => {
               return(
                 <Row className="my-1">
                   <Col xs="4">
-                      <img src={val.sampul} height="100px" width="auto" objectFit="cover"/>
+                      <img src={val.sampul} height="100px" width="auto" objectFit="cover" alt="rekomendasi-img"/>
                   </Col>
                   <Col xs="8">
                       <p>{val.judul}</p>

@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard React - v1.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
@@ -25,12 +7,12 @@ import "assets/scss/paper-dashboard.scss?v=1.2.0";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import "assets/css/style.css"
 // import "./index.css";
-import DashboardPeminjam from "layouts/Peminjam"
-import DashboardAdmin from "layouts/Admin";
-import { createBrowserHistory } from "history";
-import { Router, BrowserRouter,Route, Switch, Redirect } from "react-router-dom";
+// import DashboardPeminjam from "layouts/Peminjam"
+// import DashboardAdmin from "layouts/Admin";
+// import { createBrowserHistory } from "history";
+// import { Router, BrowserRouter,Route, Switch, Redirect } from "react-router-dom";
 // import Index from "components/login.component"
-import Index from "layouts/Login.js"
+// import Index from "layouts/Login.js"
 
 // const hist = createBrowserHistory();
 
