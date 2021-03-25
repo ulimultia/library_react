@@ -1,21 +1,34 @@
 import React from "react";
-// react plugin used to create charts
-import { Line, Pie } from "react-chartjs-2";
-// reactstrap components
-import {
-  Card,CardHeader,CardBody,CardFooter,CardTitle, CardText, CardImgOverlay, CardImg,
-  Row,Col,
-} from "reactstrap";
-// core components
-import {
-  dashboard24HoursPerformanceChart,
-  dashboardEmailStatisticsChart,
-  dashboardNASDAQChart,
-} from "variables/charts.js";
+import { Row,Col } from "reactstrap";
 import WidgetDashboard from "components/WidgetDashboard/"
 import BukuRekomendasi from "components/BukuRekomendasiDashboard/index"
+import Terpopuler from "assets/data/dataterpopuler"
+import Terbaru from "assets/data/dataterbaru"
+// react plugin used to create charts
+// import { Line, Pie } from "react-chartjs-2";
+// // reactstrap components
+// core components
+// import {
+//   dashboard24HoursPerformanceChart,
+//   dashboardEmailStatisticsChart,
+//   dashboardNASDAQChart,
+// } from "variables/charts.js";
 
 class Dashboard extends React.Component {
+  constructor(){
+    super();
+  }
+
+  //fungsi yang digunakan untuk memotong judul yang terlalu panjang
+  cutTitle = (judul) => {
+    if(judul.length > 40){
+          return judul.slice(0,40) + " ...."
+        }
+        else{
+          return judul
+        }
+  }
+  
   render() {
     return (
       <>
@@ -58,107 +71,60 @@ class Dashboard extends React.Component {
             <Col xs="2" sm="4"><hr/></Col>
             <Col xs="8" sm="4"><h5 className="text-center"><b>Buku Terbaru</b></h5></Col>
             <Col xs="2" sm="4"><hr/></Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://images.wallpaperscraft.com/image/book_bouquet_cup_147482_3840x2160.jpg"
-                kategori = "Novel"
-                genre = "Remaja"
-                judul = "Cinta Pertamaku"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg"
-                kategori = "Komik"
-                genre = "Series"
-                judul = "Doraemon Volume 1"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/thumb/8/8e/Laskar_pelangi_sampul.jpg/220px-Laskar_pelangi_sampul.jpg"
-                kategori = "Novel"
-                genre = "Sosial Pendidikan"
-                judul = "Laskar Pelangi"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/c/c8/Ayat-Ayat_Cinta.jpg"
-                kategori = "Novel"
-                genre = "Romantis"
-                judul = "Ayat-ayat Cinta"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/thumb/8/8e/Laskar_pelangi_sampul.jpg/220px-Laskar_pelangi_sampul.jpg"
-                kategori = "Novel"
-                genre = "Sosial Pendidikan"
-                judul = "Laskar Pelangi"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/c/c8/Ayat-Ayat_Cinta.jpg"
-                kategori = "Novel"
-                genre = "Romantis"
-                judul = "Ayat-ayat Cinta"
-              />
-            </Col>
+            { Terbaru.map(val=>{
+              console.log("cek", val);
+              return(
+                <Col xs="6" sm="2">
+                  <BukuRekomendasi 
+                    id = {val.id}
+                    kode = {val.kode}
+                    judul = {val.judul}
+                    judul_cut = {this.cutTitle(val.judul)}
+                    kategori = {val.kategori}
+                    genre = {val.genre}
+                    isbn = {val.isbn}
+                    harga = {val.harga}
+                    pengarang = {val.pengarang}
+                    penerbit = {val.penerbit}
+                    tanggal_terbit = {val.tanggal_terbit }
+                    halaman = {val.halaman}
+                    jumlah = {val.jumlah}
+                    lokasi = {val.lokasi}
+                    deskripsi = {val.deskripsi}
+                    sampul = {val.sampul}
+                  />
+                </Col>
+              ) 
+            })}
           </Row>
           <Row className="mt-4">
             <Col xs="2" sm="4"><hr/></Col>
             <Col xs="8" sm="4"><h5 className="text-center"><b>Buku Terpopuler</b></h5></Col>
             <Col xs="2" sm="4"><hr/></Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://images.wallpaperscraft.com/image/book_bouquet_cup_147482_3840x2160.jpg"
-                kategori = "Novel"
-                genre = "Remaja"
-                judul = "Cinta Pertamaku"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg"
-                kategori = "Komik"
-                genre = "Series"
-                judul = "Doraemon Volume 1"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://images.wallpaperscraft.com/image/book_bouquet_cup_147482_3840x2160.jpg"
-                kategori = "Novel"
-                genre = "Remaja"
-                judul = "Cinta Pertamaku"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/c/c8/Doraemon_volume_1_cover.jpg"
-                kategori = "Komik"
-                genre = "Series"
-                judul = "Doraemon Volume 1"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/thumb/8/8e/Laskar_pelangi_sampul.jpg/220px-Laskar_pelangi_sampul.jpg"
-                kategori = "Novel"
-                genre = "Sosial Pendidikan"
-                judul = "Laskar Pelangi"
-              />
-            </Col>
-            <Col xs="6" sm="2">
-              <BukuRekomendasi 
-                image = "https://upload.wikimedia.org/wikipedia/id/c/c8/Ayat-Ayat_Cinta.jpg"
-                kategori = "Novel"
-                genre = "Romantis"
-                judul = "Ayat-ayat Cinta"
-              />
-            </Col>
+            { Terpopuler.map(val=>{
+              return(
+                <Col xs="6" sm="2">
+                  <BukuRekomendasi 
+                    id = {val.id}
+                    kode = {val.kode}
+                    judul = {val.judul}
+                    judul_cut = {this.cutTitle(val.judul)}
+                    kategori = {val.kategori}
+                    genre = {val.genre}
+                    isbn = {val.isbn}
+                    harga = {val.harga}
+                    pengarang = {val.pengarang}
+                    penerbit = {val.penerbit}
+                    tanggal_terbit = {val.tanggal_terbit }
+                    halaman = {val.halaman}
+                    jumlah = {val.jumlah}
+                    lokasi = {val.lokasi}
+                    deskripsi = {val.deskripsi}
+                    sampul = {val.sampul}
+                  />
+                </Col>
+              )
+            })}
           </Row>
         </div>
       </>

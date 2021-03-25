@@ -3,16 +3,23 @@ import React, { useState } from 'react';
 import { Col, Row, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const DetailBukuModal = (props) => {
-  const { id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul, buttonLabel, className
+  const { id, kode, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul, buttonLabel, className, colorButton, classButton
   } = props;
 
   const [modal, setModal] = useState(false);
-
+  var warna = "warning"
+  if(colorButton != null){
+    warna = colorButton
+  }
+  var classBtn = "btn-block btn-sm"
+  if(classButton!=null){
+    classBtn = classButton
+  }
   const toggle = () => setModal(!modal);
 
   return (
     <div>
-      <Button color="info" onClick={toggle} className="btn-block btn-sm"><i className="fas fa-info-circle"> </i>  {buttonLabel}</Button>
+      <Button color={warna} onClick={toggle} className={classBtn}><i className="fas fa-info-circle"> </i>  {buttonLabel}</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Detail Buku</ModalHeader>
         <ModalBody>

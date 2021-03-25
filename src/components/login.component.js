@@ -4,8 +4,10 @@ import ReactDOM from "react-dom";
 import Peminjam from "../app/Peminjam/index";
 import Admin from "../app/Admin/index";
 import Swal from 'sweetalert2'
+import LayoutdAdmin from "layouts/Admin"
 
 import withReactContent from 'sweetalert2-react-content'
+import { Redirect, Route } from "react-router";
 
 // import { useHistory } from "react-router";
 const MySwal = withReactContent(Swal)
@@ -32,12 +34,18 @@ export default class Login extends Component {
         document.getElementById("root")
       );
     } else {
-      ReactDOM.render(
-        <React.StrictMode>
-          <Peminjam />
-        </React.StrictMode>,
-        document.getElementById("root")
-      );
+        return (
+          <>
+          <Route path="/admin" render={(props) => <LayoutdAdmin {...props} />} />
+          <Redirect to="/admin/dashboard" />
+          </>
+        )
+      // ReactDOM.render(
+      //   <React.StrictMode>
+      //     <Peminjam />
+      //   </React.StrictMode>,
+      //   document.getElementById("root")
+      // );
         // MySwal.fire({
         //     title: "Gagal!!!",
         //     text: "Username atau Password Salah",
