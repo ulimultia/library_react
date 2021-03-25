@@ -188,7 +188,7 @@ const CardProfil = (props) => {
                             style={{backgroundImage: "linear-gradient(to bottom right, #23150d,#845f3e)",
                                     color: "#ffffff"}}>Edit Profil</ModalHeader>
                             <form>
-                            <ModalBody>
+                            <ModalBody className="mx-4 my-3">
                                 <Row>
                                     <Col xs="12" sm="6" className="mb-3">
                                         <FormGroup>
@@ -286,7 +286,7 @@ const CardProfil = (props) => {
                             style={{backgroundImage: "linear-gradient(to bottom right, #23150d,#845f3e)",
                             color: "#ffffff"}}>Ganti Password</ModalHeader>
                             <form>
-                            <ModalBody>
+                            <ModalBody className="mx-3 my-3">
                                 <FormGroup className="mb-3">
                                     <Label for="password">Passwod Sekarang</Label>
                                     <Input type="password" name="password" id="password" placeholder="Password saat ini ..."
