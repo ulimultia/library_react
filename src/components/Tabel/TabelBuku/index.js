@@ -39,7 +39,7 @@ Buku.forEach(el => {
         harga: el.harga,
         jumlah: el.jumlah,
         lokasi: el.lokasi,
-        action: <><ModalEditBuku classButtonModal="btn btn-success btn-sm fa fa-edit" id={el.id} modalName={el.id} judulBuku={el.judul} kategoriBuku={el.kategori} genreBuku={el.genre} hargaBuku={el.harga} jumlahBuku={el.jumlah} lokasiBuku={el.lokasi}></ModalEditBuku> <Button handleClick={() => handleDelete(el.id - 1)} classButton="btn btn-danger btn-sm fa fa-trash"></Button></>
+        action: <div className="d-flex flex-wrap"><ModalEditBuku classButtonModal="btn btn-success btn-sm fa fa-edit mx-1" id={el.id} modalName={el.id} judulBuku={el.judul} kategoriBuku={el.kategori} genreBuku={el.genre} hargaBuku={el.harga} jumlahBuku={el.jumlah} lokasiBuku={el.lokasi}></ModalEditBuku> <Button handleClick={() => handleDelete(el.id - 1)} classButton="btn btn-danger btn-sm fa fa-trash mx-1"></Button></div>
     })
 });
 

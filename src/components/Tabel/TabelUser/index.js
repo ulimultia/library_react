@@ -54,7 +54,7 @@ User.forEach(el => {
     kelamin: el.kelamin,
     ttl: el.tempat + ", " + el.tanggal_lahir,
     alamat: el.alamat,
-    action: <><ModalEditUser classButtonModal="btn btn-success btn-sm fa fa-edit" id={el.id} modalName={el.id} nama={el.nama} kelamin={el.kelamin} tempat={el.tempat} tanggal_lahir={el.tanggal_lahir} alamat={el.alamat}></ModalEditUser> <Button handleClick={() => handleDelete(el.id - 1)} classButton="btn btn-danger btn-sm fa fa-trash"></Button> <ModalTopupUser classButtonModal="btn btn-info btn-sm fa fa-money-bill-wave" modalName={el.id} namatopup={el.nama}></ModalTopupUser> <Button handleClick={() => handleReset(el.id - 1)} classButton="btn btn-warning btn-sm fa fa-key"></Button></>,
+    action: <div className="d-flex flex-wrap"><ModalEditUser classButtonModal="btn btn-success btn-sm fa fa-edit mx-1" id={el.id} modalName={el.id} nama={el.nama} kelamin={el.kelamin} tempat={el.tempat} tanggal_lahir={el.tanggal_lahir} alamat={el.alamat}></ModalEditUser> <Button handleClick={() => handleDelete(el.id - 1)} classButton="btn btn-danger btn-sm fa fa-trash mx-1"></Button> <ModalTopupUser classButtonModal="btn btn-info btn-sm fa fa-money-bill-wave mx-1" modalName={el.id} namatopup={el.nama}></ModalTopupUser> <Button handleClick={() => handleReset(el.id - 1)} classButton="btn btn-warning btn-sm fa fa-key mx-1"></Button></div>,
 
   })
 });
