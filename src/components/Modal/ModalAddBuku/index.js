@@ -16,6 +16,7 @@ const ModalAddBuku = (props) => {
 
         MySwal.fire({
             title: "Berhasil!!!",
+            icon: "success",
             text: "Berhasil Menambahkan Buku",
         })
         toggle();
