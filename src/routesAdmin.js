@@ -18,12 +18,9 @@
 */
 import Dashboard from "views/Admin/Dashboard.js";
 import Profile from "views/Admin/Profile.js";
-import Notifications from "views/Notifications.js";
-import Icons from "views/Icons.js";
-import Typography from "views/Typography.js";
-import TableList from "views/Admin/ManageUser.js";
-import Maps from "views/Map.js";
-import UserPage from "views/User.js";
+import TableUser from "views/Admin/ManageUser.js";
+import TableBuku from "views/Admin/ManageBuku.js";
+import TabelPengembalian from "views/Admin/ManagePengembalian";
 
 var routesAdmin = [
   {
@@ -41,45 +38,24 @@ var routesAdmin = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-diamond",
-    component: Icons,
+    path: "/buku",
+    name: "Daftar Buku",
+    icon: "nc-icon nc-tile-56",
+    component: TableBuku,
     layout: "/admin",
   },
   {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Maps,
-    layout: "/admin",
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "nc-icon nc-bell-55",
-    component: Notifications,
-    layout: "/admin",
-  },
-  {
-    path: "/user-page",
-    name: "User Profile",
-    icon: "nc-icon nc-single-02",
-    component: UserPage,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
+    path: "/user",
     name: "Daftar User",
     icon: "nc-icon nc-tile-56",
-    component: TableList,
+    component: TableUser,
     layout: "/admin",
   },
   {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-caps-small",
-    component: Typography,
+    path: "/pinjaman",
+    name: "Daftar Pinjaman",
+    icon: "nc-icon nc-tile-56",
+    component: TabelPengembalian,
     layout: "/admin",
   },
 ];
