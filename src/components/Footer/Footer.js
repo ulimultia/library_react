@@ -27,11 +27,20 @@ class Footer extends React.Component {
     return (
       <footer
         className={"footer" + (this.props.default ? " footer-default" : "")}
+        style={{backgroundColor: "black", color: "#ffffff"}}
       >
         <Container fluid={this.props.fluid ? true : false}>
           <Row>
             <nav className="footer-nav">
               <ul>
+                <li>
+                  <a
+                    href="#"
+                    target="_blank"
+                  >
+                    KreasiTech
+                  </a>
+                </li>
                 <li>
                   <a href="https://www.creative-tim.com" target="_blank">
                     Creative Tim
@@ -55,7 +64,7 @@ class Footer extends React.Component {
             <div className="credits ml-auto">
               <div className="copyright">
                 &copy; {1900 + new Date().getYear()}, made with{" "}
-                <i className="fa fa-heart heart" /> by Creative Tim
+                <i className="fa fa-heart heart" /> by Creative Tim and KreasiTech
               </div>
             </div>
           </Row>

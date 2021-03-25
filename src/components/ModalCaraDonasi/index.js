@@ -14,7 +14,7 @@ const ModalCaraDonasi = (props) => {
     <div>
       <Button color="default" round outline onClick={toggle} className="btn-block btn-sm"><i className="fas fa-info-circle"> </i>  Lihat Cara Berdonasi</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>Cara Donasi Buku</ModalHeader>
+        <ModalHeader toggle={toggle} style={{backgroundImage: "linear-gradient(to bottom right, #23150d,#845f3e)",color: "#ffffff"}}>Cara Donasi Buku</ModalHeader>
         <ModalBody>
         <ol>
             <li className="text-justify font-weight-lighter">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Exercitationem, laborum, sed ex, eveniet ratione iste fugit quos est provident praesentium magnam voluptatem fuga autem! Sequi, possimus.
