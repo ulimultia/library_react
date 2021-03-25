@@ -5,9 +5,7 @@ import {
   Row, Col,
 } from "reactstrap";
 import TabelUser from "components/Tabel/TabelUser/index";
-import User from "../../assets/data/User"
 import ModalAddUser from "../../components/Modal/ModalAddUser/index"
-import Button from "../../../src/components/Button"
 
 class Tables extends React.Component {
   // handleAdd = (id) => {

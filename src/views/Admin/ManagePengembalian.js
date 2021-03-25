@@ -5,8 +5,6 @@ import {
   Row, Col,
 } from "reactstrap";
 import TabelPengembalian from "../../components/Tabel/TabelPengembalian/index";
-import User from "../../assets/data/User"
-import Button from "../../components/Button"
 
 class Tables extends React.Component {
   // handleAdd = (id) => {
