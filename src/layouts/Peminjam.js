@@ -6,6 +6,8 @@ import { Route, Switch } from "react-router-dom";
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
+import sessioncheck from "../components/SessionCheck/index.js"
+
 // import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "../../src/routesPeminjam";
@@ -71,6 +73,11 @@ class Dashboard extends React.Component {
         <div className="main-panel" ref={this.mainPanel}>
           <DemoNavbar {...this.props} />
           <Switch>
+          {
+            // console.log(localStorage.getItem("user"))
+            sessioncheck()
+
+            }
             {routes.map((prop, key) => {
               return (
                 <Route
