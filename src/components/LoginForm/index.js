@@ -50,34 +50,32 @@ const LoginForm = () => {
         //kalau berhasil ditemukan
         if(getUserData){
             console.log(getUserData.role);
-            if(getUserData.role === 0){
-                localStorage.setItem("user", getUserData.role)
-                setRedirect(true)
-                setRole("0")
-            }
-            else {
-                localStorage.setItem("user", getUserData.role)
-                setRedirect(true)
-                setRole("1")
-            }
+            localStorage.setItem("user", getUserData.role)
+            setRole(getUserData.role)
+            // if(getUserData.role === 0){
+            //     localStorage.setItem("user", getUserData.role)
+            //     setRedirect(true)
+            //     setRole("0")
+            // }
+            // else {
+            //     localStorage.setItem("user", getUserData.role)
+            //     setRedirect(true)
+            //     setRole("1")
+            // }
         }
     }
 
-    const cekRoles = () => {
-        const rolee = localStorage.getItem('user');
-        if(rolee==="1") {
-            return <Redirect to="peminjam/dashboard"/>
-        }
-        else if(rolee==="0") {
-            return <Redirect to="admin/dashboard"/>
-        }
+    const cekRoles = (role) => {
+        // const rolee = localStorage.getItem('user');
+        if(role === "1") return <Redirect to="peminjam/dashboard"/>
+        else if(role === "0") return <Redirect to="admin/dashboard"/>
     }
 
     return (
       <>
         { 
-        // console.log("isirole",role)
-        cekRoles()
+            // console.log("isirole",role)
+            cekRoles(role)
             // cekRoles(role)
             // role=="1" && (
             // <Redirect to="peminjam/dashboard"/>) ,
