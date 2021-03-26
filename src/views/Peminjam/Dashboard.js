@@ -72,7 +72,7 @@ class Dashboard extends React.Component {
             <Col xs="8" sm="4"><h5 className="text-center"><b>Buku Terbaru</b></h5></Col>
             <Col xs="2" sm="4"><hr/></Col>
             { Terbaru.map(val=>{
-              console.log("cek", val);
+              // console.log("cek", val);
               return(
                 <Col xs="6" sm="2">
                   <BukuRekomendasi 
