@@ -131,7 +131,8 @@ const ModalAddBuku = (props) => {
         <div>
             <Button className={classButton} onClick={toggle}>{buttonLabel}</Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle}>{modalName}</ModalHeader>
+                <ModalHeader toggle={toggle}style={{backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
+                                    color: "#ffffff"}}>{modalName}</ModalHeader>
                 <ModalBody>
                     <div className="px-5">
                         <Form>
@@ -315,7 +316,7 @@ const ModalAddBuku = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <ModalFooter>
+                            <ModalFooter >
                                 <Button type="button" onClick={() => handleAdd()} color="primary">Add</Button>{' '}
                             </ModalFooter>
                         </Form>

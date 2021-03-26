@@ -52,7 +52,8 @@ const ModalSewaBuku = (props) => {
         <div>
             <Button className={classButton} onClick={toggle}>{buttonLabel}</Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle}>{modalName}</ModalHeader>
+                <ModalHeader toggle={toggle} style={{backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
+                                    color: "#ffffff"}}>{modalName}</ModalHeader>
                 <ModalBody>
                     <div className="px-5" >
                         <Form>
