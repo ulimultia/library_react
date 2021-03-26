@@ -1,84 +1,53 @@
 import React from "react";
-import { Card, CardBody, Row, Col, Container } from "reactstrap";
+import CardProfilAdmin from "components/CardProfilAdmin"
+import WidgetProfil from "components/WidgetProfil"
+// reactstrap components
+import {
+  Row,Col,
+} from "reactstrap";
 
 class Profile extends React.Component {
   render() {
     return (
       <>
         <div className="content">
-          <Container>
-          <Card>
-            <Row>
-              <Col xs="12" md="6">
-                <div className="info-box mb-3">
-                  <span
-                    className="info-box-icon elevation-1"
-                    style={{
-                      backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
-                    }}
-                  >
-                    <i className="fas fa-venus-mars text-light"></i>
-                  </span>
-                  <div className="info-box-content">
-                    <span className="info-box-text">Jenis Kelamin</span>
-                    <span className="info-box-number">Laki-laki</span>
-                  </div>
-                </div>
-              </Col>
-              <Col xs="12" md="6">
-                <div className="info-box mb-3">
-                  <span
-                    className="info-box-icon elevation-1"
-                    style={{
-                      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
-                    }}
-                  >
-                    
-                    <i className="fas fa-venus-mars text-light"></i>
-                  </span>
-                  <div className="info-box-content">
-                    <span className="info-box-text">Jenis Kelamin</span>
-                    <span className="info-box-number">Laki-laki</span>
-                  </div>
-                </div>
-              </Col>
-              <Col xs="12" md="6">
-                <div className="info-box mb-3">
-                  <span
-                    className="info-box-icon elevation-1"
-                    style={{
-                      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
-                    }}
-                  >
-                    
-                    <i className="fas fa-venus-mars text-light"></i>
-                  </span>
-                  <div className="info-box-content">
-                    <span className="info-box-text">Jenis Kelamin</span>
-                    <span className="info-box-number">Laki-laki</span>
-                  </div>
-                </div>
-              </Col>
-              <Col xs="12" md="6">
-                <div className="info-box mb-3">
-                  <span
-                    className="info-box-icon elevation-1"
-                    style={{
-                      backgroundColor: "linear-gradient(to left, #44a08d, #093637)",
-                    }}
-                  >
-                    
-                    <i className="fas fa-venus-mars text-light"></i>
-                  </span>
-                  <div className="info-box-content">
-                    <span className="info-box-text">Jenis Kelamin</span>
-                    <span className="info-box-number">Laki-laki</span>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-            </Card>
-          </Container>
+          <Row>
+            <Col md="12">
+              <CardProfilAdmin
+                nama="Alfian Aulia Firdaus"
+                role="Admin"
+                foto="https://i.pinimg.com/originals/b3/ac/66/b3ac66a299b5496846ffa50eac790d49.png"
+              />
+            </Col>
+            <Col xs="12" sm="6">
+              <WidgetProfil
+                icon="fas fa-venus-mars"
+                kategori="Jenis Kelamin"
+                info="Laki-Laki"
+              />
+            </Col>
+            <Col xs="12" sm="6">
+              <WidgetProfil
+                icon="fas fa-calendar-alt"
+                kategori="TTL"
+                info="Pati, 28 Januari 1945"
+              />
+            </Col>
+            <Col xs="12" sm="6">
+              <WidgetProfil
+                icon="fas fa-home"
+                kategori="Alamat"
+                info="Jl. Mulawarman Semarang"
+              />
+            </Col>
+            <Col xs="12" sm="6">
+              <WidgetProfil
+                icon="fas fa-phone"
+                kategori="Telepon"
+                info="081123456789"
+              />
+            </Col>
+          </Row>
         </div>
       </>
     );
