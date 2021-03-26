@@ -65,17 +65,17 @@ const LoginForm = () => {
         }
     }
 
-    const cekRoles = (role) => {
-        // const rolee = localStorage.getItem('user');
-        if(role === "1") return <Redirect to="peminjam/dashboard"/>
-        else if(role === "0") return <Redirect to="admin/dashboard"/>
+    const cekRoles = () => {
+        const rolee = localStorage.getItem('user');
+        if(rolee === "1") return <Redirect to="peminjam/dashboard"/>
+        else if(rolee === "0") return <Redirect to="admin/dashboard"/>
     }
 
     return (
       <>
         { 
             // console.log("isirole",role)
-            cekRoles(role)
+            cekRoles()
             // cekRoles(role)
             // role=="1" && (
             // <Redirect to="peminjam/dashboard"/>) ,
