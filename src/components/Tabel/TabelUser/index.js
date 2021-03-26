@@ -1,6 +1,6 @@
 import React from 'react';
 import { MDBDataTableV5, MDBBtn } from 'mdbreact';
-import User from '../../../assets/data/User'
+import User from '../../../assets/data/user'
 import Button from "../../Button";
 import ModalEditUser from "../../../components/Modal/ModalEditUser/index"
 import ModalTopupUser from "../../../components/Modal/ModalTopupUser/index"

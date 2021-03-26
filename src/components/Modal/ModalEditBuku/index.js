@@ -9,12 +9,22 @@ const ModalEditBuku = (props) => {
     const { id, judulBuku, kategoriBuku, genreBuku, hargaBuku, jumlahBuku, lokasiBuku, buttonLabel, className,
         classButtonModal, modalName
     } = props;
-
+    // const [judulBuku, setJudulBuku] = useState("")
+    const [labelJudul, setLabelJudul] = useState("")
     const [modal, setModal] = useState(false);
 
     const toggle = () => setModal(!modal);
+
+    // const onChangeJudul = (event) =>{
+    //     setJudulBuku(event.target.value);
+    // }
     const handleEdit = () => {
-        
+        var isValid = true
+
+        if (judulBuku == "") {isValid = false; setLabelJudul("Tidak boleh kosong")}
+        else {setLabelJudul("")}
+        if(isValid === true){
+
         // console.log(judulBuku);
          MySwal.fire({
             title: "Berhasil!!!",
@@ -22,6 +32,7 @@ const ModalEditBuku = (props) => {
             text: "Berhasil Mengedit Buku "+judulBuku,
         })
         toggle();
+    }
     };
     return (
         <div>
@@ -32,7 +43,7 @@ const ModalEditBuku = (props) => {
                     <div className="px-5" >
                         <Form>
                             <label className="col-form-label">Judul:</label>
-                            <span className="font-weight-lighter ml-3" id="labelJudul"></span>
+                            <span className="font-weight-lighter ml-3" id="labelJudul">{labelJudul}</span>
                             <div className="input-group">
                                 <input type="text" className="form-control" id="judulBuku" defaultValue={judulBuku}></input>
                                 <div className="input-group-append">
