@@ -21,6 +21,7 @@ import Profile from "views/Admin/Profile.js";
 import TableUser from "views/Admin/ManageUser.js";
 import TableBuku from "views/Admin/ManageBuku.js";
 import TabelPengembalian from "views/Admin/ManagePengembalian";
+import Logout from "views/Admin/Logout.js"
 
 var routesAdmin = [
   {
@@ -56,6 +57,13 @@ var routesAdmin = [
     name: "Daftar Pinjaman",
     icon: "fa fa-exchange-alt",
     component: TabelPengembalian,
+    layout: "/admin",
+  },
+  {
+    path: "/logout",
+    name: "Logout",
+    icon: "nc-icon nc-button-power",
+    component: Logout,
     layout: "/admin",
   },
 ];

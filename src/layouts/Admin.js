@@ -7,7 +7,7 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 // import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
-
+import sessioncheck from "../components/SessionCheck/index.js"
 import routes from "../../src/routesAdmin.js";
 
 var ps;
@@ -47,6 +47,7 @@ class Dashboard extends React.Component {
   };
   render() {
     return (
+
       <div className="wrapper">
         <Sidebar
           {...this.props}
@@ -54,10 +55,17 @@ class Dashboard extends React.Component {
           bgColor={this.state.backgroundColor}
           activeColor={this.state.activeColor}
         />
+        
         <div className="main-panel" ref={this.mainPanel}>
           <DemoNavbar {...this.props} />
           <Switch>
+          {
+            // console.log(localStorage.getItem("user"))
+            sessioncheck()
+
+            }
             {routes.map((prop, key) => {
+
               return (
                 <Route
                   path={prop.layout + prop.path}
@@ -66,7 +74,9 @@ class Dashboard extends React.Component {
                 />
               );
             })}
+            
           </Switch>
+          
           <Footer fluid />
         </div>
         {/* <FixedPlugin
