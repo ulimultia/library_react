@@ -48,19 +48,19 @@ const LoginForm = () => {
       .then((res) => {
         console.log(res); // menampilkan hasil response dari data inputan yang dikirim
         setRole(res.data.data.role); //mengisikan role yang didapatkan dari api ke variabel role
-        localStorage.setItem("userdata", JSON.stringify(res.data));  //memasukkan semua response data dari api ke dalam session
+        localStorage.setItem("userdata", JSON.stringify(res.data)); //memasukkan semua response data dari api ke dalam session
         console.log(localStorage.getItem("userdata")); //menampilkan isi session
 
-        if (res.data.data.username === data.username) { //menyamakan username inputan dan username response
-          console.log("Login Berhasil!");   
-
-          
+        if (res.data.data.username === data.username) {
+          //menyamakan username inputan dan username response
+          console.log("Login Berhasil!");
         }
-      }).then(() => {
-//testing proses data session
-var obj = localStorage.getItem("userdata")    //memasukkan data session pada var obj
-setSession(JSON.parse(obj))  // memasukkan parsing json kedalam objek session
-console.log(session);   //mengambil salah satu nilai dari objek session
+      })
+      .then(() => {
+        //testing proses data session
+        var obj = localStorage.getItem("userdata"); //memasukkan data session pada var obj
+        setSession(JSON.parse(obj)); // memasukkan parsing json kedalam objek session
+        console.log(session); //mengambil salah satu nilai dari objek session
       })
       .catch(function (error) {
         if (error.response) {
@@ -70,15 +70,14 @@ console.log(session);   //mengambil salah satu nilai dari objek session
   };
 
   const cekRoles = () => {
-      var peminjam = ["PEMINJAM"]
-      var admin = ["ADMIN"]
+    var peminjam = ["PEMINJAM"];
+    var admin = ["ADMIN"];
     // const rolee = localStorage.getItem("user");
     console.log(role);
     if (JSON.stringify(role) === JSON.stringify(peminjam)) {
-        return <Redirect to="peminjam/dashboard" />;
-    }
-    else if (JSON.stringify(role) === JSON.stringify(admin)) {
-        return <Redirect to="admin/dashboard" />;
+      return <Redirect to="peminjam/dashboard" />;
+    } else if (JSON.stringify(role) === JSON.stringify(admin)) {
+      return <Redirect to="admin/dashboard" />;
     }
   };
 
