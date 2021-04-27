@@ -11,7 +11,7 @@ class Tables extends React.Component {
       <>
         <div className="content">
           <Row>
-            <Col md="12">
+            <Col xs="12" sm="12">
               <Card>
                 {/* <CardHeader>
                   <CardTitle tag="h5">Riwayat Sewa</CardTitle>
