@@ -21,6 +21,10 @@ import Profile from "views/Admin/Profile.js";
 import TableUser from "views/Admin/ManageUser.js";
 import TableBuku from "views/Admin/ManageBuku.js";
 import TabelPengembalian from "views/Admin/ManagePengembalian";
+import Penerbit from "views/Admin/ManagePenerbit"
+import Kategori from "views/Admin/ManageKategori"
+import Genre from "views/Admin/ManageGenre"
+import Lokasi from "views/Admin/ManageLokasi"
 import Logout from "views/Admin/Logout.js"
 
 var routesAdmin = [
@@ -57,6 +61,34 @@ var routesAdmin = [
     name: "Daftar Pinjaman",
     icon: "fa fa-exchange-alt",
     component: TabelPengembalian,
+    layout: "/admin",
+  },
+  {
+    path: "/penerbit",
+    name: "Penerbit Buku",
+    icon: "fa fa-database",
+    component: Penerbit,
+    layout: "/admin",
+  },
+  {
+    path: "/kategori",
+    name: "Kategori Buku",
+    icon: "fa fa-database",
+    component: Kategori,
+    layout: "/admin",
+  },
+  {
+    path: "/genre",
+    name: "Genre Buku",
+    icon: "fa fa-database",
+    component: Genre,
+    layout: "/admin",
+  },
+  {
+    path: "/lokasi",
+    name: "Lokasi Buku",
+    icon: "fa fa-database",
+    component: Lokasi,
     layout: "/admin",
   },
   {

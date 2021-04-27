@@ -210,7 +210,7 @@ class Catalog extends React.Component {
               </Row>
             </Col>
             <Col xs="12" sm="4">
-              <Card className="card-stats">
+              {/* <Card className="card-stats">
                 <CardBody>
                   <Row>
                     <Col md="4" xs="5">
@@ -242,7 +242,7 @@ class Catalog extends React.Component {
                     </Col>
                   </Row>
                 </CardBody>
-              </Card>
+              </Card> */}
               <CardRekomendasi jenisRekomendasi = "Buku Terpopuler" data={TerpopulerJs}/>
               <CardRekomendasi jenisRekomendasi = "Buku Terbaru" data={TerbaruJs}/>
             </Col>
