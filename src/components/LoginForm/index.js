@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
 import axios from "axios";
@@ -32,7 +32,13 @@ const LoginForm = () => {
     const value = event.target.value;
     setPassword(value);
   };
-
+  const getData = async () => {
+    //testing proses data session
+    var obj = localStorage.getItem("userdata"); //memasukkan data session pada var obj
+    setSession(JSON.parse(obj)); // memasukkan parsing json kedalam objek session
+    console.log(session); //mengambil salah satu nilai dari objek session
+    console.log("a");
+  };
   const submitLogin = () => {
     // console.log("heheh");
     const data = {
@@ -56,12 +62,6 @@ const LoginForm = () => {
           console.log("Login Berhasil!");
         }
       })
-      .then(() => {
-        //testing proses data session
-        var obj = localStorage.getItem("userdata"); //memasukkan data session pada var obj
-        setSession(JSON.parse(obj)); // memasukkan parsing json kedalam objek session
-        console.log(session); //mengambil salah satu nilai dari objek session
-      })
       .catch(function (error) {
         if (error.response) {
           console.log(error.response.data);
@@ -80,7 +80,11 @@ const LoginForm = () => {
       return <Redirect to="admin/dashboard" />;
     }
   };
-
+  useEffect(() => {
+    // You need to restrict it at some point
+    // This is just dummy code and should be replaced by actual
+    getData();
+  }, []);
   return (
     <>
       {
