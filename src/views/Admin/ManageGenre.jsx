@@ -193,7 +193,7 @@ class Genre extends React.Component {
             if(isValid === true){
                 const genreDto = {
                     id: this.state.idGenre,
-                    namaGenre: this.state.namaGenre
+                    namaGenre: this.state.editNamaGenre
                 }
                 axios.put("http://localhost:8080/api/v1/genre/edit", genreDto)
                 .then((response) => {

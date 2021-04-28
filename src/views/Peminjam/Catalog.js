@@ -8,9 +8,6 @@ import {
 } from "reactstrap";
 import DetailBukuModal from "../../components/DetailBukuModal/index"
 import CardRekomendasi from "../../components/CardRekomendasi/index"
-import CatalogJs from "../../assets/data/datacatalog"
-import TerbaruJs from "../../assets/data/dataterbaru"
-import TerpopulerJs from "../../assets/data/dataterpopuler"
 import CardFooter from "reactstrap/lib/CardFooter";
 // import data from "../../assets/data/Catalog.json" untuk cek link hehehe
 
@@ -22,6 +19,11 @@ class Catalog extends React.Component {
       kategori: "",
       genre: "",
       sort: "",
+      catalogs: [],
+      newBooks: [],
+      hotBooks: [],
+      categories: [],
+      genres: [],
       selectedKategori: true,
       selectedGenre: true,
       selectedSort: true,
@@ -30,28 +32,58 @@ class Catalog extends React.Component {
 
   componentDidMount(){
     //panggil fungsi getAllCatalog diawal
-    // this.getAllCatalog();
+    this.getAllCatalog();
+    this.getNewBooks();
+    this.getHotBooks();
+    this.getAllKategori();
+    this.getAllGenre();
   }
 
-  // mengambil data json dengan axios
-  // getAllCatalog = () => {
-  //   fetch('.././../assets/data/datacatalog.json')
-  //   .then(res => {
-  //     console.log(res);
-  //     return res.json()
-  //   })
-  //   .then(datajson => {
-  //     this.setState({ data: datajson })
-  //   // axios.get("https://jsonplaceholder.typicode.com/users")
-  //   // .then(res=> { 
-  //   //   console.log("res: ", res);
-  //   //   // this.setState({
-  //   //   //   data: res.data
-  //   //   // })
-  //   // })
-  //   })
-  //   console.log(this.state.data);
-  // }
+  // mengambil semua buku yang belum dihapus
+  getAllCatalog = () => {
+    axios.get('http://localhost:8080/api/v1/user/buku/all')
+    .then((response) => {
+        this.setState({
+            catalogs: response.data.data
+        })
+    })
+  }
+  // mengambil data buku terbaru
+  getNewBooks = () => {
+    axios.get('http://localhost:8080/api/v1/user/buku/terbaru')
+    .then((response) => {
+        this.setState({
+            newBooks: response.data.data
+        })
+    })
+  }
+  // mengambil data buku terpopuler 
+  getHotBooks = () => {
+    axios.get('http://localhost:8080/api/v1/user/buku/terpopuler')
+    .then((response) => {
+        this.setState({
+            hotBooks: response.data.data
+        })
+    })
+  }
+  //  ambil data kategori untuk filter
+  getAllKategori = () => {
+    axios.get('http://localhost:8080/api/v1/kategori/all')
+    .then((response) => {
+        this.setState({
+            categories: response.data.data
+        })
+    })
+  }
+  //  ambil data genre untuk filter
+  getAllGenre = () => {
+    axios.get('http://localhost:8080/api/v1/genre/all')
+    .then((response) => {
+        this.setState({
+            genres: response.data.data
+        })
+    })
+  }
   handleSearch = (event) => {
     this.setState({
       cari: event.target.value,
@@ -99,17 +131,17 @@ class Catalog extends React.Component {
 
   render() {
     // const {data} = this.state;
-    const { cari, kategori, genre }= this.state
-    const cariData = CatalogJs.filter(value => {
+    const { cari, kategori, genre, catalogs, newBooks, hotBooks, categories, genres }= this.state
+    const cariData = catalogs.filter(value => {
       if(kategori!== "") return value.kategori.toLocaleLowerCase().includes(kategori.toLocaleLowerCase())
       else if (genre !== "") return value.genre.toLocaleLowerCase().includes(genre.toLocaleLowerCase())
       else if (cari!==""){
         if(value.judul.toLocaleLowerCase().includes(cari.toLocaleLowerCase()) || value.pengarang.toLocaleLowerCase().includes(cari.toLocaleLowerCase()))
-        return CatalogJs
+        return catalogs
       }
-      else return CatalogJs
+      else return catalogs
     })
-    
+   
     // const kategoriData = CatalogJs.filter(value => {
     //  return value.kategori.toLocaleLowerCase().includes(kategori.toLocaleLowerCase())
     // })
@@ -128,9 +160,11 @@ class Catalog extends React.Component {
                     <Label for="kategori_filter">Filter Kategori</Label>
                     <Input type="select" name="kategori_filter" id="kategori_filter" onChange={this.handleKategori}>
                       <option value="" selected={this.state.selectedKategori}>Semua Kategori</option>
-                      <option value="Buku">Buku</option>
-                      <option value="Novel">Novel</option>
-                      <option value="Komik">Komik</option>
+                      {categories.map(value => {
+                        return(
+                          <option value={value.namaKategori}>{value.namaKategori}</option>
+                        )
+                      })}
                     </Input>
                   </FormGroup>
                 </Col>
@@ -139,10 +173,11 @@ class Catalog extends React.Component {
                     <Label for="genre_filter">Filter Genre</Label>
                     <Input type="select" name="genre_filter" id="genre_filter" onChange={this.handleGenre}>
                       <option value="" selected={this.state.selectedGenre}>Semua Genre</option>
-                      <option value="Aksi">Aksi</option>
-                      <option value="Romantis">Romantis</option>
-                      <option value="Kuliner">Kuliner</option>
-                      <option value="Sains">Sains</option>
+                      {genres.map(value => {
+                        return(
+                          <option value={value.namaGenre}>{value.namaGenre}</option>
+                        )
+                      })}
                     </Input>
                   </FormGroup>
                 </Col>
@@ -183,21 +218,7 @@ class Catalog extends React.Component {
                         </CardBody>
                         <CardFooter>
                           <DetailBukuModal 
-                            id = {val.id}
-                            kode = {val.kode}
-                            judul = {val.judul}
-                            kategori = {val.kategori}
-                            genre = {val.genre}
-                            isbn = {val.isbn}
-                            harga = {val.harga}
-                            pengarang = {val.pengarang}
-                            penerbit = {val.penerbit}
-                            tanggal_terbit = {val.tanggal_terbit }
-                            halaman = {val.halaman}
-                            jumlah = {val.jumlah}
-                            lokasi = {val.lokasi}
-                            deskripsi = {val.deskripsi}
-                            sampul = {val.sampul}
+                            dataBuku = {val}
                             buttonLabel = "Detail"
                             className ="modal-lg"
                           /> 
@@ -243,8 +264,8 @@ class Catalog extends React.Component {
                   </Row>
                 </CardBody>
               </Card> */}
-              <CardRekomendasi jenisRekomendasi = "Buku Terpopuler" data={TerpopulerJs}/>
-              <CardRekomendasi jenisRekomendasi = "Buku Terbaru" data={TerbaruJs}/>
+              <CardRekomendasi jenisRekomendasi = "Buku Terpopuler" data={hotBooks}/>
+              <CardRekomendasi jenisRekomendasi = "Buku Terbaru" data={newBooks}/>
             </Col>
           </Row>
         </div>

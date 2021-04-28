@@ -3,31 +3,28 @@ import { Card,CardTitle, CardText, CardImgOverlay, CardImg } from "reactstrap";
 import Detail from "components/DetailBukuModal"
 
 const BukuRekomendasi = (props) => {
-  const { id, kode,judul_cut, judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul} = props;
+  const { dataBuku} = props;
+
+   //fungsi yang digunakan untuk memotong judul yang terlalu panjang
+   const cutTitle = (judul) => {
+    if(judul.length > 40){
+          return judul.slice(0,40) + " ...."
+        }
+        else{
+          return judul
+        }
+  }
+
   return (
     <div>
         <Card className="bg-dark text-white book-recomendation">
-            <CardImg src={sampul} alt="..." style={{opacity:"0.5"}} className="img-recomendation"/>
+            <CardImg src={dataBuku.sampul} alt="..." style={{opacity:"0.5"}} className="img-recomendation"/>
             {/* <CardImg src="https://images.wallpaperscraft.com/image/book_bouquet_cup_147482_3840x2160.jpg" alt="..." style={{opacity:"0.2"}} className="img-recomendation"/> */}
             <CardImgOverlay>
-                <CardTitle><h5><b>{judul_cut}</b></h5></CardTitle>
-                <CardText>{kategori} | {genre}</CardText>
+                <CardTitle><h5><b>{cutTitle(dataBuku.judul)}</b></h5></CardTitle>
+                <CardText>{dataBuku.kategori} | {dataBuku.genre}</CardText>
                 <Detail 
-                            id = {id}
-                            kode = {kode}
-                            judul = {judul}
-                            kategori = {kategori}
-                            genre = {genre}
-                            isbn = {isbn}
-                            harga = {harga}
-                            pengarang = {pengarang}
-                            penerbit = {penerbit}
-                            tanggal_terbit = {tanggal_terbit }
-                            halaman = {halaman}
-                            jumlah = {jumlah}
-                            lokasi = {lokasi}
-                            deskripsi = {deskripsi}
-                            sampul = {sampul}
+                            dataBuku = {dataBuku}
                             buttonLabel = "Detail"
                             className ="modal-lg"
                           /> 

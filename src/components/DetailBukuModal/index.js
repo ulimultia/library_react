@@ -3,10 +3,19 @@ import { Col, Row, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 're
 
 const DetailBukuModal = (props) => {
   const { 
-    // /id, kode, 
-    judul, kategori, genre, isbn, harga, pengarang, penerbit, tanggal_terbit, halaman, jumlah, lokasi, deskripsi, sampul, buttonLabel, className, colorButton, classButton
+    dataBuku,
+   buttonLabel, className, colorButton, classButton
   } = props;
-
+  console.log(dataBuku)
+  let jmlTersedia = 0
+  if(dataBuku.kodeBuku !== null){
+    dataBuku.kodeBuku.map((value, key) => {
+      // menghitung jumlah buku yang tersedia saja 
+      if(value.isAvailable === true){
+        jmlTersedia++;
+      }
+    })
+  }
   const [modal, setModal] = useState(false);
   var warna = "warning"
   if(colorButton != null){
@@ -26,33 +35,33 @@ const DetailBukuModal = (props) => {
         <ModalBody className="mx-4">
           <Row>
               <Col xs="12" sm ="4" className="my-4">
-                <img src={sampul} alt="" className="catalog-img-modal"/>
+                <img src={dataBuku.sampul} alt="" className="catalog-img-modal"/>
               </Col>
               <Col xs="12" sm ="8" className="mt-4">
-                <h3>{judul}</h3>
+                <h3>{dataBuku.judul}</h3>
                 <p class="text-secondary font-italic">
-                    {kategori} | {genre}
+                    {dataBuku.kategori} | {dataBuku.genre}
                     <br></br>Didonasikan Oleh: - 
                 </p>
                 <hr></hr>
                 <Row>
                     <Col xs="12" sm="7">
-                        <p> <i class="fas fa-user fa-sm"></i> {pengarang}</p>
-                        <p><i class="fas fa-calendar-alt fa-sm"></i> {tanggal_terbit}</p>
-                        <p><i class="fas fa-building fa-sm"></i> {penerbit}</p>
-                        <p> <i class="fas fa-barcode fa-sm"></i> {isbn} </p>
+                        <p> <i class="fas fa-user fa-sm"></i> {dataBuku.pengarang}</p>
+                        <p><i class="fas fa-calendar-alt fa-sm"></i> {dataBuku.tahun}</p>
+                        <p><i class="fas fa-building fa-sm"></i> {dataBuku.penerbit}</p>
+                        <p> <i class="fas fa-barcode fa-sm"></i> {dataBuku.isbn} </p>
                     </Col>
                     <Col xs="12" sm="5">
-                        <p> <i class="fas fa-file fa-sm"></i> Halaman: {halaman} </p>
-                        <p> <i class="fas fa-map-marker-alt fa-sm"></i> Lokasi: {lokasi} </p>
-                        <p> <i class="fas fa-book-open fa-sm"></i> Tersedia: {jumlah} buah</p>
-                        <p> <i class="fas fa-coins fa-sm"></i>Rp {harga},-/minggu </p>
+                        {/* <p> <i class="fas fa-file fa-sm"></i> Halaman: {0} </p> */}
+                        <p> <i class="fas fa-map-marker-alt fa-sm"></i> Lokasi: {dataBuku.lokasi} </p>
+                        <p> <i class="fas fa-book-open fa-sm"></i> Tersedia: {jmlTersedia} buah</p>
+                        <p> <i class="fas fa-coins fa-sm"></i>Rp {dataBuku.harga},-/minggu </p>
                     </Col>
                 </Row>
               </Col><br></br>
               <Col xs="12"className="mt-4 mb-3">
                 <h5><b>Deskripsi:</b> </h5>
-                <p class="text-justify" style={{lineHeight: 'normal'}}>{deskripsi}</p>
+                <p class="text-justify" style={{lineHeight: 'normal'}}>{dataBuku.deskripsi}</p>
               </Col>
           </Row>
         </ModalBody>

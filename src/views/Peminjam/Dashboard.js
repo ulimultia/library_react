@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Row,Col } from "reactstrap";
 import WidgetDashboard from "components/WidgetDashboard/"
 import BukuRekomendasi from "components/BukuRekomendasiDashboard/index"
@@ -15,10 +16,38 @@ import Terbaru from "assets/data/dataterbaru"
 // } from "variables/charts.js";
 
 class Dashboard extends React.Component {
-  // constructor(){
-  //   super();
-  // }
+  constructor(){
+    super();
+    this.state = {
+      newBooks: [],
+      hotBooks: [],
+    }
+  }
 
+  componentDidMount(){
+    //panggil fungsi getAllCatalog diawal
+    this.getNewBooks();
+    this.getHotBooks();
+  }
+
+  // mengambil data buku terbaru
+  getNewBooks = () => {
+    axios.get('http://localhost:8080/api/v1/user/buku/terbaru')
+    .then((response) => {
+        this.setState({
+            newBooks: response.data.data
+        })
+    })
+  }
+  // mengambil data buku terpopuler 
+  getHotBooks = () => {
+    axios.get('http://localhost:8080/api/v1/user/buku/terpopuler')
+    .then((response) => {
+        this.setState({
+            hotBooks: response.data.data
+        })
+    })
+  }
   //fungsi yang digunakan untuk memotong judul yang terlalu panjang
   cutTitle = (judul) => {
     if(judul.length > 40){
@@ -30,6 +59,7 @@ class Dashboard extends React.Component {
   }
   
   render() {
+    const {newBooks, hotBooks} = this.state
     return (
       <>
         <div className="content">
@@ -71,27 +101,12 @@ class Dashboard extends React.Component {
             <Col xs="2" sm="4"><hr/></Col>
             <Col xs="8" sm="4"><h5 className="text-center"><b>Buku Terbaru</b></h5></Col>
             <Col xs="2" sm="4"><hr/></Col>
-            { Terbaru.map(val=>{
+            { newBooks.map(val=>{
               // console.log("cek", val);
               return(
                 <Col xs="6" sm="2">
                   <BukuRekomendasi 
-                    id = {val.id}
-                    kode = {val.kode}
-                    judul = {val.judul}
-                    judul_cut = {this.cutTitle(val.judul)}
-                    kategori = {val.kategori}
-                    genre = {val.genre}
-                    isbn = {val.isbn}
-                    harga = {val.harga}
-                    pengarang = {val.pengarang}
-                    penerbit = {val.penerbit}
-                    tanggal_terbit = {val.tanggal_terbit }
-                    halaman = {val.halaman}
-                    jumlah = {val.jumlah}
-                    lokasi = {val.lokasi}
-                    deskripsi = {val.deskripsi}
-                    sampul = {val.sampul}
+                    dataBuku = {val}
                   />
                 </Col>
               ) 
@@ -101,26 +116,11 @@ class Dashboard extends React.Component {
             <Col xs="2" sm="4"><hr/></Col>
             <Col xs="8" sm="4"><h5 className="text-center"><b>Buku Terpopuler</b></h5></Col>
             <Col xs="2" sm="4"><hr/></Col>
-            { Terpopuler.map(val=>{
+            { hotBooks.map(val=>{
               return(
                 <Col xs="6" sm="2">
                   <BukuRekomendasi 
-                    id = {val.id}
-                    kode = {val.kode}
-                    judul = {val.judul}
-                    judul_cut = {this.cutTitle(val.judul)}
-                    kategori = {val.kategori}
-                    genre = {val.genre}
-                    isbn = {val.isbn}
-                    harga = {val.harga}
-                    pengarang = {val.pengarang}
-                    penerbit = {val.penerbit}
-                    tanggal_terbit = {val.tanggal_terbit }
-                    halaman = {val.halaman}
-                    jumlah = {val.jumlah}
-                    lokasi = {val.lokasi}
-                    deskripsi = {val.deskripsi}
-                    sampul = {val.sampul}
+                    dataBuku = {val}
                   />
                 </Col>
               )

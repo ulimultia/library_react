@@ -8,6 +8,8 @@ import { Col, Row, Badge, Card, CardHeader, CardTitle, CardBody } from 'reactstr
 
 const CardRekomendasi = (props) => {
   const { jenisRekomendasi, data} = props;
+  
+  // console.log("terbaru");
   // console.log(data);
   return (
     <div>
@@ -18,6 +20,15 @@ const CardRekomendasi = (props) => {
           </CardHeader>
           <CardBody>
             {data.slice(0,3).map(val => {
+              let jmlTersedia = 0
+              if(val.kodeBuku !== null){
+                val.kodeBuku.map((value, key) => {
+                  // menghitung jumlah buku yang tersedia saja 
+                  if(value.isAvailable === true){
+                    jmlTersedia++;
+                  }
+                })
+              }
               return(
                 <Row className="my-1">
                   <Col xs="4">
@@ -26,7 +37,7 @@ const CardRekomendasi = (props) => {
                   <Col xs="8">
                       <p>{val.judul}</p>
                       <p className="font-italic font-weight-light">{val.kategori} | {val.genre} </p>
-                      <Badge style={{backgroundColor: "#090c4a"}}>Tersedia: {val.jumlah}</Badge>
+                      <Badge style={{backgroundColor: "#090c4a"}}>Tersedia: {jmlTersedia}</Badge>
                   </Col>
                 </Row>   
               )
