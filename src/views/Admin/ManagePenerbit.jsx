@@ -15,7 +15,7 @@ const MySwal = withReactContent(Swal)
 class Penerbit extends React.Component {
     constructor(props) {
         super(props);
-        this.getAllGenre = this.getAllGenre.bind()
+        this.getAllPenerbit = this.getAllPenerbit.bind()
         this.state = {
             penerbits: [],
             newPenerbits: [],
@@ -49,7 +49,7 @@ class Penerbit extends React.Component {
 
     async componentDidMount() {
         // await this.authHeader();
-        await this.getAllGenre()
+        await this.getAllPenerbit()
         // this.handleGetAll(this.categories);
     }
 
@@ -88,7 +88,7 @@ class Penerbit extends React.Component {
             })
         }
     }
-    // handler genre input
+    // handler data input
     onChangePenerbit = (event) =>{
         this.setState({
             [event.target.name]: event.target.value
@@ -96,8 +96,8 @@ class Penerbit extends React.Component {
             // editNamaPenerbit: event.target.value
         })
     }
-    // get all data genre
-    getAllGenre = () =>{
+    // get all data data
+    getAllPenerbit = () =>{
         axios.get('http://localhost:8080/api/v1/penerbit/all')
         .then((response) => {
             this.setState({
@@ -160,7 +160,7 @@ class Penerbit extends React.Component {
                         newPenerbits: [],
                         data: {}
                     })
-                    this.getAllGenre()
+                    this.getAllPenerbit()
                 })
                 MySwal.fire({
                     icon: "success",
@@ -203,7 +203,7 @@ class Penerbit extends React.Component {
                         newPenerbits: [],
                         data: {}
                     })
-                    this.getAllGenre()
+                    this.getAllPenerbit()
                 })
                 MySwal.fire({
                     icon: "success",
@@ -220,7 +220,7 @@ class Penerbit extends React.Component {
             }
         }
     }
-    // delete genre
+    // delete data
     handleDelete = (id) => {
         MySwal.fire({
             title: "Anda Yakin?",
@@ -243,7 +243,7 @@ class Penerbit extends React.Component {
                         newPenerbits: [],
                         data: {}
                     })
-                    this.getAllGenre()
+                    this.getAllPenerbit()
                 })
                 MySwal.fire("Success", "Data berhasil dihapus ...", "success").then(() => {});
             }

@@ -15,7 +15,7 @@ const MySwal = withReactContent(Swal)
 class Kategori extends React.Component {
     constructor(props) {
         super(props);
-        this.getAllGenre = this.getAllGenre.bind()
+        this.getAllKategori = this.getAllKategori.bind()
         this.state = {
             categories: [],
             newCategories: [],
@@ -54,7 +54,7 @@ class Kategori extends React.Component {
 
     async componentDidMount() {
         // await this.authHeader();
-        await this.getAllGenre()
+        await this.getAllKategori()
         // this.handleGetAll(this.categories);
     }
 
@@ -93,16 +93,16 @@ class Kategori extends React.Component {
             })
         }
     }
-    // handler genre input
-    onChangePenerbit = (event) =>{
+    // handler input
+    onChangeInput = (event) =>{
         this.setState({
             [event.target.name]: event.target.value
             // namaKategori: event.target.value,
             // editNamaKategori: event.target.value
         })
     }
-    // get all data genre
-    getAllGenre = () =>{
+    // get all data kategori
+    getAllKategori = () =>{
         axios.get('http://localhost:8080/api/v1/kategori/all')
         .then((response) => {
             this.setState({
@@ -167,7 +167,7 @@ class Kategori extends React.Component {
                         newCategories: [],
                         data: {}
                     })
-                    this.getAllGenre()
+                    this.getAllKategori()
                 })
                 MySwal.fire({
                     icon: "success",
@@ -211,7 +211,7 @@ class Kategori extends React.Component {
                         newCategories: [],
                         data: {}
                     })
-                    this.getAllGenre()
+                    this.getAllKategori()
                 })
                 MySwal.fire({
                     icon: "success",
@@ -228,7 +228,7 @@ class Kategori extends React.Component {
             }
         }
     }
-    // delete genre
+    // delete kategori
     handleDelete = (id) => {
         MySwal.fire({
             title: "Anda Yakin?",
@@ -251,7 +251,7 @@ class Kategori extends React.Component {
                         newCategories: [],
                         data: {}
                     })
-                    this.getAllGenre()
+                    this.getAllKategori()
                 })
                 MySwal.fire("Success", "Data berhasil dihapus ...", "success").then(() => {});
             }
@@ -281,7 +281,7 @@ class Kategori extends React.Component {
                                                 <Label for="namaKategori">Kategori</Label>
                                                 <Input type="text" name="namaKategori" id="namaKategori" placeholder="Contoh: Buku"
                                                 value={this.state.namaKategori}
-                                                onChange = {this.onChangePenerbit}
+                                                onChange = {this.onChangeInput}
                                                 />
                                                 <FormText color="danger">{this.state.kategoriHelp}</FormText>
                                             </FormGroup>
@@ -326,7 +326,7 @@ class Kategori extends React.Component {
                         <Label for="namaKategori">Kategori</Label>
                         <Input type="text" name="editNamaKategori" id="editNamaKategori" placeholder="Contoh: Buku"
                         value={this.state.editNamaKategori}
-                        onChange = {this.onChangePenerbit}
+                        onChange = {this.onChangeInput}
                         />
                         <FormText color="danger">{this.state.kategoriHelp}</FormText>
                     </FormGroup>

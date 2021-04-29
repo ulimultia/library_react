@@ -101,13 +101,13 @@ class Lokasi extends React.Component {
             })
         }
     }
-    // handler genre input
+    // handler input
     onChangeLokasi = (event) =>{
         this.setState({
             [event.target.name]: event.target.value
         })
     }
-    // get all data genre
+    // get all data
     getAllLocation = () =>{
         axios.get('http://localhost:8080/api/v1/lokasi/all')
         .then((response) => {
@@ -270,7 +270,7 @@ class Lokasi extends React.Component {
         }
     }
 
-    // delete genre
+    // delete data
     handleDelete = (id) => {
         MySwal.fire({
             title: "Anda Yakin?",
