@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import ReactDOM from 'react-dom';
+import ReactPaginate from 'react-paginate';
 // reactstrap components
 import {
   Card,CardBody,
@@ -9,11 +11,12 @@ import {
 import DetailBukuModal from "../../components/DetailBukuModal/index"
 import CardRekomendasi from "../../components/CardRekomendasi/index"
 import CardFooter from "reactstrap/lib/CardFooter";
+import { data } from "jquery";
 // import data from "../../assets/data/Catalog.json" untuk cek link hehehe
 
 class Catalog extends React.Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       cari: "",
       kategori: "",
@@ -27,7 +30,13 @@ class Catalog extends React.Component {
       selectedKategori: true,
       selectedGenre: true,
       selectedSort: true,
+      offset: 0,
+      perPage: 6,
+      currentPage: 0,
     }
+    this.handlePageClick = this
+            .handlePageClick
+            .bind(this);
   }
 
   componentDidMount(){
@@ -43,8 +52,43 @@ class Catalog extends React.Component {
   getAllCatalog = () => {
     axios.get('http://localhost:8080/api/v1/user/buku/all')
     .then((response) => {
+        const tempData = response.data.data
+        const slice = tempData.slice(this.state.offset, this.state.offset + this.state.perPage)
+        const postData = slice.map(val => 
+        <React.Fragment>
+          <Col xs="6" sm="4" className="catalog-book">      
+                      <Card className="card-stats">
+                        {/* <a type="button" data-toggle="modal" data-target="#"> */}
+                          <img src={val.sampul} alt=" " className="card-img-top catalog-img "/>
+                        {/* </a>  */}
+                        <CardBody>
+                          <a type="button" data-toggle="modal" data-target="#">
+                            <p><b>{val.judul}</b></p>
+                            <p className="description text-end">
+                                <span class="font-italic font-weight-lighter">{val.kategori} | {val.genre}</span>
+                                <br></br><span class="text-success"> Tersedia: {val.jumlah} </span>
+                                <br></br><strong>Rp {val.harga},-/minggu</strong> 
+                              </p>
+                          </a>  
+                        </CardBody>
+                        <CardFooter>
+                          <DetailBukuModal 
+                            dataBuku = {val}
+                            buttonLabel = "Detail"
+                            className ="modal-lg"
+                          /> 
+                        </CardFooter>
+                      </Card>
+                    </Col>
+        </React.Fragment>)
+
         this.setState({
-            catalogs: response.data.data
+            pageCount: Math.ceil(data.length / this.state.perPage),
+          
+            postData
+        })
+        this.setState({
+            catalogs: response.data.data,
         })
     })
   }
@@ -117,6 +161,19 @@ class Catalog extends React.Component {
       selectedSort: true
     })
   }
+  handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    const offset = selectedPage * this.state.perPage;
+
+    this.setState({
+        currentPage: selectedPage,
+        offset: offset
+    }, () => {
+        this.getAllCatalog();
+    });
+
+  };
+
   // onChangeSort = (event) => {
   //   this.setState({
   //     sort: event.targt.value,
@@ -226,9 +283,23 @@ class Catalog extends React.Component {
                       </Card>
                     </Col>
                   )
-                })
-              }
+                  })
+                }
               </Row>
+              {/* <hr></hr>
+              {this.state.postData}
+                <ReactPaginate
+                    previousLabel={"prev"}
+                    nextLabel={"next"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}/> */}
             </Col>
             <Col xs="12" sm="4">
               {/* <Card className="card-stats">

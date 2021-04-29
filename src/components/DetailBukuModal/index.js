@@ -1,12 +1,11 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Col, Row, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const DetailBukuModal = (props) => {
   const { 
-    dataBuku,
-   buttonLabel, className, colorButton, classButton
-  } = props;
-  console.log(dataBuku)
+    dataBuku, buttonLabel, className, colorButton, classButton } = props;
+  // console.log(dataBuku)
   let jmlTersedia = 0
   if(dataBuku.kodeBuku !== null){
     dataBuku.kodeBuku.map((value, key) => {
@@ -16,6 +15,24 @@ const DetailBukuModal = (props) => {
       }
     })
   }
+  // cari nama donatur dengan id donatur
+  // let arrDonatur = []
+  // const [namaDonatur, setnamaDonatur] = useState("")
+  // if(dataBuku.kodeBuku !== null){
+  //   dataBuku.kodeBuku.map((value, key) => {
+  //     console.log("id donatur" + value.donatur);
+  //     return(
+  //       getDonaturDetail(value.donatur),
+  //       arrDonatur.push(namaDonatur)
+  //     )
+  //   })
+  // }
+
+  // async function getDonaturDetail(id) {
+  //   const response = await axios.get('http://localhost:8080/user/get-detail/' + id);
+  //   setnamaDonatur(response.data.nama);
+  // }
+
   const [modal, setModal] = useState(false);
   var warna = "warning"
   if(colorButton != null){
@@ -41,7 +58,7 @@ const DetailBukuModal = (props) => {
                 <h3>{dataBuku.judul}</h3>
                 <p class="text-secondary font-italic">
                     {dataBuku.kategori} | {dataBuku.genre}
-                    <br></br>Didonasikan Oleh: - 
+                    {/* <br></br>Didonasikan Oleh: {arrDonatur}  */}
                 </p>
                 <hr></hr>
                 <Row>

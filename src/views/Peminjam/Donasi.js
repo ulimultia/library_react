@@ -5,30 +5,51 @@ import {
 } from "reactstrap";
 import ModalCaraDonasi from "components/ModalCaraDonasi/index"
 import CardDonasi from "components/CardDonasi/index"
+import axios from "axios";
 
 class Sewa extends React.Component {
+  // http://localhost:8080/api/v1/user/buku/donasi/
+  constructor(){
+    super();
+    this.state = {
+      donations: [],
+      sessionData: JSON.parse(localStorage.getItem("userdata")),
+    }
+  }
+
+  componentDidMount(){
+    this.getAllDonation(this.state.sessionData.data.id);
+  }
+
+  getAllDonation = (id) => {
+    axios.get('http://localhost:8080/api/v1/user/buku/donasi/' + id)
+    .then((response) => {
+        this.setState({
+            donations: response.data.data
+        })
+    })
+  }
+
   render() {
+    const { donations } = this.state
+    // console.log(donations);
     return (
       <>
         <div className="content">
           <Row>
               <Col xs="12" sm="8">
                 <Row>
-                  <Col xs="6" sm="4">
-                    <CardDonasi />
-                  </Col>
-                  <Col xs="6" sm="4">
-                    <CardDonasi />
-                  </Col>
-                  <Col xs="6" sm="4">
-                    <CardDonasi />
-                  </Col>
-                  <Col xs="6" sm="4">
-                    <CardDonasi />
-                  </Col>
-                  <Col xs="6" sm="4">
-                    <CardDonasi />
-                  </Col>
+                  {
+                    donations.map(value => {
+                      return (
+                        <Col xs="6" sm="4">
+                          <CardDonasi 
+                            dataBuku = { value }
+                          />
+                        </Col>
+                      )
+                    })
+                  }
                 </Row>
               </Col>
               <Col xs="12" sm="4">
