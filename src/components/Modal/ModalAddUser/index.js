@@ -237,10 +237,6 @@ const ModalAddUser = (props) => {
                     <span class="fas fa-user"></span>
                   </div>
                 </div>
-                <span
-                  class="font-weight-lighter ml-3"
-                  id="labelPasswordAdd"
-                ></span>
               </div>
               <label for="labelPasswordAdd">Password</label>
               <span class="font-weight-lighter ml-3" id="labelPasswordAdd">
@@ -260,7 +256,6 @@ const ModalAddUser = (props) => {
                     <span class="fas fa-key"></span>
                   </div>
                 </div>
-                <span class="font-weight-lighter ml-3" id="labelNamaAdd"></span>
               </div>
               <label for="labelNamaAdd">Nama</label>
               <span class="font-weight-lighter ml-3" id="labelNamaAdd">
@@ -280,7 +275,6 @@ const ModalAddUser = (props) => {
                     <span class="fas fa-user"></span>
                   </div>
                 </div>
-                <span class="font-weight-lighter ml-3" id="labelNamaAdd"></span>
               </div>
               <label for="labelRoleAdd">Role</label>
               <span class="font-weight-lighter ml-3 ml-3" id="labelRoleAdd">

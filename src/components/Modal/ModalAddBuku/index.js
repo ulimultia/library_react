@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -9,47 +9,63 @@ import {
 } from "reactstrap";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import axios from "axios";
 
 const MySwal = withReactContent(Swal);
 const ModalAddBuku = (props) => {
-  const { buttonLabel, classButton, modalName, className } = props;
-  const [kodeBuku, setKodeBuku] = useState("");
-  const [labelKode, setLabelKode] = useState("");
+  const {
+    buttonLabel,
+    classButton,
+    modalName,
+    className,
+    onChangeModal,
+    getAll,
+  } = props;
   const [judulBuku, setJudul] = useState("");
   const [labelJudul, setLabelJudul] = useState("");
   const [pengarangBuku, setPengarang] = useState("");
   const [labelPengarang, setLabelPengarang] = useState("");
   const [penerbitBuku, setPenerbit] = useState("");
   const [labelPenerbit, setLabelPenerbit] = useState("");
-  const [tanggalTerbit, setTanggal] = useState("");
-  const [labelTanggal, setLabelTanggal] = useState("");
+  const [tahunTerbit, setTahunTerbit] = useState("");
+  const [labelTahunTerbit, setLabelTahunTerbit] = useState("");
   const [isbnBuku, setISBN] = useState("");
   const [labelISBN, setLabelISBN] = useState("");
   const [kategoriBuku, setKategori] = useState("");
   const [labelKategori, setLabelKategori] = useState("");
   const [genreBuku, setGenre] = useState("");
   const [labelGenre, setLabelGenre] = useState("");
-  const [halamanBuku, setHalaman] = useState("");
-  const [labelHalaman, setLabelHalaman] = useState("");
-  const [jumlahBuku, setJumlah] = useState("");
-  const [labelJumlah, setLabelJumlah] = useState("");
   const [hargaBuku, setHarga] = useState("");
   const [labelHarga, setLabelHarga] = useState("");
   const [lokasiBuku, setLokasi] = useState("");
   const [labelLokasi, setLabelLokasi] = useState("");
   const [deskripsiBuku, setDeskripsi] = useState("");
   const [labelDeskripsi1, setLabelDeskripsi] = useState("");
-  const [userBuku, setUser] = useState("");
-  const [labelUser, setLabelUser] = useState("");
   const [sampulBuku, setSampul] = useState("");
   const [labelSampul, setLabelSampul] = useState("");
+  const [arrayKategori, setArrayKategori] = useState([]);
+  const [arrayGenre, setArrayGenre] = useState([]);
+  const [arrayPenerbit, setArrayPenerbit] = useState([]);
+  const [arrayLokasi, setArrayLokasi] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
   const [modal, setModal] = useState(false);
-
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/v1/kategori/all").then((response) => {
+      setArrayKategori(response.data.data);
+    });
+    axios.get("http://localhost:8080/api/v1/genre/all").then((response) => {
+      setArrayGenre(response.data.data);
+    });
+    axios.get("http://localhost:8080/api/v1/penerbit/all").then((response) => {
+      setArrayPenerbit(response.data.data);
+    });
+    axios.get("http://localhost:8080/api/v1/lokasi/all").then((response) => {
+      setArrayLokasi(response.data.data);
+    });
+  }, []);
   const toggle = () => setModal(!modal);
 
-  const onChangeKodeBuku = (event) => {
-    setKodeBuku(event.target.value);
-  };
   const onChangeJudul = (event) => {
     setJudul(event.target.value);
   };
@@ -59,8 +75,8 @@ const ModalAddBuku = (props) => {
   const onChangePenerbit = (event) => {
     setPenerbit(event.target.value);
   };
-  const onChangeTanggal = (event) => {
-    setTanggal(event.target.value);
+  const onChangeTahunTerbit = (event) => {
+    setTahunTerbit(event.target.value);
   };
   const onChangeISBN = (event) => {
     setISBN(event.target.value);
@@ -71,12 +87,6 @@ const ModalAddBuku = (props) => {
   const onChangeGenre = (event) => {
     setGenre(event.target.value);
   };
-  const onChangeHalaman = (event) => {
-    setHalaman(event.target.value);
-  };
-  const onChangeJumlah = (event) => {
-    setJumlah(event.target.value);
-  };
   const onChangeHarga = (event) => {
     setHarga(event.target.value);
   };
@@ -86,20 +96,47 @@ const ModalAddBuku = (props) => {
   const onChangeDeskripsi = (event) => {
     setDeskripsi(event.target.value);
   };
-  const onChangeUser = (event) => {
-    setUser(event.target.value);
-  };
   const onChangeSampul = (event) => {
     setSampul(event.target.value);
   };
-  const handleAdd = () => {
+  const getFiles = () => {
+    axios.get("http://localhost:8080/api/v1/files").then((res) => {
+      console.log(res);
+      setFiles(null);
+      setFiles(res.data);
+    });
+  };
+  const postFiles = (e) => {
+    // e.preventDefault();
+
+    const data = new FormData();
+    data.append("file", file);
+
+    axios
+      .post("http://localhost:8080/api/v1/files/uploadsampul", data)
+      .then((res) => {
+        console.log(res.data.name);
+        setFiles(res.data.name);
+        // getFiles();
+        setFile(null);
+      });
+  };
+  const fileChange = async (e) => {
+    console.log(e.target.files);
+    await setFile(e.target.files[0]);
+    // await setFiles([]);
+    // await this.setState({
+    //   file: e.target.files[0],
+    // });
+    await console.log(file);
+  };
+  const handleAdd = async () => {
+    const kategoriObj = { ["id"]: kategoriBuku };
+    const penerbitObj = { ["id"]: penerbitBuku };
+    const lokasiObj = { ["id"]: lokasiBuku };
+    const genreObj = { ["id"]: genreBuku };
+    console.log("kategori obj: " + kategoriObj);
     var isValid = true;
-    if (kodeBuku === "") {
-      isValid = false;
-      setLabelKode("Tidak boleh kosong");
-    } else {
-      setLabelKode("");
-    }
     if (judulBuku === "") {
       isValid = false;
       setLabelJudul("Tidak boleh kosong");
@@ -112,17 +149,35 @@ const ModalAddBuku = (props) => {
     } else {
       setLabelPengarang("");
     }
-    if (penerbitBuku === "") {
+    if (kategoriBuku == "") {
+      isValid = false;
+      setLabelKategori("Tidak boleh kosong");
+    } else {
+      setLabelKategori("");
+    }
+    if (penerbitBuku == "") {
       isValid = false;
       setLabelPenerbit("Tidak boleh kosong");
     } else {
       setLabelPenerbit("");
     }
-    if (tanggalTerbit === "") {
+    if (lokasiBuku == "") {
       isValid = false;
-      setLabelTanggal("Tidak boleh kosong");
+      setLabelLokasi("Tidak boleh kosong");
     } else {
-      setLabelTanggal("");
+      setLabelLokasi("");
+    }
+    if (genreBuku == "") {
+      isValid = false;
+      setLabelGenre("Tidak boleh kosong");
+    } else {
+      setLabelGenre("");
+    }
+    if (tahunTerbit === "") {
+      isValid = false;
+      setLabelTahunTerbit("Tidak boleh kosong");
+    } else {
+      setLabelTahunTerbit("");
     }
     if (isbnBuku === "") {
       isValid = false;
@@ -130,66 +185,48 @@ const ModalAddBuku = (props) => {
     } else {
       setLabelISBN("");
     }
-    if (kategoriBuku === "") {
-      isValid = false;
-      setLabelKategori("Tidak boleh kosong");
-    } else {
-      setLabelKategori("");
-    }
-    if (genreBuku === "") {
-      isValid = false;
-      setLabelGenre("Tidak boleh kosong");
-    } else {
-      setLabelGenre("");
-    }
-    if (halamanBuku === "") {
-      isValid = false;
-      setLabelHalaman("Tidak boleh kosong");
-    } else {
-      setLabelHalaman("");
-    }
-    if (jumlahBuku === "") {
-      isValid = false;
-      setLabelJumlah("Tidak boleh kosong");
-    } else {
-      setLabelJumlah("");
-    }
     if (hargaBuku === "") {
       isValid = false;
       setLabelHarga("Tidak boleh kosong");
     } else {
       setLabelHarga("");
     }
-    if (lokasiBuku === "") {
-      isValid = false;
-      setLabelLokasi("Tidak boleh kosong");
-    } else {
-      setLabelLokasi("");
-    }
+
     if (deskripsiBuku === "") {
       isValid = false;
       setLabelDeskripsi("Tidak boleh kosong");
     } else {
       setLabelDeskripsi("");
     }
-    if (userBuku === "") {
-      isValid = false;
-      setLabelUser("Tidak boleh kosong");
-    } else {
-      setLabelUser("");
-    }
-    if (sampulBuku === "") {
-      isValid = false;
-      setLabelSampul("Tidak boleh kosong");
-    } else {
-      setLabelSampul("");
-    }
+    postFiles();
+    const tambahBuku = {
+      judul: judulBuku,
+      pengarang: pengarangBuku,
+      tahunTerbit: tahunTerbit,
+      sampul: files,
+      isbn: isbnBuku,
+      harga: hargaBuku,
+      deskripsi: deskripsiBuku,
+      kategori: kategoriObj,
+      penerbit: penerbitObj,
+      lokasi: lokasiObj,
+      genre: genreObj,
+    };
+    console.log(tambahBuku);
+    console.log(files);
     if (isValid === true) {
+      axios
+        .post("http://localhost:8080/api/v1/buku/add", tambahBuku)
+        .then((response) => {
+          console.log(response);
+        });
       MySwal.fire({
         title: "Berhasil!!!",
         icon: "success",
         text: "Berhasil Menambahkan Buku",
-      }).then(toggle());
+      });
+      toggle();
+      getAll();
     }
   };
   return (
@@ -210,35 +247,17 @@ const ModalAddBuku = (props) => {
         <ModalBody>
           <div className="px-5">
             <Form>
-              <label>Kode Buku</label>
-              <span className="font-weight-lighter ml-3 ml-3" id="labelKode">
-                {labelKode}
-              </span>
-              <div className="input-group" id="formtambahBuku" method="post">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="a"
-                  placeholder="Kode Buku"
-                  onChange={onChangeKodeBuku}
-                  value={kodeBuku}
-                ></input>
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-keyboard"></span>
-                  </div>
-                </div>
-              </div>
               <label>Judul</label>
-              <span className="font-weight-lighter ml-3" id="labelJudul1">
+              <span className="font-weight-lighter ml-3" id="labelJudul">
                 {labelJudul}
               </span>
               <div className="input-group">
                 <input
                   type="text"
                   className="form-control"
-                  id="judulBuku"
                   placeholder="Judul"
+                  id="judul"
+                  name="judul"
                   value={judulBuku}
                   onChange={onChangeJudul}
                 ></input>
@@ -267,41 +286,24 @@ const ModalAddBuku = (props) => {
                   </div>
                 </div>
               </div>
-              <label>Penerbit</label>
-              <span className="font-weight-lighter ml-3" id="labelPenerbit">
-                {labelPenerbit}
+
+              <label className="col-form-label">Tahun Terbit</label>
+              <span className="font-weight-lighter ml-3" id="labelJudul">
+                {labelTahunTerbit}
               </span>
               <div className="input-group">
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="penerbitBuku"
-                  placeholder="Penerbit"
-                  value={penerbitBuku}
-                  onChange={onChangePenerbit}
+                  id="tahunTerbit"
+                  placeholder="Tahun Terbit"
+                  name="tahunTerbit"
+                  value={tahunTerbit}
+                  onChange={onChangeTahunTerbit}
                 ></input>
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-print"></span>
-                  </div>
-                </div>
-              </div>
-              <label>Tanggal Terbit</label>
-              <span className="font-weight-lighter ml-3" id="labelTanggal">
-                {labelTanggal}
-              </span>
-              <div className="input-group">
-                <div className="input-group date" data-provide="datepicker">
-                  <input
-                    type="date"
-                    className="form-control pull-right"
-                    id="datepicker"
-                    placeholder="Tanggal"
-                    value={tanggalTerbit}
-                    onChange={onChangeTanggal}
-                  ></input>
-                  <div className="input-group-append">
-                    <div className="input-group-text"></div>
+                    <span className="fas fa-calendar"></span>
                   </div>
                 </div>
               </div>
@@ -311,7 +313,7 @@ const ModalAddBuku = (props) => {
               </span>
               <div className="input-group">
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="isbnBuku"
                   placeholder="ISBN"
@@ -324,88 +326,108 @@ const ModalAddBuku = (props) => {
                   </div>
                 </div>
               </div>
-              <label>Kategori</label>
-              <span className="font-weight-lighter ml-3" id="labelKategori1">
+              <label for="labelKategori">Kategori</label>
+              <span className="font-weight-lighter ml-3" id="labelKategori">
                 {labelKategori}
               </span>
               <div className="input-group">
                 <select
                   className="custom-select"
-                  id="kategoriBuku1"
+                  id="kategoriBuku"
+                  name="kategori"
                   value={kategoriBuku}
                   onChange={onChangeKategori}
                 >
-                  <option defaultChecked>Pilih Salah Satu</option>
-                  <option value="Novel">Novel</option>
-                  <option value="Komik">Komik</option>
-                  <option value="Ensiklopedia">Ensiklopedia</option>
+                  <option selected value="">
+                    Pilih Salah Satu
+                  </option>
+                  {arrayKategori.map((item) => (
+                    <option value={item.id}>{item.namaKategori}</option>
+                  ))}
                 </select>
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-list-alt pr-2"></span>
+                    <span className="fas fa-list mr-2"></span>
                   </div>
                 </div>
               </div>
-              <label>Genre</label>
-              <span className="font-weight-lighter ml-3" id="labelGenre1">
+              <label for="labelKategori">Penerbit</label>
+              <span className="font-weight-lighter ml-3" id="labelKategori">
+                {labelPenerbit}
+              </span>
+              <div className="input-group">
+                <select
+                  className="custom-select"
+                  id="penerbit"
+                  name="penerbit"
+                  value={penerbitBuku}
+                  onChange={onChangePenerbit}
+                >
+                  <option selected value="">
+                    Pilih Salah Satu
+                  </option>
+                  {arrayPenerbit.map((item) => (
+                    <option value={item.id}>{item.namaPenerbit}</option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-list mr-2"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label for="labelKategori">Lokasi</label>
+              <span className="font-weight-lighter ml-3" id="labelKategori">
+                {labelLokasi}
+              </span>
+              <div className="input-group">
+                <select
+                  className="custom-select"
+                  id="lokasi"
+                  name="lokasi"
+                  value={lokasiBuku}
+                  onChange={onChangeLokasi}
+                >
+                  <option selected value="">
+                    Pilih Salah Satu
+                  </option>
+                  {arrayLokasi.map((item) => (
+                    <option value={item.id}>{item.kodeLokasi}</option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-list mr-2"></span>
+                  </div>
+                </div>
+              </div>
+              <label for="labelGenre">Genre</label>
+              <span className="font-weight-lighter ml-3" id="labelGenre">
                 {labelGenre}
               </span>
               <div className="input-group">
                 <select
                   className="custom-select"
-                  id="genreBuku1"
+                  id="genreBuku"
+                  name="genre"
                   value={genreBuku}
                   onChange={onChangeGenre}
                 >
-                  <option defaultChecked>Pilih Salah Satu</option>
-                  <option value="Horror">Horror</option>
-                  <option value="Romance">Romance</option>
-                  <option value="Action">Action</option>
+                  <option selected value="">
+                    Pilih Salah Satu
+                  </option>
+                  {arrayGenre.map((item) => (
+                    <option value={item.id}>{item.namaGenre}</option>
+                  ))}
                 </select>
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-list-alt pr-2"></span>
+                    <span className="fas fa-list mr-2"></span>
                   </div>
                 </div>
               </div>
-              <label>Jumlah Halaman</label>
-              <span className="font-weight-lighter ml-3" id="labelHalaman">
-                {labelHalaman}
-              </span>
-              <div className="input-group">
-                <input
-                  type="number"
-                  className="form-control"
-                  id="halamanBuku"
-                  placeholder="Jumlah Halaman"
-                  value={halamanBuku}
-                  onChange={onChangeHalaman}
-                ></input>
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-sort-numeric-up"></span>
-                  </div>
-                </div>
-              </div>
-              <label>Jumlah</label>
-              <span className="font-weight-lighter ml-3" id="labelJumlah1">
-                {labelJumlah}
-              </span>
-              <div className="input-group">
-                <input
-                  type="number"
-                  className="form-control"
-                  id="jumlahBuku1"
-                  placeholder="Jumlah Buku"
-                  value={jumlahBuku}
-                  onChange={onChangeJumlah}
-                ></input>
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-calculator"></span>
-                  </div>
-                </div>
-              </div>
+
               <label>Harga</label>
               <span className="font-weight-lighter ml-3" id="labelHarga1">
                 {labelHarga}
@@ -422,25 +444,6 @@ const ModalAddBuku = (props) => {
                 <div className="input-group-append">
                   <div className="input-group-text">
                     <span className="fas fa-dollar-sign"></span>
-                  </div>
-                </div>
-              </div>
-              <label>Lokasi</label>
-              <span className="font-weight-lighter ml-3" id="labelLokasi1">
-                {labelLokasi}
-              </span>
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="lokasiBuku1"
-                  placeholder="Lokasi Buku"
-                  value={lokasiBuku}
-                  onChange={onChangeLokasi}
-                ></input>
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-map-marker-alt"></span>
                   </div>
                 </div>
               </div>
@@ -463,25 +466,7 @@ const ModalAddBuku = (props) => {
                   </div>
                 </div>
               </div>
-              <label>User</label>
-              <span className="font-weight-lighter ml-3" id="labelUsername">
-                {labelUser}
-              </span>
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="usernameBuku"
-                  placeholder="Kosongkan jika bukan donasi"
-                  value={userBuku}
-                  onChange={onChangeUser}
-                ></input>
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <span className="fas fa-user"></span>
-                  </div>
-                </div>
-              </div>
+
               <label>Sampul Buku</label>
               <span className="font-weight-lighter ml-3" id="labelSampul">
                 {labelSampul}
@@ -490,10 +475,9 @@ const ModalAddBuku = (props) => {
                 <div className="custom-file">
                   <input
                     type="file"
-                    className="custom-file-input"
+                    className="form-control-file"
                     id="sampulBuku"
-                    value={sampulBuku}
-                    onChange={onChangeSampul}
+                    onChange={fileChange}
                   ></input>
                   <label className="custom-file-label" for="sampulBuku">
                     Choose file

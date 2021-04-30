@@ -110,7 +110,7 @@ const ModalTopupUser = (props) => {
                 ></input>
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-user"></span>
+                    <span className="fas fa-dollar-sign"></span>
                   </div>
                 </div>
               </div>
