@@ -3,8 +3,6 @@ import axios from "axios";
 import { Row,Col } from "reactstrap";
 import WidgetDashboard from "components/WidgetDashboard/"
 import BukuRekomendasi from "components/BukuRekomendasiDashboard/index"
-import Terpopuler from "assets/data/dataterpopuler"
-import Terbaru from "assets/data/dataterbaru"
 // react plugin used to create charts
 // import { Line, Pie } from "react-chartjs-2";
 // // reactstrap components
@@ -21,6 +19,11 @@ class Dashboard extends React.Component {
     this.state = {
       newBooks: [],
       hotBooks: [],
+      dataSewa: [],
+      riwayats: [],
+      detailUser: {},
+      denda: 0,
+      sessionData: JSON.parse(localStorage.getItem("userdata")),
     }
   }
 
@@ -28,6 +31,10 @@ class Dashboard extends React.Component {
     //panggil fungsi getAllCatalog diawal
     this.getNewBooks();
     this.getHotBooks();
+    this.getAllDataSedangDisewa(this.state.sessionData.data.id)
+    this.getAllRiwayatSewa();
+    this.getDetailUser();
+    console.log(this.state.detailUser);
   }
 
   // mengambil data buku terbaru
@@ -48,6 +55,36 @@ class Dashboard extends React.Component {
         })
     })
   }
+  // mengambil buku yang sedang disewa
+  getAllDataSedangDisewa = (id) => {
+    axios.get('http://localhost:8080/api/v1/user/riwayat/sedangdisewa/' + id)
+    .then((response) => {
+        this.setState({
+           dataSewa: response.data.data
+        })
+    })
+  }
+  //  mengambil semua riwayat buku yang sedang disewa
+  getAllRiwayatSewa = () => {
+    // hanya riwayat sewa yang sudah selesai
+    // axios.get('http://localhost:8080/api/v1/user/riwayat/selesai/' + this.state.sessionData.data.id)
+    // semua riwayat sewa yang selesai atau masih dipinjam
+    axios.get('http://localhost:8080/api/v1/user/riwayat/sewa/' + this.state.sessionData.data.id)
+    .then(response => {
+      this.setState({
+        riwayats: response.data.data
+      })
+    })
+  }
+  // get detail user
+  getDetailUser = () => {
+    axios.get('http://localhost:8080/user/get-detail/' + this.state.sessionData.data.id)
+    .then(response => {
+      this.setState({
+        detailUser: response.data
+      })
+    })
+  }
   //fungsi yang digunakan untuk memotong judul yang terlalu panjang
   cutTitle = (judul) => {
     if(judul.length > 40){
@@ -57,7 +94,18 @@ class Dashboard extends React.Component {
           return judul
         }
   }
-  
+  // fungsi hitung denda di UI
+  hitungDenda = (data) => {
+    let denda = 0;
+    let nowDate = new Date()
+    data.map(value => {
+      let tempBatas = new Date(value.batasPinjam)
+      if(nowDate > tempBatas){
+        denda = denda + 100
+      }
+    })
+    return denda;
+  }
   render() {
     const {newBooks, hotBooks} = this.state
     return (
@@ -68,7 +116,7 @@ class Dashboard extends React.Component {
               <WidgetDashboard
                 icon = "fas fa-money-bill"
                 kategori = "Rp"
-                info = "56700,-"
+                info = {this.state.detailUser.saldo + ",-"} 
                 footer ="SALDO"
               />
             </Col>
@@ -76,7 +124,8 @@ class Dashboard extends React.Component {
               <WidgetDashboard
                 icon = "fas fa-coins"
                 kategori = "Rp"
-                info = "3300,-"
+                // info = {this.state.denda + ",-"}
+                info = {this.hitungDenda(this.state.dataSewa) + ",-"}
                 footer ="DENDA"
               />
             </Col>
@@ -84,7 +133,7 @@ class Dashboard extends React.Component {
               <WidgetDashboard
                 icon = "fas fa-hourglass-half"
                 kategori = "Buku"
-                info = "4"
+                info = {this.state.dataSewa.length}
                 footer ="SEDANG DISEWA"
               />
             </Col>
@@ -92,7 +141,7 @@ class Dashboard extends React.Component {
               <WidgetDashboard
                 icon = "fas fa-book"
                 kategori = "Buku"
-                info = "123"
+                info = {this.state.riwayats.length}
                 footer ="TOTAL BUKU DISEWA"
               />
             </Col>
