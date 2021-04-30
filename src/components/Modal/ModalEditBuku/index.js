@@ -1,126 +1,425 @@
-import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form } from 'reactstrap';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Form,
+} from "reactstrap";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import axios from "axios";
 
-const MySwal = withReactContent(Swal)
+const MySwal = withReactContent(Swal);
 
 const ModalEditBuku = (props) => {
-    const { id, judulBuku, kategoriBuku, genreBuku, hargaBuku, jumlahBuku, lokasiBuku, buttonLabel, className,
-        classButtonModal, modalName
-    } = props;
-    // const [judulBuku, setJudulBuku] = useState("")
-    const [labelJudul, setLabelJudul] = useState("")
-    const [modal, setModal] = useState(false);
+  const {
+    idDetail,
+    judulBuku,
+    kategoriBuku,
+    genreBuku,
+    hargaBuku,
+    pengarangBuku,
+    tahunTerbit,
+    isbnBuku,
+    deskripsiBuku,
+    lokasiBuku,
+    penerbitBuku,
+    buttonLabel,
+    className,
+    classButtonModal,
+    modalName,
+    modal,
+    onClickToggle,
+    onChangeModal,
+    getAll,
+  } = props;
 
-    const toggle = () => setModal(!modal);
+  const [labelJudul, setLabelJudul] = useState("");
+  const [labelKategori, setLabelKategori] = useState("");
+  const [labelGenre, setLabelGenre] = useState("");
+  const [labelHarga, setLabelHarga] = useState("");
+  const [labelLokasi, setLabelLokasi] = useState("");
+  const [labelPengarang, setLabelPengarang] = useState("");
+  const [labelTahunTerbit, setLabelTahunTerbit] = useState("");
+  const [labelIsbn, setLabelIsbn] = useState("");
+  const [labelPenerbit, setLabelPenerbit] = useState("");
+  const [arrayKategori, setArrayKategori] = useState([]);
+  const [arrayGenre, setArrayGenre] = useState([]);
+  const [arrayPenerbit, setArrayPenerbit] = useState([]);
+  const [arrayLokasi, setArrayLokasi] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
+  //   console.log("id buku : " + idDetail);
 
-    // const onChangeJudul = (event) =>{
-    //     setJudulBuku(event.target.value);
-    // }
-    const handleEdit = () => {
-        var isValid = true
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/v1/kategori/all").then((response) => {
+      setArrayKategori(response.data.data);
+    });
+    axios.get("http://localhost:8080/api/v1/genre/all").then((response) => {
+      setArrayGenre(response.data.data);
+    });
+    axios.get("http://localhost:8080/api/v1/penerbit/all").then((response) => {
+      setArrayPenerbit(response.data.data);
+    });
+    axios.get("http://localhost:8080/api/v1/lokasi/all").then((response) => {
+      setArrayLokasi(response.data.data);
+    });
+  }, []);
+  const getFiles = () => {
+    axios.get("http://localhost:8080/api/v1/files").then((res) => {
+      console.log(res);
+      setFiles(null);
+      setFiles(res.data);
+    });
+  };
+  const postFiles = (e) => {
+    // e.preventDefault();
 
-        if (judulBuku == "") {isValid = false; setLabelJudul("Tidak boleh kosong")}
-        else {setLabelJudul("")}
-        if(isValid === true){
+    const data = new FormData();
+    data.append("file", file);
 
-        // console.log(judulBuku);
-         MySwal.fire({
-            title: "Berhasil!!!",
-            icon: "success",
-            text: "Berhasil Mengedit Buku "+judulBuku,
-        })
-        toggle();
+    axios
+      .post("http://localhost:8080/api/v1/files/uploadsampul", data)
+      .then((res) => {
+        console.log(res.data.name);
+        setFiles(res.data.name);
+        // getFiles();
+        setFile(null);
+      });
+  };
+  const fileChange = async (e) => {
+    console.log(e.target.files);
+    await setFile(e.target.files[0]);
+    // await setFiles([]);
+    // await this.setState({
+    //   file: e.target.files[0],
+    // });
+    await console.log(file);
+  };
+  const handleEdit = () => {
+    console.log("id buku : " + idDetail);
+    const kategoriObj = { ["id"]: kategoriBuku };
+    const penerbitObj = { ["id"]: penerbitBuku };
+    const lokasiObj = { ["id"]: lokasiBuku };
+    const genreObj = { ["id"]: genreBuku };
+    var isValid = true;
+
+    if (judulBuku == "") {
+      isValid = false;
+      setLabelJudul("Tidak boleh kosong");
+    } else {
+      setLabelJudul("");
     }
-    };
-    return (
-        <div>
-            <Button className={classButtonModal} onClick={toggle}>{buttonLabel}</Button>
-            <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle} style={{backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
-                                    color: "#ffffff"}}>{modalName}</ModalHeader>
-                <ModalBody>
-                    <div className="px-5" >
-                        <Form>
-                            <label className="col-form-label">Judul:</label>
-                            <span className="font-weight-lighter ml-3" id="labelJudul">{labelJudul}</span>
-                            <div className="input-group">
-                                <input type="text" className="form-control" id="judulBuku" defaultValue={judulBuku}></input>
-                                <div className="input-group-append">
-                                    <div className="input-group-text">
-                                        <span className="fas fa-heading"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <label for="labelKategori">Kategori</label>
-                            <span className="font-weight-lighter ml-3" id="labelKategori"></span>
-                            <div className="input-group">
-                                <select className="custom-select" id="kategoriBuku" defaultValue={kategoriBuku} >
-                                    <option value="Novel">Novel</option>
-                                    <option value="Komik">Komik</option>
-                                    <option value="Ensiklopedia">Ensiklopedia</option>
-                                </select>
-                                <div className="input-group-append">
-                                    <div className="input-group-text">
-                                        <span className="fas fa-list"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <label for="labelGenre">Genre</label>
-                            <span className="font-weight-lighter ml-3" id="labelGenre"></span>
-                            <div className="input-group">
-                                <select className="custom-select" id="genreBuku" defaultValue={genreBuku}>
-                                    <option value="Horror">Horror</option>
-                                    <option value="Romance">Romance</option>
-                                    <option value="Action">Action</option>
-                                </select>
-                                <div className="input-group-append">
-                                    <div className="input-group-text">
-                                        <span className="fas fa-list"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <label for="tanggallahir" className="col-form-label">Harga:</label>
-                            <span className="font-weight-lighter ml-3" id="labelHarga"></span>
-                            <div className="input-group">
-                                <input type="number" className="form-control" id="hargaBuku" defaultValue={hargaBuku}></input>
-                                <div className="input-group-append">
-                                    <div className="input-group-text">
-                                        <span className="fas fa-dollar-sign"></span>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <label for="alamat" className="col-form-label">Jumlah:</label>
-                            <span className="font-weight-lighter ml-3" id="labelJumlah"></span>
-                            <div className="input-group">
-                                <input type="number" className="form-control" id="jumlahBuku" defaultValue={jumlahBuku}></input>
-                                <div className="input-group-append">
-                                    <div className="input-group-text">
-                                        <span className="fas fa-calculator"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <label for="alamat" className="col-form-label">Lokasi:</label>
-                            <span className="font-weight-lighter ml-3" id="labelLokasi"></span>
-                            <div className="input-group">
-                                <input type="text" className="form-control" id="lokasiBuku" defaultValue={lokasiBuku}></input>
-                                <div className="input-group-append">
-                                    <div className="input-group-text">
-                                        <span className="fas fa-map-marker-alt"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <ModalFooter>
-                                <Button type="button" onClick={() => handleEdit()} color="primary">Edit</Button>{' '}
-                            </ModalFooter>
-                        </Form>
-                    </div>
-                </ModalBody>
-            </Modal>
-        </div>
-    );
-}
+    if (kategoriBuku == "") {
+      isValid = false;
+      setLabelKategori("Tidak boleh kosong");
+    } else {
+      setLabelKategori("");
+    }
+
+    if (genreBuku == "") {
+      isValid = false;
+      setLabelGenre("Tidak boleh kosong");
+    } else {
+      setLabelGenre("");
+    }
+
+    if (hargaBuku == "") {
+      isValid = false;
+      setLabelHarga("Tidak boleh kosong");
+    } else {
+      setLabelHarga("");
+    }
+
+    if (lokasiBuku == "") {
+      isValid = false;
+      setLabelLokasi("Tidak boleh kosong");
+    } else {
+      setLabelLokasi("");
+    }
+    postFiles();
+
+    const editBuku = {
+      id: idDetail,
+      judul: judulBuku,
+      pengarang: pengarangBuku,
+      tahunTerbit: tahunTerbit,
+      sampul: files,
+      isbn: isbnBuku,
+      harga: hargaBuku,
+      deskripsi: deskripsiBuku,
+      kategori: kategoriObj,
+      penerbit: penerbitObj,
+      lokasi: lokasiObj,
+      genre: genreObj,
+    };
+    console.log(editBuku);
+    if (isValid === true) {
+      axios
+        .put("http://localhost:8080/api/v1/buku/edit/", editBuku)
+        .then((response) => {
+          console.log(response);
+        });
+      MySwal.fire({
+        title: "Berhasil!!!",
+        icon: "success",
+        text: "Berhasil Mengedit Buku",
+      });
+      onClickToggle();
+      getAll();
+    }
+  };
+  return (
+    <div>
+      {/* <Button className={classButtonModal} onClick={onClickToggle}>
+        {buttonLabel}
+      </Button> */}
+      <Modal isOpen={modal} toggle={onClickToggle} className={className}>
+        <ModalHeader
+          toggle={onClickToggle}
+          style={{
+            backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
+            color: "#ffffff",
+          }}
+        >
+          {modalName}
+        </ModalHeader>
+        <ModalBody>
+          <div className="px-5">
+            <Form>
+              <label className="col-form-label">Judul</label>
+              <span className="font-weight-lighter ml-3" id="labelJudul">
+                {labelJudul}
+              </span>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="judulBuku"
+                  name="judul"
+                  value={judulBuku}
+                  onChange={onChangeModal}
+                ></input>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-heading"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label className="col-form-label">Pengarang</label>
+              <span className="font-weight-lighter ml-3" id="labelJudul">
+                {labelPengarang}
+              </span>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="pengarang"
+                  name="pengarang"
+                  value={pengarangBuku}
+                  onChange={onChangeModal}
+                ></input>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label className="col-form-label">Tahun Terbit</label>
+              <span className="font-weight-lighter ml-3" id="labelJudul">
+                {labelTahunTerbit}
+              </span>
+              <div className="input-group">
+                <input
+                  type="number"
+                  className="form-control"
+                  id="tahunTerbit"
+                  name="tahunTerbit"
+                  value={tahunTerbit}
+                  onChange={onChangeModal}
+                ></input>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-calendar"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label className="col-form-label">ISBN</label>
+              <span className="font-weight-lighter ml-3" id="labelJudul">
+                {labelIsbn}
+              </span>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="isbn"
+                  name="isbn"
+                  value={isbnBuku}
+                  onChange={onChangeModal}
+                ></input>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-calendar"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label for="labelKategori">Kategori</label>
+              <span className="font-weight-lighter ml-3" id="labelKategori">
+                {labelKategori}
+              </span>
+              <div className="input-group">
+                <select
+                  className="custom-select"
+                  id="kategoriBuku"
+                  name="kategori"
+                  value={kategoriBuku}
+                  onChange={onChangeModal}
+                >
+                  {arrayKategori.map((item) => (
+                    <option value={item.id}>{item.namaKategori}</option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-list mr-2"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label for="labelKategori">Penerbit</label>
+              <span className="font-weight-lighter ml-3" id="labelKategori">
+                {labelPenerbit}
+              </span>
+              <div className="input-group">
+                <select
+                  className="custom-select"
+                  id="penerbit"
+                  name="penerbit"
+                  value={penerbitBuku}
+                  onChange={onChangeModal}
+                >
+                  {arrayPenerbit.map((item) => (
+                    <option value={item.id}>{item.namaPenerbit}</option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-list mr-2"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label for="labelKategori">Lokasi</label>
+              <span className="font-weight-lighter ml-3" id="labelKategori">
+                {labelLokasi}
+              </span>
+              <div className="input-group">
+                <select
+                  className="custom-select"
+                  id="lokasi"
+                  name="lokasi"
+                  value={lokasiBuku}
+                  onChange={onChangeModal}
+                >
+                  {arrayLokasi.map((item) => (
+                    <option value={item.id}>{item.kodeLokasi}</option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-list mr-2"></span>
+                  </div>
+                </div>
+              </div>
+
+              <label for="labelGenre">Genre</label>
+              <span className="font-weight-lighter ml-3" id="labelGenre">
+                {labelGenre}
+              </span>
+              <div className="input-group">
+                <select
+                  className="custom-select"
+                  id="genreBuku"
+                  name="genre"
+                  value={genreBuku}
+                  onChange={onChangeModal}
+                >
+                  {arrayGenre.map((item) => (
+                    <option value={item.id}>{item.namaGenre}</option>
+                  ))}
+                </select>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-list mr-2"></span>
+                  </div>
+                </div>
+              </div>
+              <label for="tanggallahir" className="col-form-label">
+                Harga:
+              </label>
+              <span className="font-weight-lighter ml-3" id="labelHarga">
+                {labelHarga}
+              </span>
+              <div className="input-group">
+                <input
+                  type="number"
+                  className="form-control"
+                  id="hargaBuku"
+                  name="harga"
+                  value={hargaBuku}
+                  onChange={onChangeModal}
+                ></input>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-dollar-sign"></span>
+                  </div>
+                </div>
+              </div>
+              <label>Sampul Buku</label>
+              <span
+                className="font-weight-lighter ml-3"
+                id="labelSampul"
+              ></span>
+              <div className="input-group">
+                <div className="custom-file">
+                  <input
+                    type="file"
+                    className="form-control-file"
+                    id="sampulBuku"
+                    onChange={fileChange}
+                  ></input>
+                  <label className="custom-file-label" for="sampulBuku">
+                    Choose file
+                  </label>
+                </div>
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-upload pr-2"></span>
+                  </div>
+                </div>
+              </div>
+              <ModalFooter>
+                <Button
+                  type="button"
+                  onClick={() => handleEdit()}
+                  color="primary"
+                >
+                  Edit
+                </Button>{" "}
+              </ModalFooter>
+            </Form>
+          </div>
+        </ModalBody>
+      </Modal>
+    </div>
+  );
+};
 
 export default ModalEditBuku;
