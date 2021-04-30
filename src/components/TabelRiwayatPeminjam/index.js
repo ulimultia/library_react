@@ -1,7 +1,8 @@
 import React from 'react';
 import { MDBDataTableV5 } from 'mdbreact';
 
-function TabelRiwayat() {
+function TabelRiwayat(props) {
+  const {data} = props
   const [datatable, setDatatable] = React.useState({
     columns: [
       {
