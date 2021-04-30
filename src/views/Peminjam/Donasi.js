@@ -7,8 +7,7 @@ import ModalCaraDonasi from "components/ModalCaraDonasi/index"
 import CardDonasi from "components/CardDonasi/index"
 import axios from "axios";
 
-class Sewa extends React.Component {
-  // http://localhost:8080/api/v1/user/buku/donasi/
+class Donasi extends React.Component {
   constructor(){
     super();
     this.state = {
@@ -73,4 +72,4 @@ class Sewa extends React.Component {
   }
 }
 
-export default Sewa;
+export default Donasi;
