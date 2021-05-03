@@ -74,13 +74,13 @@ const ModalEditBuku = (props) => {
       setFiles(res.data);
     });
   };
-  const postFiles = (e) => {
+  const postFiles = async (e) => {
     // e.preventDefault();
-
+    console.log(file);
     const data = new FormData();
     data.append("file", file);
 
-    axios
+    await axios
       .post("http://localhost:8080/api/v1/files/uploadsampul", data)
       .then((res) => {
         console.log(res.data.name);
@@ -89,14 +89,20 @@ const ModalEditBuku = (props) => {
         setFile(null);
       });
   };
+  const postfile = () => {
+    postFiles();
+  };
   const fileChange = async (e) => {
     console.log(e.target.files);
+    console.log(e);
+    console.log(file);
+
     await setFile(e.target.files[0]);
     // await setFiles([]);
     // await this.setState({
     //   file: e.target.files[0],
     // });
-    await console.log(file);
+    console.log(file);
   };
   const handleEdit = () => {
     console.log("id buku : " + idDetail);
@@ -140,36 +146,44 @@ const ModalEditBuku = (props) => {
     } else {
       setLabelLokasi("");
     }
-    postFiles();
 
-    const editBuku = {
-      id: idDetail,
-      judul: judulBuku,
-      pengarang: pengarangBuku,
-      tahunTerbit: tahunTerbit,
-      sampul: files,
-      isbn: isbnBuku,
-      harga: hargaBuku,
-      deskripsi: deskripsiBuku,
-      kategori: kategoriObj,
-      penerbit: penerbitObj,
-      lokasi: lokasiObj,
-      genre: genreObj,
-    };
-    console.log(editBuku);
+    const data = new FormData();
+    data.append("file", file);
     if (isValid === true) {
       axios
-        .put("http://localhost:8080/api/v1/buku/edit/", editBuku)
-        .then((response) => {
-          console.log(response);
+        .post("http://localhost:8080/api/v1/files/uploadsampul", data)
+        .then((res) => {
+          setFile(null);
+          const editBuku = {
+            id: idDetail,
+            judul: judulBuku,
+            pengarang: pengarangBuku,
+            tahunTerbit: tahunTerbit,
+            sampul: res.data.name,
+            isbn: isbnBuku,
+            harga: hargaBuku,
+            deskripsi: deskripsiBuku,
+            kategori: kategoriObj,
+            penerbit: penerbitObj,
+            lokasi: lokasiObj,
+            genre: genreObj,
+          };
+          if (res.status == 200) {
+            console.log(editBuku);
+            axios
+              .put("http://localhost:8080/api/v1/buku/edit/", editBuku)
+              .then((response) => {
+                console.log(response);
+              });
+            MySwal.fire({
+              title: "Berhasil!!!",
+              icon: "success",
+              text: "Berhasil Mengedit Buku",
+            });
+            onClickToggle();
+            getAll();
+          }
         });
-      MySwal.fire({
-        title: "Berhasil!!!",
-        icon: "success",
-        text: "Berhasil Mengedit Buku",
-      });
-      onClickToggle();
-      getAll();
     }
   };
   return (

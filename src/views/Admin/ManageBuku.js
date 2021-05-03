@@ -201,36 +201,73 @@ class Tables extends React.Component {
       console.log(this.state.bukuNew);
 
       this.state.bukuNew.map((el, key) => {
-        return this.state.bukuNew2.push({
-          no: key + 1,
-          judul: el.judul,
-          pengarang: el.pengarang,
-          tahunTerbit: el.tahunTerbit,
-          isbn: el.isbn,
-          harga: el.harga,
-          deskripsi: el.deskripsi,
-          sampul: (
-            <img
-              src={"http://localhost:8080/api/v1/files/download/" + el.sampul}
-            ></img>
-          ),
-          kategori: el.kategori.namaKategori,
-          penerbit: el.penerbit.namaPenerbit,
-          lokasi: el.lokasi.kodeLokasi,
-          genre: el.genre.namaGenre,
-          action: (
-            <Row>
-              <Button
-                onClick={() => this.toggleModal(el.id)}
-                className="btn btn-success btn-sm fa fa-edit mx-1"
-              ></Button>{" "}
-              <Button
-                onClick={() => this.handleDelete(el.id)}
-                className="btn btn-danger btn-sm fa fa-trash mx-1"
-              ></Button>{" "}
-            </Row>
-          ),
+        this.setState({
+          bukuNew2: [
+            ...this.state.bukuNew2,
+            {
+              no: key + 1,
+              judul: el.judul,
+              pengarang: el.pengarang,
+              tahunTerbit: el.tahunTerbit,
+              isbn: el.isbn,
+              harga: el.harga,
+              deskripsi: el.deskripsi,
+              sampul: (
+                <img
+                  src={
+                    "http://localhost:8080/api/v1/files/download/" + el.sampul
+                  }
+                ></img>
+              ),
+              kategori: el.kategori.namaKategori,
+              penerbit: el.penerbit.namaPenerbit,
+              lokasi: el.lokasi.kodeLokasi,
+              genre: el.genre.namaGenre,
+              action: (
+                <Row>
+                  <Button
+                    onClick={() => this.toggleModal(el.id)}
+                    className="btn btn-success btn-sm fa fa-edit mx-1"
+                  ></Button>{" "}
+                  <Button
+                    onClick={() => this.handleDelete(el.id)}
+                    className="btn btn-danger btn-sm fa fa-trash mx-1"
+                  ></Button>{" "}
+                </Row>
+              ),
+            },
+          ],
         });
+        // return this.state.bukuNew2.push({
+        //   no: key + 1,
+        //   judul: el.judul,
+        //   pengarang: el.pengarang,
+        //   tahunTerbit: el.tahunTerbit,
+        //   isbn: el.isbn,
+        //   harga: el.harga,
+        //   deskripsi: el.deskripsi,
+        //   sampul: (
+        //     <img
+        //       src={"http://localhost:8080/api/v1/files/download/" + el.sampul}
+        //     ></img>
+        //   ),
+        //   kategori: el.kategori.namaKategori,
+        //   penerbit: el.penerbit.namaPenerbit,
+        //   lokasi: el.lokasi.kodeLokasi,
+        //   genre: el.genre.namaGenre,
+        //   action: (
+        //     <Row>
+        //       <Button
+        //         onClick={() => this.toggleModal(el.id)}
+        //         className="btn btn-success btn-sm fa fa-edit mx-1"
+        //       ></Button>{" "}
+        //       <Button
+        //         onClick={() => this.handleDelete(el.id)}
+        //         className="btn btn-danger btn-sm fa fa-trash mx-1"
+        //       ></Button>{" "}
+        //     </Row>
+        //   ),
+        // });
       });
       this.setState({
         data: {
