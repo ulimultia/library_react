@@ -9,12 +9,14 @@ import {
  import withReactContent from 'sweetalert2-react-content'
 
 const MySwal = withReactContent(Swal)
+// const bcrypt = require('bcryptjs');
 
 const CardProfil = () => {
 
     let sessionData = JSON.parse(localStorage.getItem("userdata"))
     let idUser = sessionData.data.id
     const [detailUser, setdetailUser] = useState({})
+    const [dataUser, setdataUser] = useState({})
     const [dataSewa, setdataSewa] = useState([])
     const [donations, setdonations] = useState([])
      // const [status, setstatus] = useState("")
@@ -40,8 +42,8 @@ const CardProfil = () => {
     const [edAlamat, setEdAlamat] = useState("")
     const [edAlamatHelp, setEdAlamatHelp] = useState("")
     const [passNow, setPassNow] = useState("")
-    const [passNowHelp, setPassNowHelp] = useState("")
     const [newPass, setNewPass] = useState("")
+    const [passNowHelp, setPassNowHelp] = useState("")
     const [newPassHelp, setNewPassHelp] = useState("")
     const [confirmPass, setConfirmPass] = useState("")
     const [confirmPassHelp, setConfirmPassHelp] = useState("")
@@ -50,13 +52,6 @@ const CardProfil = () => {
         getAllDetailUser();
         getAllDonation();
         getAllDataSedangDisewa();
-
-        console.log("detail");
-        console.log(detailUser);
-        console.log("sewa");
-        console.log(dataSewa);
-        console.log("donasi");
-        console.log(donations);
     }, [])
 
     // let edNik = detailUser.nik
@@ -65,6 +60,7 @@ const CardProfil = () => {
         .then(response => {
         //   this.setState({
             setdetailUser(response.data)
+            setdataUser(response.data.user)
             setEdNik(response.data.nik)
             setEdNama(response.data.nama)
             setEdKelamin(response.data.kelamin)
@@ -187,14 +183,19 @@ const CardProfil = () => {
             .then(response => {
                 setEditModal(false)
                 getAllDetailUser()
+                MySwal.fire({
+                    icon: "success",
+                    title: "Sukses!!!",
+                    text: "Data berhasil diubah ....",
+                })
             })
             .catch(error => {
                 console.log(error.response);
-            })
-            MySwal.fire({
-                icon: "success",
-                title: "Sukses!!!",
-                text: "Data berhasil diubah ....",
+                MySwal.fire({
+                    icon: "success",
+                    title: "Gagal!!!",
+                    text: error.response.data.message,
+                })
             })
         }
         else {
@@ -221,8 +222,12 @@ const CardProfil = () => {
     const editPassNow = () => {
         var isValid = true;
         // validasi pass saat ini 
+        // console.log("hasil compare pass: " + bcrypt.compare(passNow, passNowHash));
         if(passNow === "") {isValid = false; setPassNowHelp("Tidak boleh kosong");}      
         else if(passNow.length < 5) {isValid = false; setPassNowHelp("Minimal 5 karakter")}
+        // else if(bcrypt.compare(passNow, passNowHash) === false){
+        //     setPassNowHelp("Passwird tidak sesuai");     
+        // }
         else setPassNowHelp("");
         // validasi pass baru
         if(newPass === "") {isValid = false; setNewPassHelp("Tidak boleh kosong")}
@@ -235,10 +240,35 @@ const CardProfil = () => {
         else setConfirmPassHelp("")
 
         if(isValid === true){
-            MySwal.fire({
-                icon: "success",
-                title: "Sukses!!!",
-                text: "Password berhasil diubah ....",
+            let sessionData = JSON.parse(localStorage.getItem("userdata"))
+            let uname = sessionData.data.username
+            console.log(uname);
+            const userDto = {
+                username: uname,
+                passwordNew: newPass,
+                password: passNow
+            }
+            axios.put("http://localhost:8080/auth/change", userDto)
+            .then(response => {
+                setGantiPass(false)
+                setPassNowHelp("")
+                setPassNow("")
+                setNewPass("")
+                setConfirmPass("")
+                MySwal.fire({
+                    icon: "success",
+                    title: "Sukses!!!",
+                    text: "Password berhasil diubah ....",
+                })
+            })
+            .catch(error => {
+                console.log(error.response);
+                MySwal.fire({
+                    icon: "error",
+                    title: "Gagal!!!",
+                    text: error.response.data.message + " ....",
+                })
+                setPassNowHelp("Password salah")
             })
         }
         else {
@@ -251,6 +281,7 @@ const CardProfil = () => {
     }
 
   return (
+    //   console.log(passNow),
     <>
         <Row>
             <Col md="12">
