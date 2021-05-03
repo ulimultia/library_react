@@ -11,15 +11,11 @@ class Profile extends React.Component {
     return (
       <>
         <div className="content">
-          <Row>
-            <Col md="12">
-              <CardProfilAdmin
-                nama="Alfian Aulia Firdaus"
-                role="Admin"
-                foto="https://i.pinimg.com/originals/b3/ac/66/b3ac66a299b5496846ffa50eac790d49.png"
-              />
-            </Col>
-            <Col xs="12" sm="6">
+          {/* <Row>
+            <Col md="12"> */}
+              <CardProfilAdmin/>
+            {/* </Col> */}
+            {/* <Col xs="12" sm="6">
               <WidgetProfil
                 icon="fas fa-venus-mars"
                 kategori="Jenis Kelamin"
@@ -47,7 +43,7 @@ class Profile extends React.Component {
                 info="081123456789"
               />
             </Col>
-          </Row>
+          </Row> */}
         </div>
       </>
     );

@@ -9,20 +9,19 @@ import {
  import withReactContent from 'sweetalert2-react-content'
 
 const MySwal = withReactContent(Swal)
-// const bcrypt = require('bcryptjs');
 
 const CardProfil = () => {
-
     let sessionData = JSON.parse(localStorage.getItem("userdata"))
     let idUser = sessionData.data.id
+
     const [detailUser, setdetailUser] = useState({})
     const [dataUser, setdataUser] = useState({})
     const [dataSewa, setdataSewa] = useState([])
     const [donations, setdonations] = useState([])
-     // const [status, setstatus] = useState("")
-    // const [mgs, setmgs] = useState("")
+
     const [editModal, setEditModal] = useState(false)
     const [gantiPass, setGantiPass] = useState(false)
+    
     const [edNik, setEdNik] = useState("")
     const [edNikHelp, setEdNikHelp] = useState("")
     const [edNama, setEdNama] = useState("")
@@ -114,7 +113,6 @@ const CardProfil = () => {
     }
     const onChangeEdTanggal = (event) =>{
         setEdTanggal(event.target.value);
-        // console.log(edTanggal)
     }
     // const onChangeEdEmail = (event) =>{
     //     setEdEmail(event.target.value);
@@ -134,7 +132,6 @@ const CardProfil = () => {
     
     // validasi dan feedback edit profil
     const editNow = () => {
-        // console.log("klik edit profil");
         var isValid = true
         // validasi NIK
         if (isNaN(edNik) === true) {isValid = false; setEdNikHelp("Harus Angka")} 
@@ -190,7 +187,6 @@ const CardProfil = () => {
                 })
             })
             .catch(error => {
-                console.log(error.response);
                 MySwal.fire({
                     icon: "success",
                     title: "Gagal!!!",
@@ -222,7 +218,6 @@ const CardProfil = () => {
     const editPassNow = () => {
         var isValid = true;
         // validasi pass saat ini 
-        // console.log("hasil compare pass: " + bcrypt.compare(passNow, passNowHash));
         if(passNow === "") {isValid = false; setPassNowHelp("Tidak boleh kosong");}      
         else if(passNow.length < 5) {isValid = false; setPassNowHelp("Minimal 5 karakter")}
         // else if(bcrypt.compare(passNow, passNowHash) === false){
@@ -262,7 +257,6 @@ const CardProfil = () => {
                 })
             })
             .catch(error => {
-                console.log(error.response);
                 MySwal.fire({
                     icon: "error",
                     title: "Gagal!!!",
@@ -281,7 +275,7 @@ const CardProfil = () => {
     }
 
   return (
-    //   console.log(passNow),
+
     <>
         <Row>
             <Col md="12">
