@@ -18,17 +18,17 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-
+import moment from "moment";
 const MySwal = withReactContent(Swal);
 
 class Pinjam extends React.Component {
   constructor(props) {
     super(props);
-    this.getAllSewa = this.getAllSewa.bind();
+    this.getAllPinjaman = this.getAllPinjaman.bind();
     this.state = {
       session: JSON.parse(localStorage.getItem("userdata")),
       pinjamanBuku: [],
-      newKodeBuku: [],
+      newPinjamanBuku: [],
       modal: false,
       modalEdit: false,
       idSewa: null,
@@ -38,11 +38,10 @@ class Pinjam extends React.Component {
       penyewaHelp: "",
       judul: "",
       kode: "",
-      penyewa: "",
-      created: "",
-      donatur: "-",
-      harga: "",
-      hargaDetail: "",
+      peminjam: "",
+      pencatat: "",
+      batas: "",
+      tanggalPinjam: "",
       btn: "",
       columTable: [
         {
@@ -51,24 +50,35 @@ class Pinjam extends React.Component {
           width: 40,
         },
         {
-          label: "Judul",
-          field: "judul",
-          width: 400,
-        },
-        {
           label: "Kode Buku",
           field: "kode",
           width: 200,
         },
         {
-          label: "Harga Sewa",
-          field: "harga",
+          label: "Peminjam",
+          field: "peminjam",
           width: 200,
         },
         {
-          label: "Donatur",
-          field: "donatur",
-          width: 400,
+          label: "Lokasi",
+          field: "pencatat",
+          width: 200,
+        },
+        {
+          label: "Tanggal Pinjam",
+          field: "tanggalPinjam",
+          width: 200,
+        },
+        {
+          label: "Batas Pinjam",
+          field: "batas",
+          width: 150,
+        },
+        {
+          label: "Action",
+          field: "action",
+          // sort: 'disabled',
+          width: 80,
         },
       ],
       data: {},
@@ -77,7 +87,7 @@ class Pinjam extends React.Component {
 
   async componentDidMount() {
     // await this.authHeader();
-    await this.getAllSewa();
+    await this.getAllPinjaman();
     // this.handleGetAll(this.categories);
   }
 
@@ -98,6 +108,86 @@ class Pinjam extends React.Component {
       });
     }
   };
+  handlePengembalian = (id) => {
+    axios
+      .get("http://localhost:8080/admin/peminjaman/get-by-id/" + id)
+      .then((response) => {
+        const pengembalianDTO = {
+          id: id,
+          idUser: this.state.session.data.id,
+        };
+        this.setState({
+          batas: moment(response.data.batasPinjam).format(),
+          tanggalPinjam: moment(response.data.tanggalPinjam).format(),
+        });
+        console.log(this.state.batas);
+        console.log(this.state.tanggalPinjam);
+        var durasi = moment().diff(this.state.batas, this.state.tanggalPinjam);
+        var days = moment.duration(durasi).asDays();
+        console.log(days);
+        if (days < 0) {
+          console.log(response.data.kodeBuku.buku.lokasi.keteranganLokasi);
+          axios
+            .post(
+              "http://localhost:8080/admin/peminjaman/pengembalian",
+              pengembalianDTO
+            )
+            .then((respon) => {
+              MySwal.fire(
+                "Success",
+                "Silahkan meletakkan buku pada " +
+                  response.data.kodeBuku.buku.lokasi.keteranganLokasi,
+                "success"
+              );
+            });
+        }
+        if (days > 0) {
+          axios
+            .post(
+              "http://localhost:8080/admin/peminjaman/pengembalian",
+              pengembalianDTO
+            )
+            .then((respon) => {
+              console.log(respon.data.message);
+              MySwal.fire(
+                "Success",
+                respon.data.message +
+                  ". Silahkan meletakkan buku pada " +
+                  response.data.kodeBuku.buku.lokasi.keteranganLokasi,
+                "success"
+              );
+            })
+            .catch((error) => {
+              // Error
+              if (error.response) {
+                console.log(error.response.headers);
+                if (error.response.headers) {
+                  MySwal.fire({
+                    icon: "error",
+                    title: "Gagal!!!",
+                    text: "Saldo anda tidak mencukupi!",
+                  });
+                }
+              } else if (error.request) {
+                console.log(error.request);
+                MySwal.fire({
+                  icon: "error",
+                  title: "Gagal!!!",
+                  text: "Saldo anda tidak mencukupi!",
+                });
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                MySwal.fire({
+                  icon: "error",
+                  title: "Gagal!!!",
+                  text: "Saldo anda tidak mencukupi!",
+                });
+                console.log("Error", error.message);
+              }
+            });
+        }
+      });
+  };
   // handler genre input
   onChangeSewa = (event) => {
     this.setState({
@@ -105,133 +195,42 @@ class Pinjam extends React.Component {
     });
   };
   // get all data genre
-  getAllSewa = () => {
+  getAllPinjaman = () => {
     axios
-      .get("http://localhost:8080/api/v1/kodebuku/all-available")
+      .get("http://localhost:8080/admin/peminjaman/get-all")
       .then((response) => {
+        console.log(response);
         this.setState({
-          kodeBuku: response.data.data,
+          pinjamanBuku: response.data.data,
         });
-        this.state.kodeBuku.map((value, key) => {
-          return this.state.newKodeBuku.push({
+        this.state.pinjamanBuku.map((value, key) => {
+          return this.state.newPinjamanBuku.push({
             no: key + 1,
-            judul: value.buku.judul,
-            kode: value.kodeBuku,
-            donatur: "-" ? null : value.donatur.username,
-            harga: value.buku.harga,
+            kode: value.kodeBuku.kodeBuku,
+            peminjam: value.user.username,
+            pencatat: value.kodeBuku.buku.lokasi.kodeLokasi,
+            batas: moment(value.batasPinjam).format("MMMM Do YYYY"),
+            tanggalPinjam: moment(value.tanggalPinjam).format(
+              "MMMM Do YYYY, h:mm:ss a"
+            ),
+            action: (
+              <Row>
+                <Button
+                  onClick={() => this.handlePengembalian(value.id)}
+                  className="btn btn-warning btn-sm fa fa-exchange-alt"
+                ></Button>{" "}
+              </Row>
+            ),
           });
         });
-        console.log(this.state.newKodeBuku);
+        console.log(this.state.newPinjamanBuku);
         this.setState({
           data: {
             columns: [...this.state.columTable],
-            rows: [...this.state.newKodeBuku],
+            rows: [...this.state.newPinjamanBuku],
           },
         });
       });
-  };
-  // add and edit
-  submitNow = (e) => {
-    console.log(this.state.kode);
-
-    e.preventDefault();
-    let isValid = true;
-    // jika button tambah data
-    if (this.state.btn === "Tambah") {
-      if (this.state.kode === "") {
-        isValid = false;
-        this.setState({
-          kodeHelp: "Kode Buku tidak boleh kosong...",
-        });
-      } else {
-        this.setState({
-          kodeHelp: "",
-        });
-      }
-      if (this.state.penyewa === "") {
-        isValid = false;
-        this.setState({
-          penyewaHelp: "Username penyewa tidak boleh kosong...",
-        });
-      } else {
-        this.setState({
-          penyewaHelp: "",
-        });
-      }
-
-      if (isValid === true) {
-        axios
-          .get("http://localhost:8080/api/v1/kodebuku/kode/" + this.state.kode)
-          .then((response) => {
-            const kodeObj = { ["kodeBuku"]: this.state.kode };
-            const penyewaObj = { ["username"]: this.state.penyewa };
-            const pencatatObj = { ["id"]: this.state.session.data.id };
-            const sewaDTO = {
-              kodeBuku: kodeObj,
-              peminjam: penyewaObj,
-              pencatat: pencatatObj,
-              harga: response.data.data.buku.harga,
-            };
-            console.log(sewaDTO);
-            axios
-              .post("http://localhost:8080/admin/peminjaman/sewa", sewaDTO)
-              .then((respon) => {
-                if (respon.status == 200) {
-                  console.log(respon.message);
-
-                  MySwal.fire({
-                    icon: "success",
-                    title: "Sukses!!!",
-                    text: "Buku berhasil disewa ....",
-                  });
-                  this.setState({
-                    modal: false,
-                    kode: "",
-                    kodeBuku: [],
-                    newKodeBuku: [],
-                    data: {},
-                  });
-                  this.getAllSewa();
-                }
-              })
-              .catch((error) => {
-                // Error
-                if (error.response) {
-                  if (error.response.status == 400) {
-                    MySwal.fire({
-                      icon: "error",
-                      title: "Gagal!!!",
-                      text: "Saldo anda tidak mencukupi!",
-                    });
-                  }
-                  if (error.response.status == 410) {
-                    MySwal.fire({
-                      icon: "error",
-                      title: "Gagal!!!",
-                      text: "Buku tidak tersedia atau sudah dipinjam",
-                    });
-                  }
-                } else if (error.request) {
-                  console.log(error.request);
-
-                  MySwal.fire({
-                    icon: "error",
-                    title: "Gagal!!!",
-                    text: "Kode buku salah!",
-                  });
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  MySwal.fire({
-                    icon: "error",
-                    title: "Gagal!!!",
-                    text: "Kode buku salah!",
-                  });
-                  console.log("Error", error.message);
-                }
-              });
-          });
-      }
-    }
   };
 
   render() {
@@ -243,85 +242,7 @@ class Pinjam extends React.Component {
               <Card>
                 <CardBody>
                   <Row>
-                    <Col xs="12" sm="12" className="text-right">
-                      <Button
-                        onClick={this.toggle}
-                        className="btn btn-sm"
-                        style={{ backgroundColor: "navy" }}
-                      >
-                        <i className="fas fa-plus"> </i> Sewa Buku
-                      </Button>
-                      <Modal
-                        isOpen={this.state.modal}
-                        toggle={this.toggle}
-                        className="modal-sm"
-                        id="modalTambah"
-                      >
-                        <ModalHeader
-                          toggle={this.toggle}
-                          style={{
-                            backgroundImage:
-                              "linear-gradient(to left, #44a08d, #093637)",
-                            color: "#ffffff",
-                          }}
-                        >
-                          Sewa Buku
-                        </ModalHeader>
-                        <form id="form">
-                          <ModalBody className="mx-4">
-                            <FormGroup>
-                              <Input
-                                type="number"
-                                name="idSewa"
-                                id="idSewa"
-                                value={this.state.idSewa}
-                                hidden={true}
-                              />
-                            </FormGroup>
-                            <FormGroup>
-                              <Label for="labelKode">Kode Buku</Label>
-                              <Input
-                                type="text"
-                                name="kode"
-                                id="kode"
-                                placeholder="Kode Buku"
-                                value={this.state.kode}
-                                onChange={this.onChangeSewa}
-                              />
-                              <FormText color="danger">
-                                {this.state.kodeHelp}
-                              </FormText>
-                            </FormGroup>
-                            <FormGroup>
-                              <Label for="labelPenyewa">Penyewa</Label>
-                              <Input
-                                type="text"
-                                name="penyewa"
-                                id="penyewa"
-                                placeholder="Username Penyewa"
-                                value={this.state.penyewa}
-                                onChange={this.onChangeSewa}
-                              />
-                              <FormText color="danger">
-                                {this.state.penyewaHelp}
-                              </FormText>
-                            </FormGroup>
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button
-                              type="reset"
-                              color="secondary"
-                              onClick={this.toggle}
-                            >
-                              Tutup
-                            </Button>
-                            <Button color="info" onClick={this.submitNow}>
-                              {this.state.btn}
-                            </Button>
-                          </ModalFooter>
-                        </form>
-                      </Modal>
-                    </Col>
+                    <Col xs="12" sm="12" className="text-right"></Col>
                   </Row>
                   <hr />
                   <MDBDataTableV5
