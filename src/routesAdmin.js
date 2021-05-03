@@ -20,6 +20,7 @@ import Dashboard from "views/Admin/Dashboard.js";
 import Profile from "views/Admin/Profile.js";
 import TableUser from "views/Admin/ManageUser.js";
 import TableBuku from "views/Admin/ManageBuku.js";
+import KodeBuku from "views/Admin/ManageKodeBuku.jsx";
 import TabelPengembalian from "views/Admin/ManagePengembalian";
 import Penerbit from "views/Admin/ManagePenerbit"
 import Kategori from "views/Admin/ManageKategori"
@@ -47,6 +48,13 @@ var routesAdmin = [
     name: "Daftar Buku",
     icon: "fa fa-book",
     component: TableBuku,
+    layout: "/admin",
+  },
+  {
+    path: "/kodebuku",
+    name: "Kode Buku",
+    icon: "fa fa-copy",
+    component: KodeBuku,
     layout: "/admin",
   },
   {
