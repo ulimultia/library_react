@@ -17,14 +17,8 @@ import {
   Row,
   Col,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Input,
-  Label,
+  Modal,ModalHeader,ModalBody,ModalFooter,
+  Form, FormGroup, Input, Label, FormText,
 } from "reactstrap";
 const MySwal = withReactContent(Swal);
 class Tables extends React.Component {
@@ -35,6 +29,7 @@ class Tables extends React.Component {
       modalTest: false,
       modalGenerate: false,
       unameDonatur: "",
+      unameHelp: "",
       idBuku: 0,
       bukuNew: [],
       bukuNew2: [],
@@ -226,7 +221,7 @@ class Tables extends React.Component {
                 <img
                   src={
                     "http://localhost:8080/api/v1/files/download/" + el.sampul
-                  }
+                  } alt="sampulBuku"
                 ></img>
               ),
               kategori: el.kategori.namaKategori,
@@ -235,13 +230,7 @@ class Tables extends React.Component {
               genre: el.genre.namaGenre,
               action: (
                 <Row>
-                  <Button
-                    className="btn btn-sm"
-                    style={{ backgroundColor: "purple" }}
-                    onClick={() => {
-                      this.toggleGenerate(el.id);
-                    }}
-                  >
+                  <Button className="btn btn-sm" style={{backgroundColor:"purple"}} onClick={() => {this.toggleGenerate(el.id)}}>
                     <i className="fas fa-barcode"></i>
                   </Button>
                   <Button
@@ -325,26 +314,37 @@ class Tables extends React.Component {
         id: this.state.idBuku,
       },
       donatur: {
-        username: this.state.unameDonatur,
-      },
-    };
-    axios
-      .post("http://localhost:8080/api/v1/kodebuku/add", kodeBukuDto)
-      .then((response) => {
-        // if(response.data.status === 200)
+          username: this.state.unameDonatur
+      }
+  }
+  axios.post("http://localhost:8080/api/v1/kodebuku/add", kodeBukuDto)
+  .then(response => {
+      if(response.data.status === 201){
         // this.getAllKodeBuku();
         this.toggleGenerate();
         MySwal.fire({
-          icon: "success",
-          title: "Sukses!!!",
-          text:
-            "Kode buku " +
-            response.data.data.kodeBuku +
-            " berhasil ditambahkan ...",
-        });
-      })
-      .catch((error) => {
+            icon: "success",
+            title: "Sukses!!!",
+            text: "Kode buku " + response.data.data.kodeBuku + " berhasil ditambahkan ...",
+        })
+        this.setState({
+          unameHelp: "",
+          unameDonatur: ""
+        })
+      }
+      else{
         MySwal.fire({
+            icon: "error",
+            title: "Gagal!!!",
+            text: response.data.message,
+        })
+        this.setState({
+          unameHelp: "Username tidak valid"
+        })
+      }
+  })
+  .catch(error => {
+      MySwal.fire({
           icon: "error",
           title: "Gagal!!!",
           text: error.response.data.message,
@@ -452,9 +452,9 @@ class Tables extends React.Component {
                   id="unameDonatur"
                   placeholder="Username donatur"
                   value={this.state.unameDonatur}
-                  onChange={this.onChangeUnameDonatur}
-                />
-                {/* <FormText color="danger">{this.state.kategoriHelp}</FormText> */}
+                  onChange = {this.onChangeUnameDonatur}
+                  />
+                  <FormText color="danger">{this.state.unameHelp}</FormText>
               </FormGroup>
             </ModalBody>
             <ModalFooter>

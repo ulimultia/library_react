@@ -26,6 +26,7 @@ class KodeBuku extends React.Component {
             temp: "",
             idKodeBuku: 0,
             editUsernameDonatur: "",
+            unameHelp: "",
             rowTable: [],
             columnTable: [
                 {
@@ -77,30 +78,14 @@ class KodeBuku extends React.Component {
         await this.getAllKodeBuku()
         
     }
-
-    // modal toggle tambah
-    toggle = () => {
-        if(this.state.modal === true){
-            this.setState({
-                modal : false,
-                btn: "",
-                kategoriHelp: ""
-            })
-        }
-        else{
-            this.setState({
-                modal : true,
-                btn: "Tambah"
-            })
-        }
-    }
     // modal toggle edit
     toggleEdit = (value) => {
         if(this.state.modalEdit === true){
             this.setState({
                 modalEdit : false,
-                editUsernameDonatur: "",
-                idKodeBuku: 0
+                editUsernameDonatur: null,
+                idKodeBuku: 0,
+                unameHelp: ""
                 
             })
         }
@@ -150,7 +135,7 @@ class KodeBuku extends React.Component {
                 return (
                     this.state.rowTable.push({
                         no: key + 1,
-                        sampul: <img src={value.buku.sampul} alt="sampulBuku" className="" style={{width: "50px", height: "70px"}}/>,
+                        sampul: <img src={"http://localhost:8080/api/v1/files/download/" + value.sampul} alt="sampulBuku" className="" style={{width: "50px", height: "70px"}}/>,
                         kode: value.kodeBuku,
                         judul: value.buku.judul,
                         tanggal: this.handleTgl(value.createdAt),
@@ -190,14 +175,28 @@ class KodeBuku extends React.Component {
         }
         axios.put("http://localhost:8080/api/v1/kodebuku/edit", kodeBukuDto)
         .then(response => {
-            // if(response.data.status === 200)
-            this.getAllKodeBuku();
-            this.toggleEdit();
-            MySwal.fire({
-                icon: "success",
-                title: "Sukses!!!",
-                text: response.data.message,
-            })
+            if(response.data.status === 200){
+                this.setState({
+                    unameHelp: ""
+                })
+                MySwal.fire({
+                    icon: "success",
+                    title: "Sukses!!!",
+                    text: response.data.message,
+                })
+                this.toggleEdit();
+                this.getAllKodeBuku();
+            }
+            else{
+                this.setState({
+                    unameHelp: "Username tidak valid"
+                })
+                MySwal.fire({
+                    icon: "error",
+                    title: "Gagal!!!",
+                    text: response.data.message,
+                })
+            }
         })
         .catch(error => {
             MySwal.fire({
@@ -307,7 +306,8 @@ class KodeBuku extends React.Component {
                         value={this.state.editUsernameDonatur}
                         onChange = {this.onChangeInput}
                         />
-                        {/* <FormText color="danger">{this.state.dHelp}</FormText> */}
+                        {console.log(this.state.editUsernameDonatur)}
+                        <FormText color="danger">{this.state.unameHelp}</FormText>
                     </FormGroup>
                 </ModalBody>
                 <ModalFooter>

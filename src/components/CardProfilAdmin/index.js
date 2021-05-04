@@ -456,18 +456,15 @@ const CardProfilAdmin = () => {
                           </Col>
                           <Col xs="12" sm="6" className="mb-3">
                             <FormGroup>
-                              <Label for="nama">Jenis Kelamin</Label>
-                              <Input
-                                type="text"
-                                name="edKelamin"
-                                id="edKelamin"
-                                placeholder="Nama lengkap ..."
+                                <Label for="nama">Jenis Kelamin</Label>
+                                <Input type="select" name="edKelamin" id="edKelamin" placeholder="Nama lengkap ..."
                                 value={edKelamin}
-                                onChange={onChangeEdKelamin}
-                              />
-                              <FormText color="danger">
-                                {edKelaminHelp}
-                              </FormText>
+                                onChange = {onChangeEdKelamin}
+                                >
+                                    <option value="Perempuan">Perempuan </option>
+                                    <option value="Laki-laki">Laki-laki </option>
+                                </Input>
+                                <FormText color="danger">{edKelaminHelp}</FormText>
                             </FormGroup>
                           </Col>
                           <Col xs="12" sm="6" className="mb-3">
@@ -611,11 +608,10 @@ const CardProfilAdmin = () => {
                 </p>
               </div>
               <hr />
-
               {/* <p className="description text-center">
-                        "I like the way you work it <br />
-                        No diggity <br />I wanna bag it up"
-                        </p> */}
+              "I like the way you work it <br />
+              No diggity <br />I wanna bag it up"
+              </p> */}
             </CardBody>
           </Card>
         </Col>
