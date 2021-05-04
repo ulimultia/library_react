@@ -8,20 +8,11 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  CardFooter,
-  Table,
-  Row,
-  Col,
+  Card, CardHeader,CardBody,CardTitle,CardFooter,
+  Table,Row,Col,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
+  Modal,ModalHeader,ModalBody,ModalFooter,
+  Form, FormGroup, Input, Label
 } from "reactstrap";
 const MySwal = withReactContent(Swal);
 class Tables extends React.Component {
@@ -30,6 +21,9 @@ class Tables extends React.Component {
     this.state = {
       modalEdit: false,
       modalTest: false,
+      modalGenerate: false,
+      unameDonatur: "",
+      idBuku: 0,
       bukuNew: [],
       bukuNew2: [],
       detailBuku: [],
@@ -225,6 +219,9 @@ class Tables extends React.Component {
               genre: el.genre.namaGenre,
               action: (
                 <Row>
+                              <Button className="btn btn-sm" style={{backgroundColor:"purple"}} onClick={() => {this.toggleGenerate(el.id)}}>
+                <i className="fas fa-barcode"></i>
+              </Button>
                   <Button
                     onClick={() => this.toggleModal(el.id)}
                     className="btn btn-success btn-sm fa fa-edit mx-1"
@@ -277,6 +274,59 @@ class Tables extends React.Component {
       });
     });
   };
+  // toogle modal generate kode buku
+  toggleGenerate = (id) => {
+    console.log("clicked: " + id);
+    if(this.state.modalGenerate === true){
+      this.setState({
+        modalGenerate: false,
+        idBuku: 0
+      })
+    }
+    else{
+      this.setState({
+        modalGenerate: true,
+        idBuku: id
+      })
+    }
+    // console.log("id kode buku: " + this.state.idBuku);
+  }
+  //onchange input username donatur
+  onChangeUnameDonatur = (event) => {
+    this.setState ({
+      unameDonatur : event.target.value
+    })
+  }
+  // submit generate kode buku
+  submitNow = () => {
+    const kodeBukuDto = {
+      buku: {
+        id: this.state.idBuku
+      },
+      donatur: {
+          username: this.state.unameDonatur
+      }
+  }
+  axios.post("http://localhost:8080/api/v1/kodebuku/add", kodeBukuDto)
+  .then(response => {
+      // if(response.data.status === 200)
+      // this.getAllKodeBuku();
+      this.toggleGenerate();
+      MySwal.fire({
+          icon: "success",
+          title: "Sukses!!!",
+          text: "Kode buku " + response.data.data.kodeBuku + "berhasil ditambahkan ...",
+      })
+  })
+  .catch(error => {
+      MySwal.fire({
+          icon: "error",
+          title: "Gagal!!!",
+          text: error.response.data.message,
+      })
+  })
+  }
+
   render() {
     return (
       <>
@@ -341,6 +391,30 @@ class Tables extends React.Component {
             getAll={this.getAllBuku}
           ></ModalEditBuku>{" "}
         </div>
+        {/* modal generate kode buku */}
+        <Modal isOpen={this.state.modalGenerate} toggle={this.toggleGenerate} className="modal-sm">
+          <ModalHeader toggle={this.toggleGenerate} style={{backgroundImage: "linear-gradient(to left, #44a08d, #093637)",color: "#ffffff"}}>Generate Kode Buku</ModalHeader>
+          <form id="form">
+          <ModalBody className="mx-4">
+              <FormGroup>
+                  <Input type="number" name="idBuku" id="idBuku" value={this.state.idBuku} hidden={true}/>
+                  {/* {console.log(this.state.idBuku)} */}
+              </FormGroup>
+              <FormGroup>
+                  <Label for="namaKategori">Donatur</Label>
+                  <Input type="text" name="unameDonatur" id="unameDonatur" placeholder="Username donatur"
+                  value={this.state.unameDonatur}
+                  onChange = {this.onChangeUnameDonatur}
+                  />
+                  {/* <FormText color="danger">{this.state.kategoriHelp}</FormText> */}
+              </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+              <Button type="reset" color="secondary" onClick={this.toggleGenerate}>Tutup</Button>
+              <Button  color="info" onClick={this.submitNow}>Generate</Button>
+          </ModalFooter>
+          </form>
+      </Modal>
       </>
     );
   }
