@@ -42,6 +42,7 @@ class Pinjam extends React.Component {
       pencatat: "",
       batas: "",
       tanggalPinjam: "",
+      tanggalKembali: "",
       btn: "",
       columTable: [
         {
@@ -118,11 +119,11 @@ class Pinjam extends React.Component {
         };
         this.setState({
           batas: moment(response.data.batasPinjam).format(),
-          tanggalPinjam: moment(response.data.tanggalPinjam).format(),
+          tanggalKembali: moment().format(),
         });
         console.log(this.state.batas);
-        console.log(this.state.tanggalPinjam);
-        var durasi = moment().diff(this.state.batas, this.state.tanggalPinjam);
+        console.log(this.state.tanggalKembali);
+        var durasi = moment().diff(this.state.batas, this.state.tanggalKembali);
         var days = moment.duration(durasi).asDays();
         console.log(days);
         if (days < 0) {
@@ -142,6 +143,7 @@ class Pinjam extends React.Component {
             });
         }
         if (days > 0) {
+          console.log("denda");
           axios
             .post(
               "http://localhost:8080/admin/peminjaman/pengembalian",
