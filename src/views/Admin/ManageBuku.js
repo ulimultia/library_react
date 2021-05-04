@@ -315,7 +315,7 @@ class Tables extends React.Component {
       MySwal.fire({
           icon: "success",
           title: "Sukses!!!",
-          text: "Kode buku " + response.data.data.kodeBuku + "berhasil ditambahkan ...",
+          text: "Kode buku " + response.data.data.kodeBuku + " berhasil ditambahkan ...",
       })
   })
   .catch(error => {
