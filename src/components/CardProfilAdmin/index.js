@@ -659,7 +659,7 @@ const CardProfilAdmin = () => {
                   <div>
                     <p className="card-category">TTL</p>
                     <CardTitle tag="h5">
-                      {detailUser.tempatLahir + ", " + detailUser.tanggalLahir}
+                      {detailUser.tempatLahir + ", " + handleTgl(detailUser.tanggalLahir)}
                     </CardTitle>
                     <p />
                   </div>
