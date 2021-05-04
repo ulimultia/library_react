@@ -15,7 +15,7 @@ const CardProfil = () => {
     let idUser = sessionData.data.id
 
     const [detailUser, setdetailUser] = useState({})
-    const [dataUser, setdataUser] = useState({})
+    // const [dataUser, setdataUser] = useState({})
     const [dataSewa, setdataSewa] = useState([])
     const [donations, setdonations] = useState([])
 
@@ -59,7 +59,7 @@ const CardProfil = () => {
         .then(response => {
         //   this.setState({
             setdetailUser(response.data)
-            setdataUser(response.data.user)
+            // setdataUser(response.data.user)
             setEdNik(response.data.nik)
             setEdNama(response.data.nama)
             setEdKelamin(response.data.kelamin)
@@ -369,10 +369,13 @@ const CardProfil = () => {
                                             <Col xs="12" sm="6" className="mb-3">
                                                 <FormGroup>
                                                     <Label for="nama">Jenis Kelamin</Label>
-                                                    <Input type="text" name="edKelamin" id="edKelamin" placeholder="Nama lengkap ..."
+                                                    <Input type="select" name="edKelamin" id="edKelamin" placeholder="Nama lengkap ..."
                                                     value={edKelamin}
                                                     onChange = {onChangeEdKelamin}
-                                                    />
+                                                    >
+                                                        <option value="Perempuan">Perempuan </option>
+                                                        <option value="Laki-laki">Laki-laki </option>
+                                                    </Input>
                                                     <FormText color="danger">{edKelaminHelp}</FormText>
                                                 </FormGroup>
                                             </Col>

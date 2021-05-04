@@ -334,10 +334,13 @@ const CardProfilAdmin = () => {
                                             <Col xs="12" sm="6" className="mb-3">
                                                 <FormGroup>
                                                     <Label for="nama">Jenis Kelamin</Label>
-                                                    <Input type="text" name="edKelamin" id="edKelamin" placeholder="Nama lengkap ..."
+                                                    <Input type="select" name="edKelamin" id="edKelamin" placeholder="Nama lengkap ..."
                                                     value={edKelamin}
                                                     onChange = {onChangeEdKelamin}
-                                                    />
+                                                    >
+                                                        <option value="Perempuan">Perempuan </option>
+                                                        <option value="Laki-laki">Laki-laki </option>
+                                                    </Input>
                                                     <FormText color="danger">{edKelaminHelp}</FormText>
                                                 </FormGroup>
                                             </Col>
