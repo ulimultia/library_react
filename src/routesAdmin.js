@@ -21,12 +21,14 @@ import Profile from "views/Admin/Profile.js";
 import TableUser from "views/Admin/ManageUser.js";
 import TableBuku from "views/Admin/ManageBuku.js";
 import KodeBuku from "views/Admin/ManageKodeBuku.jsx";
+import TableSewa from "views/Admin/ManageSewa";
 import TabelPengembalian from "views/Admin/ManagePengembalian";
-import Penerbit from "views/Admin/ManagePenerbit"
-import Kategori from "views/Admin/ManageKategori"
-import Genre from "views/Admin/ManageGenre"
-import Lokasi from "views/Admin/ManageLokasi"
-import Logout from "views/Admin/Logout.js"
+import Pengembalian from "views/Admin/ManagePeminjaman";
+import Penerbit from "views/Admin/ManagePenerbit";
+import Kategori from "views/Admin/ManageKategori";
+import Genre from "views/Admin/ManageGenre";
+import Lokasi from "views/Admin/ManageLokasi";
+import Logout from "views/Admin/Logout.js";
 
 var routesAdmin = [
   {
@@ -44,6 +46,13 @@ var routesAdmin = [
     layout: "/admin",
   },
   {
+    path: "/user",
+    name: "Daftar User",
+    icon: "fa fa-users",
+    component: TableUser,
+    layout: "/admin",
+  },
+  {
     path: "/buku",
     name: "Daftar Buku",
     icon: "fa fa-book",
@@ -51,6 +60,7 @@ var routesAdmin = [
     layout: "/admin",
   },
   {
+
     path: "/kodebuku",
     name: "Kode Buku",
     icon: "fa fa-copy",
@@ -62,6 +72,19 @@ var routesAdmin = [
     name: "Daftar User",
     icon: "fa fa-users",
     component: TableUser,
+
+    path: "/sewabuku",
+    name: "Sewa Buku",
+    icon: "fa fa-book",
+    component: TableSewa,
+    layout: "/admin",
+  },
+  {
+    path: "/peminjaman",
+    name: "Daftar Pinjaman",
+    icon: "fa fa-exchange-alt",
+    component: Pengembalian,
+
     layout: "/admin",
   },
   {
