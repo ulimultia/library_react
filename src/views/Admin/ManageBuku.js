@@ -12,7 +12,7 @@ import {
   Table,Row,Col,
   Button,
   Modal,ModalHeader,ModalBody,ModalFooter,
-  Form, FormGroup, Input, Label
+  Form, FormGroup, Input, Label, FormText,
 } from "reactstrap";
 const MySwal = withReactContent(Swal);
 class Tables extends React.Component {
@@ -23,6 +23,7 @@ class Tables extends React.Component {
       modalTest: false,
       modalGenerate: false,
       unameDonatur: "",
+      unameHelp: "",
       idBuku: 0,
       bukuNew: [],
       bukuNew2: [],
@@ -309,14 +310,29 @@ class Tables extends React.Component {
   }
   axios.post("http://localhost:8080/api/v1/kodebuku/add", kodeBukuDto)
   .then(response => {
-      // if(response.data.status === 200)
-      // this.getAllKodeBuku();
-      this.toggleGenerate();
-      MySwal.fire({
-          icon: "success",
-          title: "Sukses!!!",
-          text: "Kode buku " + response.data.data.kodeBuku + " berhasil ditambahkan ...",
-      })
+      if(response.data.status === 201){
+        // this.getAllKodeBuku();
+        this.toggleGenerate();
+        MySwal.fire({
+            icon: "success",
+            title: "Sukses!!!",
+            text: "Kode buku " + response.data.data.kodeBuku + " berhasil ditambahkan ...",
+        })
+        this.setState({
+          unameHelp: "",
+          unameDonatur: ""
+        })
+      }
+      else{
+        MySwal.fire({
+            icon: "error",
+            title: "Gagal!!!",
+            text: response.data.message,
+        })
+        this.setState({
+          unameHelp: "Username tidak valid"
+        })
+      }
   })
   .catch(error => {
       MySwal.fire({
@@ -406,7 +422,7 @@ class Tables extends React.Component {
                   value={this.state.unameDonatur}
                   onChange = {this.onChangeUnameDonatur}
                   />
-                  {/* <FormText color="danger">{this.state.kategoriHelp}</FormText> */}
+                  <FormText color="danger">{this.state.unameHelp}</FormText>
               </FormGroup>
           </ModalBody>
           <ModalFooter>
