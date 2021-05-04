@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   Modal,
@@ -10,7 +10,7 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
-
+import FileUpload from "components/FileUpload";
 const MySwal = withReactContent(Swal);
 
 const ModalEditBuku = (props) => {
@@ -34,8 +34,9 @@ const ModalEditBuku = (props) => {
     onClickToggle,
     onChangeModal,
     getAll,
+    sampulModal,
   } = props;
-
+  const sampulDefault = useRef();
   const [labelJudul, setLabelJudul] = useState("");
   const [labelKategori, setLabelKategori] = useState("");
   const [labelGenre, setLabelGenre] = useState("");
@@ -51,6 +52,8 @@ const ModalEditBuku = (props) => {
   const [arrayLokasi, setArrayLokasi] = useState([]);
   const [files, setFiles] = useState([]);
   const [file, setFile] = useState(null);
+  const [file64, setBaseFile] = useState(null);
+
   //   console.log("id buku : " + idDetail);
 
   useEffect(() => {
@@ -147,8 +150,39 @@ const ModalEditBuku = (props) => {
       setLabelLokasi("");
     }
 
+    if (file == null) {
+      console.log(sampulModal);
+      MySwal.fire({
+        icon: "Failed",
+        title: "Gagal!!!",
+        text: "Sampul kosong",
+      });
+      // axios
+      //   .get("http://localhost:8080/api/v1/files/download/" + sampulModal, {
+      //     responseType: "arraybuffer",
+      //   })
+      //   .then((res) => {
+      //     console.log(Buffer.from(res.data, "binary").toString("base64"));
+      //     var base64 = Buffer.from(res.data, "binary").toString("base64");
+      //     var image = new Buffer(base64, "base64");
+      //     // console.log("base64File", base64.slice(5));
+      //     console.log(image);
+      //     // setFile(res.data);
+
+      //     console.log(res);
+      //   })
+      //   .catch((error) => {
+      //     MySwal.fire({
+      //       icon: "failed",
+      //       title: "Gagal!!!",
+      //       text: error.response.data.message,
+      //     });
+      //   });
+    }
     const data = new FormData();
     data.append("file", file);
+    console.log(file);
+
     if (isValid === true) {
       axios
         .post("http://localhost:8080/api/v1/files/uploadsampul", data)
@@ -407,6 +441,7 @@ const ModalEditBuku = (props) => {
                     type="file"
                     className="form-control-file"
                     id="sampulBuku"
+                    // ref={sampulModal}
                     onChange={fileChange}
                   ></input>
                   <label className="custom-file-label" for="sampulBuku">
@@ -419,6 +454,9 @@ const ModalEditBuku = (props) => {
                   </div>
                 </div>
               </div>
+              {/* <FileUpload
+              
+              ></FileUpload> */}
               <ModalFooter>
                 <Button
                   type="button"
