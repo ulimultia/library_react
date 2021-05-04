@@ -319,6 +319,11 @@ const CardProfilAdmin = () => {
     }
   };
 
+  // handle tanggal lahir 
+     const handleTgl = (tanggal) => {
+        if(tanggal == null) return tanggal
+        else return (new Intl.DateTimeFormat('en-GB', {dateStyle: 'long'}).format(new Date(tanggal)))
+    }
   return (
     <div>
       <Row>
@@ -423,7 +428,7 @@ const CardProfilAdmin = () => {
                                                     />
                                                     <FormText color="danger">{edUsernameHelp}</FormText>
                                                 </FormGroup>
-                                            </Col> */}
+                          */}
                           <Col xs="12" sm="6" className="mb-3">
                             <FormGroup>
                               <Label for="edTempat">Tempat Lahir</Label>
