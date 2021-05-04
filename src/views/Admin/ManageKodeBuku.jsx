@@ -135,7 +135,7 @@ class KodeBuku extends React.Component {
                 return (
                     this.state.rowTable.push({
                         no: key + 1,
-                        sampul: <img src={value.buku.sampul} alt="sampulBuku" className="" style={{width: "50px", height: "70px"}}/>,
+                        sampul: <img src={"http://localhost:8080/api/v1/files/download/" + value.sampul} alt="sampulBuku" className="" style={{width: "50px", height: "70px"}}/>,
                         kode: value.kodeBuku,
                         judul: value.buku.judul,
                         tanggal: this.handleTgl(value.createdAt),

@@ -211,7 +211,7 @@ class Tables extends React.Component {
                 <img
                   src={
                     "http://localhost:8080/api/v1/files/download/" + el.sampul
-                  }
+                  } alt="sampulBuku"
                 ></img>
               ),
               kategori: el.kategori.namaKategori,
@@ -220,9 +220,9 @@ class Tables extends React.Component {
               genre: el.genre.namaGenre,
               action: (
                 <Row>
-                              <Button className="btn btn-sm" style={{backgroundColor:"purple"}} onClick={() => {this.toggleGenerate(el.id)}}>
-                <i className="fas fa-barcode"></i>
-              </Button>
+                  <Button className="btn btn-sm" style={{backgroundColor:"purple"}} onClick={() => {this.toggleGenerate(el.id)}}>
+                    <i className="fas fa-barcode"></i>
+                  </Button>
                   <Button
                     onClick={() => this.toggleModal(el.id)}
                     className="btn btn-success btn-sm fa fa-edit mx-1"
