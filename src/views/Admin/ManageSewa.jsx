@@ -98,6 +98,10 @@ class Sewa extends React.Component {
       });
     }
   };
+  handleDonatur = (donatur) => {
+    if (donatur === null) return "-";
+    else return donatur.username;
+  };
   // handler genre input
   onChangeSewa = (event) => {
     this.setState({
@@ -117,7 +121,7 @@ class Sewa extends React.Component {
             no: key + 1,
             judul: value.buku.judul,
             kode: value.kodeBuku,
-            donatur: "-" ? null : value.donatur.username,
+            donatur: this.handleDonatur(value.donatur),
             harga: value.buku.harga,
           });
         });
