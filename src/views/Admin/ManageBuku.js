@@ -8,8 +8,14 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
 import {
-  Card, CardHeader,CardBody,CardTitle,CardFooter,
-  Table,Row,Col,
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  CardFooter,
+  Table,
+  Row,
+  Col,
   Button,
   Modal,ModalHeader,ModalBody,ModalFooter,
   Form, FormGroup, Input, Label, FormText,
@@ -36,6 +42,7 @@ class Tables extends React.Component {
       harga: "",
       deskripsi: "",
       sampul: "",
+      sampulModal: "",
       kategori: "",
       penerbit: "",
       lokasi: "",
@@ -173,12 +180,15 @@ class Tables extends React.Component {
         harga: response.data.data.harga,
         deskripsi: response.data.data.deskripsi,
         sampul: response.data.data.sampul,
+        sampulModal: response.data.data.sampul,
         kategori: response.data.data.kategori.id,
         penerbit: response.data.data.penerbit.id,
         lokasi: response.data.data.lokasi.id,
         genre: response.data.data.genre.id,
         idDetail: id,
       });
+      console.log(this.state.sampulModal);
+
       console.log("get detail: " + id);
       console.log("get id detail: " + this.state.idDetail);
     });
@@ -278,31 +288,30 @@ class Tables extends React.Component {
   // toogle modal generate kode buku
   toggleGenerate = (id) => {
     console.log("clicked: " + id);
-    if(this.state.modalGenerate === true){
+    if (this.state.modalGenerate === true) {
       this.setState({
         modalGenerate: false,
-        idBuku: 0
-      })
-    }
-    else{
+        idBuku: 0,
+      });
+    } else {
       this.setState({
         modalGenerate: true,
-        idBuku: id
-      })
+        idBuku: id,
+      });
     }
     // console.log("id kode buku: " + this.state.idBuku);
-  }
+  };
   //onchange input username donatur
   onChangeUnameDonatur = (event) => {
-    this.setState ({
-      unameDonatur : event.target.value
-    })
-  }
+    this.setState({
+      unameDonatur: event.target.value,
+    });
+  };
   // submit generate kode buku
   submitNow = () => {
     const kodeBukuDto = {
       buku: {
-        id: this.state.idBuku
+        id: this.state.idBuku,
       },
       donatur: {
           username: this.state.unameDonatur
@@ -339,9 +348,9 @@ class Tables extends React.Component {
           icon: "error",
           title: "Gagal!!!",
           text: error.response.data.message,
-      })
-  })
-  }
+        });
+      });
+  };
 
   render() {
     return (
@@ -401,6 +410,7 @@ class Tables extends React.Component {
             isbnBuku={this.state.isbn}
             deskripsiBuku={this.state.deskripsi}
             penerbitBuku={this.state.penerbit}
+            sampulModal={this.state.sampulModal}
             modal={this.state.modalTest}
             onClickToggle={this.toggleModal}
             onChangeModal={this.onChangeBuku}
@@ -408,29 +418,59 @@ class Tables extends React.Component {
           ></ModalEditBuku>{" "}
         </div>
         {/* modal generate kode buku */}
-        <Modal isOpen={this.state.modalGenerate} toggle={this.toggleGenerate} className="modal-sm">
-          <ModalHeader toggle={this.toggleGenerate} style={{backgroundImage: "linear-gradient(to left, #44a08d, #093637)",color: "#ffffff"}}>Generate Kode Buku</ModalHeader>
+        <Modal
+          isOpen={this.state.modalGenerate}
+          toggle={this.toggleGenerate}
+          className="modal-sm"
+        >
+          <ModalHeader
+            toggle={this.toggleGenerate}
+            style={{
+              backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
+              color: "#ffffff",
+            }}
+          >
+            Generate Kode Buku
+          </ModalHeader>
           <form id="form">
-          <ModalBody className="mx-4">
+            <ModalBody className="mx-4">
               <FormGroup>
-                  <Input type="number" name="idBuku" id="idBuku" value={this.state.idBuku} hidden={true}/>
-                  {/* {console.log(this.state.idBuku)} */}
+                <Input
+                  type="number"
+                  name="idBuku"
+                  id="idBuku"
+                  value={this.state.idBuku}
+                  hidden={true}
+                />
+                {/* {console.log(this.state.idBuku)} */}
               </FormGroup>
               <FormGroup>
-                  <Label for="namaKategori">Donatur</Label>
-                  <Input type="text" name="unameDonatur" id="unameDonatur" placeholder="Username donatur"
+                <Label for="namaKategori">Donatur</Label>
+                <Input
+                  type="text"
+                  name="unameDonatur"
+                  id="unameDonatur"
+                  placeholder="Username donatur"
                   value={this.state.unameDonatur}
                   onChange = {this.onChangeUnameDonatur}
                   />
                   <FormText color="danger">{this.state.unameHelp}</FormText>
               </FormGroup>
-          </ModalBody>
-          <ModalFooter>
-              <Button type="reset" color="secondary" onClick={this.toggleGenerate}>Tutup</Button>
-              <Button  color="info" onClick={this.submitNow}>Generate</Button>
-          </ModalFooter>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                type="reset"
+                color="secondary"
+                onClick={this.toggleGenerate}
+              >
+                Tutup
+              </Button>
+              <Button color="info" onClick={this.submitNow}>
+                Generate
+              </Button>
+            </ModalFooter>
           </form>
-      </Modal>
+        </Modal>
       </>
     );
   }

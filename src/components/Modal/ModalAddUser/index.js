@@ -39,6 +39,7 @@ const ModalAddUser = (props) => {
   const [passwordAdd, setPassword] = useState("");
   const [labelPassword, setLabelPassword] = useState("");
   const [modal, setModal] = useState(false);
+  const [file, setFile] = useState(null);
 
   const onChangeNIK = (event) => {
     setNIK(event.target.value);
@@ -61,9 +62,6 @@ const ModalAddUser = (props) => {
   const onChangeAlamat = (event) => {
     setAlamat(event.target.value);
   };
-  const onChangeFoto = (event) => {
-    setFoto(event.target.value);
-  };
   const onChangeRole = (event) => {
     setRole(event.target.value);
   };
@@ -74,7 +72,18 @@ const ModalAddUser = (props) => {
     setPassword(event.target.value);
   };
   const toggle = () => setModal(!modal);
+  const fileChange = async (e) => {
+    console.log(e.target.files);
+    console.log(e);
+    console.log(file);
 
+    await setFile(e.target.files[0]);
+    // await setFiles([]);
+    // await this.setState({
+    //   file: e.target.files[0],
+    // });
+    console.log(file);
+  };
   const handleAdd = () => {
     var isValid = true;
     // validasi NIK
@@ -121,12 +130,7 @@ const ModalAddUser = (props) => {
     } else {
       setLabelAlamat("");
     }
-    // if (fotoAdd === "") {
-    //   isValid = false;
-    //   setLabelFoto("Tidak boleh kosong");
-    // } else {
-    //   setLabelFoto("");
-    // }
+
     if (roleAdd === "Pilih Salah Satu") {
       isValid = false;
       setLabelRole("Tidak boleh kosong");
@@ -145,38 +149,52 @@ const ModalAddUser = (props) => {
     } else {
       setLabelPassword("");
     }
-    const data = {
-      //kiri sesuain api kanan dari fungsinya
-      username: usernameAdd,
-      password: passwordAdd,
-      role: role,
-      nama: namaAdd,
-      alamat: alamatAdd,
-      foto: fotoAdd,
-      kelamin: kelaminAdd,
-      nik: nikAdd,
-      tanggalLahir: tanggalAdd,
-      telp: teleponAdd,
-      tempatLahir: tempatAdd,
-    };
+    const data = new FormData();
+    data.append("file", file);
+    if (file == null) {
+      isValid = false;
+      setLabelFoto("Tidak boleh kosong");
+    } else {
+      setLabelFoto("");
+    }
+
     if (isValid === true) {
-      console.log(role);
       axios
-        .post("http://localhost:8080/auth/register", data) // memasukkan inputan ke post api
+        .post("http://localhost:8080/api/v1/files/uploadfoto", data)
         .then((res) => {
-          console.log(res); // menampilkan hasil response dari data inputan yang dikirim
-          MySwal.fire({
-            title: "Berhasil!!!",
-            icon: "success",
-            text: "Berhasil Menambahkan User",
-          });
-          toggle();
-        })
-        .catch(function (error) {
-          if (error.response) {
-            console.log(error.response.data);
-          }
+          setFile(null);
+          const register = {
+            //kiri sesuain api kanan dari fungsinya
+            username: usernameAdd,
+            password: passwordAdd,
+            role: role,
+            nama: namaAdd,
+            alamat: alamatAdd,
+            foto: res.data.name,
+            kelamin: kelaminAdd,
+            nik: nikAdd,
+            tanggalLahir: tanggalAdd,
+            telp: teleponAdd,
+            tempatLahir: tempatAdd,
+          };
+          axios
+            .post("http://localhost:8080/auth/register", register) // memasukkan inputan ke post api
+            .then((res) => {
+              console.log(res); // menampilkan hasil response dari data inputan yang dikirim
+              MySwal.fire({
+                title: "Berhasil!!!",
+                icon: "success",
+                text: "Berhasil Menambahkan User",
+              });
+              toggle();
+            })
+            .catch(function (error) {
+              if (error.response) {
+                console.log(error.response.data);
+              }
+            });
         });
+      console.log(role);
 
       //   return <Redirect to="/admin/user" />;
     }
@@ -414,7 +432,7 @@ const ModalAddUser = (props) => {
                       class="custom-file-input"
                       id="fotoUserAdd"
                       value={fotoAdd}
-                      onChange={onChangeFoto}
+                      onChange={fileChange}
                     ></input>
                     <label class="custom-file-label" for="fotoUser">
                       Choose file
