@@ -21,7 +21,7 @@ class Catalog extends React.Component {
       cari: "",
       kategori: "",
       genre: "",
-      sort: "",
+      sort: "0",
       catalogs: [],
       newBooks: [],
       hotBooks: [],
@@ -30,9 +30,9 @@ class Catalog extends React.Component {
       selectedKategori: true,
       selectedGenre: true,
       selectedSort: true,
-      offset: 0,
-      perPage: 6,
       currentPage: 0,
+      offset: 0,
+      dataPerPage : 9,
     }
     this.handlePageClick = this
             .handlePageClick
@@ -52,43 +52,9 @@ class Catalog extends React.Component {
   getAllCatalog = () => {
     axios.get('http://localhost:8080/api/v1/user/buku/all')
     .then((response) => {
-        const tempData = response.data.data
-        const slice = tempData.slice(this.state.offset, this.state.offset + this.state.perPage)
-        const postData = slice.map(val => 
-        <React.Fragment>
-          <Col xs="6" sm="4" className="catalog-book">      
-                      <Card className="card-stats">
-                        {/* <a type="button" data-toggle="modal" data-target="#"> */}
-                          <img src={val.sampul} alt=" " className="card-img-top catalog-img "/>
-                        {/* </a>  */}
-                        <CardBody>
-                          <a type="button" data-toggle="modal" data-target="#">
-                            <p><b>{val.judul}</b></p>
-                            <p className="description text-end">
-                                <span class="font-italic font-weight-lighter">{val.kategori} | {val.genre}</span>
-                                <br></br><span class="text-success"> Tersedia: {val.jumlah} </span>
-                                <br></br><strong>Rp {val.harga},-/minggu</strong> 
-                              </p>
-                          </a>  
-                        </CardBody>
-                        <CardFooter>
-                          <DetailBukuModal 
-                            dataBuku = {val}
-                            buttonLabel = "Detail"
-                            className ="modal-lg"
-                          /> 
-                        </CardFooter>
-                      </Card>
-                    </Col>
-        </React.Fragment>)
-
-        this.setState({
-            pageCount: Math.ceil(data.length / this.state.perPage),
-          
-            postData
-        })
         this.setState({
             catalogs: response.data.data,
+            pagesCount: Math.ceil(response.data.data.length / this.state.dataPerPage),
         })
     })
   }
@@ -161,18 +127,20 @@ class Catalog extends React.Component {
       selectedSort: true
     })
   }
+  handleSort = (event) => {
+    this.setState({
+      sort: event.target.value,
+      selectedSort: false
+    })
+  }
   handlePageClick = (e) => {
     const selectedPage = e.selected;
-    const offset = selectedPage * this.state.perPage;
-
+    const offsetTemp = selectedPage * this.state.dataPerPage;
     this.setState({
-        currentPage: selectedPage,
-        offset: offset
-    }, () => {
-        this.getAllCatalog();
-    });
-
-  };
+      currentPage: selectedPage,
+      offset: offsetTemp
+    })
+  }
 
   // onChangeSort = (event) => {
   //   this.setState({
@@ -189,22 +157,41 @@ class Catalog extends React.Component {
   render() {
     // const {data} = this.state;
     const { cari, kategori, genre, catalogs, newBooks, hotBooks, categories, genres }= this.state
-    const cariData = catalogs.filter(value => {
-      if(kategori!== "") return value.kategori.toLocaleLowerCase().includes(kategori.toLocaleLowerCase())
-      else if (genre !== "") return value.genre.toLocaleLowerCase().includes(genre.toLocaleLowerCase())
-      else if (cari!==""){
-        if(value.judul.toLocaleLowerCase().includes(cari.toLocaleLowerCase()) || value.pengarang.toLocaleLowerCase().includes(cari.toLocaleLowerCase()))
-        return catalogs
-      }
-      else return catalogs
-    })
-   
-    // const kategoriData = CatalogJs.filter(value => {
-    //  return value.kategori.toLocaleLowerCase().includes(kategori.toLocaleLowerCase())
-    // })
-    // const genreData = CatalogJs.filter(value => {
-    //  return value.genre.toLocaleLowerCase().includes(genre.toLocaleLowerCase())
-    // })
+    const cariData = 
+      catalogs.filter(value => {
+        if(kategori!== "") return value.kategori.toLocaleLowerCase().includes(kategori.toLocaleLowerCase())
+        else if (genre !== "") return value.genre.toLocaleLowerCase().includes(genre.toLocaleLowerCase())
+        else if (cari!==""){
+          if(value.judul.toLocaleLowerCase().includes(cari.toLocaleLowerCase()) || value.pengarang.toLocaleLowerCase().includes(cari.toLocaleLowerCase()))
+          return catalogs
+        }
+        else return catalogs
+      })
+      .sort((a,b) => {
+        const aTemp = a.judul.toUpperCase()
+        const bTemp = b.judul.toUpperCase()
+        const idA = a.id
+        const idB = b.id
+
+        if (this.state.sort === "") {
+          let comp = 0
+          if(idA > idB) comp = 1
+          else if(idA < idB) comp = -1
+          return comp
+        } else if(this.state.sort === "1") {
+          let comp = 0
+          if(aTemp > bTemp) comp = 1
+          else if(aTemp < bTemp) comp = -1
+          return comp
+        }
+        else if(this.state.sort === "2"){
+          let comp = 0
+          if(aTemp < bTemp) comp = 1
+          else if(aTemp > bTemp) comp = -1
+          return comp
+        }
+      })
+      .slice(this.state.offset, this.state.offset + this.state.dataPerPage)
 
     return (
       <>
@@ -241,10 +228,9 @@ class Catalog extends React.Component {
                 <Col xs="12" sm="3" className="mb-3">
                   <FormGroup>
                     <Label for="sorting">Urutkan </Label>
-                    <Input type="select" name="sorting" id="sorting" 
-                    >
-                      <option value="0">Default</option>
-                      <option value="1">A-Z</option>
+                    <Input type="select" name="sorting" id="sorting" onChange={this.handleSort} >
+                      <option value="" selected={this.state.selectedSort}>Default</option>
+                      <option value="1" >A-Z</option>
                       <option value="2">Z-A</option>
                     </Input>
                   </FormGroup>
@@ -286,20 +272,22 @@ class Catalog extends React.Component {
                   })
                 }
               </Row>
-              {/* <hr></hr>
-              {this.state.postData}
-                <ReactPaginate
-                    previousLabel={"prev"}
-                    nextLabel={"next"}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={this.state.pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePageClick}
-                    containerClassName={"pagination"}
-                    subContainerClassName={"pages pagination"}
-                    activeClassName={"active"}/> */}
+              <Row className="text-right">
+                <Col>
+                  <ReactPaginate
+                      previousLabel={"Sebelum"}
+                      nextLabel={"Setelah"}
+                      breakLabel={"..."}
+                      breakClassName={"break-me"}
+                      pageCount={this.state.pagesCount}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={25}
+                      onPageChange={this.handlePageClick}
+                      containerClassName={"pagination"}
+                      subContainerClassName={"pages pagination"}
+                      activeClassName={"active"}/>
+                </Col>
+              </Row>
             </Col>
             <Col xs="12" sm="4">
               {/* <Card className="card-stats">
