@@ -213,7 +213,7 @@ class Tables extends React.Component {
       this.setState({
         userNew: response.data.data,
       });
-      console.log(this.state.userNew[1].roles[0].name);
+      // console.log(this.state.userNew[1].roles[0].name);
 
       this.state.userNew.map((el, key) => {
         return this.state.userNew3.push({

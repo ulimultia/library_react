@@ -51,9 +51,13 @@ class Dashboard extends React.Component {
       chartAll: {},
       labelChart: [],
       dataChart: [],
+      chart: [],
+      chartData: [],
+      chartLabel: [],
+      tesarray: ["a", "b"],
       data: (canvas) => {
         return {
-          labels: this.state.labelChart,
+          labels: this.state.chartLabel,
           datasets: [
             {
               borderColor: "#6bd098",
@@ -61,7 +65,7 @@ class Dashboard extends React.Component {
               pointRadius: 0,
               pointHoverRadius: 0,
               borderWidth: 3,
-              data: this.state.dataChart,
+              data: this.state.chartData,
             },
           ],
         };
@@ -69,12 +73,10 @@ class Dashboard extends React.Component {
     };
   }
   componentDidMount() {
-    //panggil fungsi getAllCatalog diawal
+    this.chartData();
     this.getAllUser();
     this.getAllBuku();
     this.getAllPinjaman();
-    this.chartData();
-    console.log(this.state.labelChart);
   }
   getAllUser = () => {
     axios.get("http://localhost:8080/user/get-all").then((response) => {
@@ -120,27 +122,19 @@ class Dashboard extends React.Component {
       .get("http://localhost:8080/admin/peminjaman/buku/terpopuler")
       .then((response) => {
         console.log(response.data.data);
-
         this.setState({
-          dataChart: response.data.data.total,
-          labelChart: response.data.data.judul,
+          chart: response.data.data,
         });
+        const perulangan = this.state.chart;
+        perulangan.forEach((perulangan) => {
+          // this.setState(...this.state.chartLabel.push(perulangan.judul));
+          this.state.chartLabel.push(perulangan.judul);
+          this.state.chartData.push(perulangan.total);
+        });
+        console.log(this.state.chartLabel);
+        console.log(this.state.chartData);
       });
-    this.setState({
-      chartAll: {
-        labels: this.state.labelChart,
-        datasets: [
-          {
-            borderColor: "#6bd098",
-            backgroundColor: "#6bd098",
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            borderWidth: 3,
-            data: this.state.dataChart,
-          },
-        ],
-      },
-    });
+    // console.log(this.state.chartData);
   };
   bukuClick = () => {
     return <Redirect to="admin/buku" />;
@@ -276,7 +270,7 @@ class Dashboard extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <Line
-                    data={dashboard24HoursPerformanceChart.data}
+                    data={this.state.data}
                     options={dashboard24HoursPerformanceChart.options}
                     width={400}
                     height={100}
