@@ -30,6 +30,8 @@ const CardProfilAdmin = () => {
   const [editModal, setEditModal] = useState(false);
   const [gantiPass, setGantiPass] = useState(false);
 
+  const [fotoProfil, setFoto] = useState("");
+
   const [edNik, setEdNik] = useState("");
   const [edNikHelp, setEdNikHelp] = useState("");
   const [edNama, setEdNama] = useState("");
@@ -74,6 +76,7 @@ const CardProfilAdmin = () => {
         setEdTanggal(response.data.tanggalLahir);
         setEdAlamat(response.data.alamat);
         setEdTelp(response.data.telp);
+        setFoto(response.data.foto);
       });
   };
   //fungsi buka dan tutup modal
@@ -190,6 +193,30 @@ const CardProfilAdmin = () => {
       setEdAlamatHelp("Tidak boleh kosong");
     } else {
       setEdKelaminHelp("");
+    }
+    if (file == null) {
+      const fileNull = {
+        nik: edNik,
+        nama: edNama,
+        tempatLahir: edTempat,
+        tanggalLahir: edTanggal,
+        kelamin: edKelamin,
+        alamat: edAlamat,
+        telp: edTelp,
+        foto: fotoProfil,
+      };
+      console.log(fileNull);
+      axios
+        .put("http://localhost:8080/user/edit/" + detailUser.id, fileNull)
+        .then((response) => {
+          setEditModal(false);
+          getAllDetailUser();
+          MySwal.fire({
+            icon: "success",
+            title: "Sukses!!!",
+            text: "Data berhasil diubah ....",
+          });
+        });
     }
     const data = new FormData();
     data.append("file", file);
@@ -456,15 +483,21 @@ const CardProfilAdmin = () => {
                           </Col>
                           <Col xs="12" sm="6" className="mb-3">
                             <FormGroup>
-                                <Label for="nama">Jenis Kelamin</Label>
-                                <Input type="select" name="edKelamin" id="edKelamin" placeholder="Nama lengkap ..."
+                              <Label for="nama">Jenis Kelamin</Label>
+                              <Input
+                                type="select"
+                                name="edKelamin"
+                                id="edKelamin"
+                                placeholder="Nama lengkap ..."
                                 value={edKelamin}
-                                onChange = {onChangeEdKelamin}
-                                >
-                                    <option value="Perempuan">Perempuan </option>
-                                    <option value="Laki-laki">Laki-laki </option>
-                                </Input>
-                                <FormText color="danger">{edKelaminHelp}</FormText>
+                                onChange={onChangeEdKelamin}
+                              >
+                                <option value="Perempuan">Perempuan </option>
+                                <option value="Laki-laki">Laki-laki </option>
+                              </Input>
+                              <FormText color="danger">
+                                {edKelaminHelp}
+                              </FormText>
                             </FormGroup>
                           </Col>
                           <Col xs="12" sm="6" className="mb-3">

@@ -35,14 +35,75 @@ import {
   dashboardEmailStatisticsChart,
   dashboardNASDAQChart,
 } from "variables/charts.js";
+import axios from "axios";
+import { Link, Redirect } from "react-router-dom";
 
 class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userAll: [],
+      bukuAll: [],
+      pinjamanAll: [],
+      userLength: "",
+      bukuLength: "",
+      pinjamanLength: "",
+    };
+  }
+  componentDidMount() {
+    //panggil fungsi getAllCatalog diawal
+    this.getAllUser();
+    this.getAllBuku();
+    this.getAllPinjaman();
+  }
+  getAllUser = () => {
+    axios.get("http://localhost:8080/user/get-all").then((response) => {
+      this.setState({
+        userAll: response.data.data,
+      });
+
+      const usertotal = this.state.userAll.length;
+      this.setState({
+        userLength: usertotal,
+      });
+    });
+  };
+  getAllBuku = () => {
+    axios.get("http://localhost:8080/api/v1/buku/all").then((response) => {
+      this.setState({
+        bukuAll: response.data.data,
+      });
+
+      const bukutotal = this.state.bukuAll.length;
+      this.setState({
+        bukuLength: bukutotal,
+      });
+    });
+  };
+  getAllPinjaman = () => {
+    axios
+      .get("http://localhost:8080/admin/peminjaman/get-all")
+      .then((response) => {
+        this.setState({
+          pinjamanAll: response.data.data,
+        });
+
+        const pinjamantotal = this.state.pinjamanAll.length;
+        this.setState({
+          pinjamanLength: pinjamantotal,
+        });
+        console.log(this.state.pinjamanLength);
+      });
+  };
+  bukuClick = () => {
+    return <Redirect to="admin/buku" />;
+  };
   render() {
     return (
       <>
         <div className="content">
           <Row>
-            <Col lg="3" md="6" sm="6">
+            <Col lg="4" md="6" sm="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -54,7 +115,7 @@ class Dashboard extends React.Component {
                     <Col md="8" xs="7">
                       <div className="numbers">
                         <p className="card-category">Total Anggota</p>
-                        <CardTitle tag="p">150</CardTitle>
+                        <CardTitle tag="p">{this.state.userLength}</CardTitle>
                         <p />
                       </div>
                     </Col>
@@ -62,13 +123,15 @@ class Dashboard extends React.Component {
                 </CardBody>
                 <CardFooter>
                   <hr />
-                  <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
+                  <div className="stats" style={{ textAlign: "center" }}>
+                    <a href="/admin/user">
+                      More info <i className="fas fa-arrow-circle-right"></i>
+                    </a>
                   </div>
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="3" md="6" sm="6">
+            <Col lg="4" md="6" sm="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -80,7 +143,7 @@ class Dashboard extends React.Component {
                     <Col md="8" xs="7">
                       <div className="numbers">
                         <p className="card-category">Total Buku</p>
-                        <CardTitle tag="p">53</CardTitle>
+                        <CardTitle tag="p">{this.state.bukuLength}</CardTitle>
                         <p />
                       </div>
                     </Col>
@@ -88,13 +151,15 @@ class Dashboard extends React.Component {
                 </CardBody>
                 <CardFooter>
                   <hr />
-                  <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
+                  <div className="stats" style={{ textAlign: "center" }}>
+                    <a class="button" href="/admin/buku">
+                      More info <i className="fas fa-arrow-circle-right"></i>
+                    </a>
                   </div>
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="3" md="6" sm="6">
+            <Col lg="4" md="6" sm="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -106,7 +171,9 @@ class Dashboard extends React.Component {
                     <Col md="8" xs="7">
                       <div className="numbers">
                         <p className="card-category">Total Peminjaman Buku</p>
-                        <CardTitle tag="p">23</CardTitle>
+                        <CardTitle tag="p">
+                          {this.state.pinjamanLength}
+                        </CardTitle>
                         <p />
                       </div>
                     </Col>
@@ -114,13 +181,15 @@ class Dashboard extends React.Component {
                 </CardBody>
                 <CardFooter>
                   <hr />
-                  <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
+                  <div className="stats" style={{ textAlign: "center" }}>
+                    <a href="/admin/peminjaman">
+                      More info <i className="fas fa-arrow-circle-right"></i>
+                    </a>
                   </div>
                 </CardFooter>
               </Card>
             </Col>
-            <Col lg="3" md="6" sm="6">
+            {/* <Col lg="3" md="6" sm="6">
               <Card className="card-stats">
                 <CardBody>
                   <Row>
@@ -140,12 +209,14 @@ class Dashboard extends React.Component {
                 </CardBody>
                 <CardFooter>
                   <hr />
-                  <div className="stats"style={{textAlign:"center"}}>
-                  <a href="#" >More info <i className="fas fa-arrow-circle-right"></i></a>
+                  <div className="stats" style={{ textAlign: "center" }}>
+                    <a href="#">
+                      More info <i className="fas fa-arrow-circle-right"></i>
+                    </a>
                   </div>
                 </CardFooter>
               </Card>
-            </Col>
+            </Col> */}
           </Row>
           <Row>
             <Col md="12">
@@ -171,7 +242,6 @@ class Dashboard extends React.Component {
               </Card>
             </Col>
           </Row>
-          
         </div>
       </>
     );

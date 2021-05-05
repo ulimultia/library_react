@@ -10,7 +10,6 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
-import FileUpload from "components/FileUpload";
 const MySwal = withReactContent(Swal);
 
 const ModalEditBuku = (props) => {
@@ -151,33 +150,33 @@ const ModalEditBuku = (props) => {
     }
 
     if (file == null) {
-      console.log(sampulModal);
-      MySwal.fire({
-        icon: "Failed",
-        title: "Gagal!!!",
-        text: "Sampul kosong",
-      });
-      // axios
-      //   .get("http://localhost:8080/api/v1/files/download/" + sampulModal, {
-      //     responseType: "arraybuffer",
-      //   })
-      //   .then((res) => {
-      //     console.log(Buffer.from(res.data, "binary").toString("base64"));
-      //     var base64 = Buffer.from(res.data, "binary").toString("base64");
-      //     var image = new Buffer(base64, "base64");
-      //     // console.log("base64File", base64.slice(5));
-      //     console.log(image);
-      //     // setFile(res.data);
-
-      //     console.log(res);
-      //   })
-      //   .catch((error) => {
-      //     MySwal.fire({
-      //       icon: "failed",
-      //       title: "Gagal!!!",
-      //       text: error.response.data.message,
-      //     });
-      //   });
+      const fileNull = {
+        id: idDetail,
+        judul: judulBuku,
+        pengarang: pengarangBuku,
+        tahunTerbit: tahunTerbit,
+        sampul: sampulModal,
+        isbn: isbnBuku,
+        harga: hargaBuku,
+        deskripsi: deskripsiBuku,
+        kategori: kategoriObj,
+        penerbit: penerbitObj,
+        lokasi: lokasiObj,
+        genre: genreObj,
+      };
+      console.log(fileNull);
+      axios
+        .put("http://localhost:8080/api/v1/buku/edit/", fileNull)
+        .then((response) => {
+          console.log(response);
+          MySwal.fire({
+            title: "Berhasil!!!",
+            icon: "success",
+            text: "Berhasil Mengedit Buku",
+          });
+          onClickToggle();
+          getAll();
+        });
     }
     const data = new FormData();
     data.append("file", file);
@@ -207,15 +206,14 @@ const ModalEditBuku = (props) => {
             axios
               .put("http://localhost:8080/api/v1/buku/edit/", editBuku)
               .then((response) => {
-                console.log(response);
+                MySwal.fire({
+                  title: "Berhasil!!!",
+                  icon: "success",
+                  text: "Berhasil Mengedit Buku",
+                });
+                onClickToggle();
+                getAll();
               });
-            MySwal.fire({
-              title: "Berhasil!!!",
-              icon: "success",
-              text: "Berhasil Mengedit Buku",
-            });
-            onClickToggle();
-            getAll();
           }
         });
     }
