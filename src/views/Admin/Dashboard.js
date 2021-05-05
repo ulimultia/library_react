@@ -48,6 +48,24 @@ class Dashboard extends React.Component {
       userLength: "",
       bukuLength: "",
       pinjamanLength: "",
+      chartAll: {},
+      labelChart: [],
+      dataChart: [],
+      data: (canvas) => {
+        return {
+          labels: this.state.labelChart,
+          datasets: [
+            {
+              borderColor: "#6bd098",
+              backgroundColor: "#6bd098",
+              pointRadius: 0,
+              pointHoverRadius: 0,
+              borderWidth: 3,
+              data: this.state.dataChart,
+            },
+          ],
+        };
+      },
     };
   }
   componentDidMount() {
@@ -55,6 +73,8 @@ class Dashboard extends React.Component {
     this.getAllUser();
     this.getAllBuku();
     this.getAllPinjaman();
+    this.chartData();
+    console.log(this.state.labelChart);
   }
   getAllUser = () => {
     axios.get("http://localhost:8080/user/get-all").then((response) => {
@@ -94,6 +114,33 @@ class Dashboard extends React.Component {
         });
         console.log(this.state.pinjamanLength);
       });
+  };
+  chartData = () => {
+    axios
+      .get("http://localhost:8080/admin/peminjaman/buku/terpopuler")
+      .then((response) => {
+        console.log(response.data.data);
+
+        this.setState({
+          dataChart: response.data.data.total,
+          labelChart: response.data.data.judul,
+        });
+      });
+    this.setState({
+      chartAll: {
+        labels: this.state.labelChart,
+        datasets: [
+          {
+            borderColor: "#6bd098",
+            backgroundColor: "#6bd098",
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            borderWidth: 3,
+            data: this.state.dataChart,
+          },
+        ],
+      },
+    });
   };
   bukuClick = () => {
     return <Redirect to="admin/buku" />;
@@ -222,7 +269,9 @@ class Dashboard extends React.Component {
             <Col md="12">
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h5">Grafik Peminjaman Buku</CardTitle>
+                  <CardTitle tag="h5">
+                    Buku Yang Paling Banyak Dipinjam
+                  </CardTitle>
                   <p className="card-category">Data Selama 24 Jam</p>
                 </CardHeader>
                 <CardBody>

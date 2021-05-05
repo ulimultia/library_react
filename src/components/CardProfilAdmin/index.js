@@ -346,11 +346,14 @@ const CardProfilAdmin = () => {
     }
   };
 
-  // handle tanggal lahir 
-     const handleTgl = (tanggal) => {
-        if(tanggal == null) return tanggal
-        else return (new Intl.DateTimeFormat('en-GB', {dateStyle: 'long'}).format(new Date(tanggal)))
-    }
+  // handle tanggal lahir
+  const handleTgl = (tanggal) => {
+    if (tanggal == null) return tanggal;
+    else
+      return new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(
+        new Date(tanggal)
+      );
+  };
   return (
     <div>
       <Row>
@@ -370,7 +373,7 @@ const CardProfilAdmin = () => {
                     alt=""
                     className="avatar border-gray"
                     src={
-                      "http://localhost:8080/api/v1/files/download/" +
+                      "http://localhost:8080/api/v1/files/downloadprofil/" +
                       detailUser.foto
                     }
                   />
@@ -692,7 +695,9 @@ const CardProfilAdmin = () => {
                   <div>
                     <p className="card-category">TTL</p>
                     <CardTitle tag="h5">
-                      {detailUser.tempatLahir + ", " + handleTgl(detailUser.tanggalLahir)}
+                      {detailUser.tempatLahir +
+                        ", " +
+                        handleTgl(detailUser.tanggalLahir)}
                     </CardTitle>
                     <p />
                   </div>
