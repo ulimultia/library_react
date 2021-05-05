@@ -21,6 +21,7 @@ import Profil from "views/Peminjam/Profile.js";
 import Catalog from "views/Peminjam/Catalog.js";
 import Sewa from "views/Peminjam/Sewa.js";
 import Riwayat from "views/Peminjam/Riwayat.js";
+import SaldoLog from "views/Peminjam/SaldoLog";
 import Donasi from "views/Peminjam/Donasi.js";
 // import Notifications from "views/Notifications.js";
 // import Icons from "views/Icons.js";
@@ -66,6 +67,13 @@ var routesPeminjam = [
     name: "Riwayat Sewa",
     icon: "nc-icon nc-single-copy-04",
     component: Riwayat,
+    layout: "/peminjam",
+  },
+  {
+    path: "/log-saldo",
+    name: "Riwayat Saldo",
+    icon: "nc-icon nc-money-coins",
+    component: SaldoLog,
     layout: "/peminjam",
   },
   {

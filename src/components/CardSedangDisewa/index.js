@@ -12,7 +12,7 @@ const CardSedangDipinjam = (props) => {
     const handleExp = (tglBatas) => {
         let tempBatas = new Date(tglBatas)
         let nowDate = new Date()
-        if(nowDate > tempBatas){
+        if(nowDate.getDate > tempBatas.getDate){
             return(
                 <Badge style={{backgroundColor: "red"}}>Kadaluardasa</Badge>
             )

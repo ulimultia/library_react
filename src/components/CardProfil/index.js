@@ -91,7 +91,7 @@ const CardProfil = () => {
         let nowDate = new Date()
         data.map(value => {
         let tempBatas = new Date(value.batasPinjam)
-        if(nowDate > tempBatas){
+        if(nowDate.getDate > tempBatas.getDate){
             denda = denda + 100
         }
         })
@@ -272,6 +272,11 @@ const CardProfil = () => {
                 text: "Password gagal diubah. Silahkan cek kembali formulir Anda ....",
             })
         }
+    }
+    // handle tanggal lahir 
+    const handleTgl = (tanggal) => {
+        if(tanggal == null) return tanggal
+        else return (new Intl.DateTimeFormat('en-GB', {dateStyle: 'long'}).format(new Date(tanggal)))
     }
 
   return (
@@ -519,7 +524,7 @@ const CardProfil = () => {
                         <Col md="8" xs="7">
                             <div>
                                 <p className="card-category">TTL</p>
-                                <CardTitle tag="h5">{detailUser.tempatLahir + ", " + (detailUser.tanggalLahir)}</CardTitle>
+                                <CardTitle tag="h5">{detailUser.tempatLahir + ", " + handleTgl(detailUser.tanggalLahir) }</CardTitle>
                                 <p />
                             </div>
                         </Col>

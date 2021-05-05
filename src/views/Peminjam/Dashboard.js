@@ -100,7 +100,7 @@ class Dashboard extends React.Component {
     let nowDate = new Date()
     data.map(value => {
       let tempBatas = new Date(value.batasPinjam)
-      if(nowDate > tempBatas){
+      if(nowDate.getDate > tempBatas.getDate){
         denda = denda + 100
       }
     })
