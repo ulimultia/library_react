@@ -46,6 +46,8 @@ const CardProfil = () => {
     const [newPassHelp, setNewPassHelp] = useState("")
     const [confirmPass, setConfirmPass] = useState("")
     const [confirmPassHelp, setConfirmPassHelp] = useState("")
+    const [file, setFile] = useState(null);
+    const [fotoProfil, setFoto] = useState("");
 
     useEffect(() => {
         getAllDetailUser();
@@ -67,6 +69,7 @@ const CardProfil = () => {
             setEdTanggal(response.data.tanggalLahir)
             setEdAlamat(response.data.alamat)
             setEdTelp(response.data.telp)
+            setFoto(response.data.foto)
         })
     }
 
@@ -129,7 +132,19 @@ const CardProfil = () => {
     const onChangeEdKelamin = (event) =>{
         setEdKelamin(event.target.value);
     }
+    const fileChange = async (e) => {
+        // console.log(e.target.files);
+        // console.log(e);
+        // console.log(file);
     
+        await setFile(e.target.files[0]);
+        // await setFiles([]);
+        // await this.setState({
+        //   file: e.target.files[0],
+        // });
+        // console.log(file);
+    };
+
     // validasi dan feedback edit profil
     const editNow = () => {
         var isValid = true
@@ -165,34 +180,66 @@ const CardProfil = () => {
         if (edKelamin === "") {isValid = false; setEdAlamatHelp("Tidak boleh kosong")}
         else {setEdKelaminHelp("")}
 
+        if (file == null) {
+            const fileNull = {
+              nik: edNik,
+              nama: edNama,
+              tempatLahir: edTempat,
+              tanggalLahir: edTanggal,
+              kelamin: edKelamin,
+              alamat: edAlamat,
+              telp: edTelp,
+              foto: fotoProfil,
+            };
+            console.log(fileNull);
+            axios
+              .put("http://localhost:8080/user/edit/" + detailUser.id, fileNull)
+              .then((response) => {
+                setEditModal(false);
+                getAllDetailUser();
+                MySwal.fire({
+                  icon: "success",
+                  title: "Sukses!!!",
+                  text: "Data berhasil diubah ....",
+                });
+            });
+        }
+        const data = new FormData();
+        data.append("file", file);
         //feedback
         if(isValid === true){
-            const detailDto = {
-                nik: edNik,
-                nama: edNama,
-                tempatLahir: edTempat,
-                tanggalLahir: edTanggal,
-                kelamin: edKelamin,
-                alamat: edAlamat,
-                telp: edTelp,
-            }
-            axios.put("http://localhost:8080/user/edit/" + detailUser.id, detailDto)
-            .then(response => {
-                setEditModal(false)
-                getAllDetailUser()
-                MySwal.fire({
-                    icon: "success",
-                    title: "Sukses!!!",
-                    text: "Data berhasil diubah ....",
+            axios
+            .post("http://localhost:8080/api/v1/files/uploadfoto", data)
+            .then((res) => {
+                setFile(null);
+                const detailDto = {
+                    nik: edNik,
+                    nama: edNama,
+                    tempatLahir: edTempat,
+                    tanggalLahir: edTanggal,
+                    kelamin: edKelamin,
+                    alamat: edAlamat,
+                    telp: edTelp,
+                    foto: res.data.name,
+                }
+                axios.put("http://localhost:8080/user/edit/" + detailUser.id, detailDto)
+                .then(response => {
+                    setEditModal(false)
+                    getAllDetailUser()
+                    MySwal.fire({
+                        icon: "success",
+                        title: "Sukses!!!",
+                        text: "Data berhasil diubah ....",
+                    })
                 })
-            })
-            .catch(error => {
-                MySwal.fire({
-                    icon: "success",
-                    title: "Gagal!!!",
-                    text: error.response.data.message,
+                .catch(error => {
+                    MySwal.fire({
+                        icon: "success",
+                        title: "Gagal!!!",
+                        text: error.response.data.message,
+                    })
                 })
-            })
+            });
         }
         else {
             MySwal.fire({
@@ -298,8 +345,11 @@ const CardProfil = () => {
                                 <img
                                 alt=""
                                 className="avatar border-gray"
-                                src={detailUser.foto}
+                                src={"http://localhost:8080/api/v1/files/download/" +
+                                detailUser.foto}
                                 />
+                                {console.log("http://localhost:8080/api/v1/files/download/" +
+                                detailUser.foto)}
                                 <h5 className="title" style={{color: "#845f3e"}}> { detailUser.nama }</h5>
                             </a>
                             <p className="description">Member<br></br>
@@ -407,7 +457,7 @@ const CardProfil = () => {
                                             <Col xs="12" sm="6" className="mb-3">
                                                 <FormGroup >
                                                     <Label for="edTelp">Foto Profil</Label>
-                                                    <Input type="file" name="fotoProfil" id="fotoProfil"
+                                                    <Input type="file" name="fotoProfil" id="fotoProfil" onChange={fileChange}
                                                     />
                                                     {/* <FormText color="danger">{edTelpHelp}</FormText> */}
                                                 </FormGroup>
