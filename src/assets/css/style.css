@@ -60,7 +60,7 @@ p, h3 {
 }
 
 /* .modal-header{
-    background-image: linear-gradient(to bottom right, #23150d,#845f3e);
+    background-image: linear-gradient(to bottom right, #23150d,#c2c2c2);
     color: white;
 }
 
@@ -82,6 +82,36 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 } 
+
+.pagination {
+    margin: 15px auto;
+    display: flex;
+    list-style: none;
+    outline: none;
+  }
+  .pagination > .active > a{
+    background-color: #c2c2c2 ;
+    border-color: #c2c2c2 ;
+    color: #fff;
+  }
+  .pagination > li > a{
+    border: 1px solid #c2c2c2 ;
+    padding: 5px 10px;
+    outline: none;
+    cursor: pointer;
+  }
+  .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
+    background-color: #878787 ;
+    border-color: #878787;
+    outline: none ;
+  }
+  .pagination > li > a, .pagination > li > span{
+    color: #c2c2c2
+  }
+  .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
+    border-radius: unset
+  }
+  
 @media(max-width:800px) {
     .catalog-book .card .card-body {
         height: 175px;
