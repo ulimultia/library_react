@@ -13,6 +13,7 @@ class Riwayat extends React.Component {
     this.state = {
       riwayats : [],
       newRiwayats: [],
+      sessionData: JSON.parse(localStorage.getItem("userdata")),
       id: JSON.parse(localStorage.getItem("userdata")).data.id,
       columnTable: [
         {
@@ -60,13 +61,25 @@ class Riwayat extends React.Component {
     }
   }
 
+  authHeader = () => {
+    if(this.state.sessionData && this.state.sessionData.data.token){
+      return {
+        'authorization': `Bearer ${this.state.sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  } 
+
   async componentDidMount(){
+    await this.authHeader()
     await this.getAllData()
   }
 
   getAllData = () => {
     // hanya riwayat sewa yang sudah selesai
-    axios.get('http://localhost:8080/api/v1/user/riwayat/selesai/' + this.state.id)
+    axios.get('http://localhost:8080/api/v1/user/riwayat/selesai/' + this.state.id, {headers: this.authHeader()})
     // semua riwayat sewa yang selesai atau masih dipinjam
     // axios.get('http://localhost:8080/api/v1/user/riwayat/sewa/' + this.state.id)
     .then(response => {

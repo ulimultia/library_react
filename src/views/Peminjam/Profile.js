@@ -22,12 +22,24 @@ class User extends React.Component {
     }
   }
 
+  authHeader = () => {
+    if(this.state.sessionData && this.state.sessionData.data.token){
+      return {
+        'authorization': `Bearer ${this.state.sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  } 
+
   componentDidMount(){
+    this.authHeader();
     this.getDetailUser();
   }
   // get detail user
   getDetailUser = () => {
-    axios.get('http://localhost:8080/user/get-detail/' + this.state.sessionData.data.id)
+    axios.get('http://localhost:8080/user/get-detail/' + this.state.sessionData.data.id, {headers: this.authHeader()})
     .then(response => {
       this.setState({
         detailUser: response.data,

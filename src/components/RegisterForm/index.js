@@ -37,6 +37,7 @@ const RegisterForm = () => {
   const [labelNIK, setLabelNIK] = useState("");
   const [labelNama, setLabelNama] = useState("");
   const [labelEmail, setLabelEmail] = useState("");
+  const [kelaminHelp, setkelaminHelp] = useState("")
   const [labelUsername, setLabelUsername] = useState("");
   const [labelTempatLahir, setLabelTempatLahir] = useState("");
   const [labelTanggalLahir, setLabelTanggalLahir] = useState("");
@@ -44,7 +45,7 @@ const RegisterForm = () => {
   const [labelTelepon, setLabelTelepon] = useState("");
   const [labelPassword, setLabelPassword] = useState("");
   const [labelKonfirmasiPassword, setLabelKonfirmasiPassword] = useState("");
-  const [isValid, setIsValid] = useState(true);
+  // const [isValid, setIsValid] = useState(true);
 
   const onChangeUsername = (event) => {
     const value = event.target.value;
@@ -95,110 +96,151 @@ const RegisterForm = () => {
     const value = event.target.value;
     setTelepon(value);
   };
+  const onChangeKelamin = (event) => {
+    setKelamin(event.target.value);
+  };
 
   const submitRegister = () => {
-    //
+    let isValid = true;
     // validasi NIK
     if (nik === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelNIK("Tidak boleh kosong");
-    } else {
+    }
+    else if(nik.length !== 16) {
+      isValid=false;
+      setLabelNIK("Harus 16 digit");
+    }
+    else if(isNaN(nik) === true){
+      isValid=false;
+      setLabelNIK("Harus angka");
+    }
+    else {
       setLabelNIK("");
     }
     if (namaLengkap === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelNama("Tidak boleh kosong");
     } else {
       setLabelNama("");
     }
-    if (email === "") {
-      setIsValid(false);
-      setLabelEmail("Tidak boleh kosong");
+    // if (email === "") {
+    //   isValid=false;
+    //   setLabelEmail("Tidak boleh kosong");
+    // } else {
+    //   setLabelEmail("");
+    // }
+    if(kelamin === ""){
+      isValid=false;
+      setkelaminHelp("Tidak boleh kosong");
     } else {
-      setLabelEmail("");
+      setkelaminHelp("");
     }
     if (username === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelUsername("Tidak boleh kosong");
+    } else if(username.length < 6){
+      isValid=false;
+      setLabelUsername("Minimal 8 karakter");
     } else {
       setLabelUsername("");
     }
     if (tempatLahir === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelTempatLahir("Tidak boleh kosong");
     } else {
       setLabelTempatLahir("");
     }
     if (tanggalLahir === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelTanggalLahir("Tidak boleh kosong");
     } else {
       setLabelTanggalLahir("");
     }
     if (alamat === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelAlamat("Tidak boleh kosong");
     } else {
       setLabelAlamat("");
     }
     if (telepon === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelTelepon("Tidak boleh kosong");
     } else {
       setLabelTelepon("");
     }
     if (password === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelPassword("Tidak boleh kosong");
+    } else if(password.length < 6 ){
+      isValid=false;
+      setLabelPassword("Minimal 6 karakter");
     } else {
       setLabelPassword("");
     }
     if (konfirmasiPassword === "") {
-      setIsValid(false);
+      isValid=false;
       setLabelKonfirmasiPassword("Tidak boleh kosong");
+    } else if(konfirmasiPassword !== password){
+      isValid=false;
+      setLabelKonfirmasiPassword("Tidak sesuai");
+    } else if(password.length < 6 ){
+      isValid=false;
+      setLabelPassword("Minimal 6 karakter");
     } else {
       setLabelKonfirmasiPassword("");
     }
 
-    //
-    setFoto(
-      "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png"
-    );
-    setKelamin("-");
-    setRole(["PEMINJAM"]);
-    const data = {
-      //kiri sesuain api kanan dari fungsinya
-      username: username,
-      password: password,
-      role: role,
-      nama: namaLengkap,
-      alamat: alamat,
-      foto: foto,
-      kelamin: kelamin,
-      nik: nik,
-      tanggalLahir: tanggalLahir,
-      telp: telepon,
-      tempatLahir: tempatLahir,
-    };
-
-    axios
-      .post("http://localhost:8080/auth/register", data) // memasukkan inputan ke post api
+    if(isValid === true){
+      setFoto(
+        "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png"
+      );
+      setRole(["PEMINJAM"]);
+      const data = {
+        //kiri sesuain api kanan dari fungsinya
+        username: username,
+        password: password,
+        role: role,
+        nama: namaLengkap,
+        alamat: alamat,
+        foto: foto,
+        kelamin: kelamin,
+        nik: nik,
+        tanggalLahir: tanggalLahir,
+        telp: telepon,
+        tempatLahir: tempatLahir,
+      };
+  
+      axios.post("http://localhost:8080/auth/register", data) // memasukkan inputan ke post api
       .then((res) => {
         console.log(res); // menampilkan hasil response dari data inputan yang dikirim
-        if (isValid === true) {
+        if(res.data.status === 201){
           MySwal.fire({
-            title: "Berhasil!!!",
+            title: "Sukses!!!",
             icon: "success",
-            text: "Berhasil Menambahkan User",
+            text: "Resgitrasi akun Anda berhasil ...",
           });
-          return <Redirect to="/" />;
+          setNik("");setNamaLengkap("");setKelamin("");setUsername("");setPassword("");setKonfirmasiPassword("");
+          setTempatLahir("");setTanggalLahir(""); setAlamat(""); setTelepon("");
         }
+        return <Redirect to="/" />;
       })
       .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data);
-        }
+        MySwal.fire({
+          icon: "error",
+          title: "Gagal!!!",
+          text: error.response.data.message,
+        });
       });
+    }
+    else {
+      MySwal.fire({
+        title: "Gagal!!!",
+        icon: "error",
+        text: "Cek kembali kelengkapan data Anda ...",
+      });
+    }
+    
   };
   return (
     <>
@@ -217,9 +259,9 @@ const RegisterForm = () => {
               <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="nik">NIK</Label>
-                  <span class="font-weight-lighter ml-3" id="labelNikAdd">
+                  {/* <span class="font-weight-lighter ml-3" id="labelNikAdd">
                     {labelNIK}
-                  </span>
+                  </span> */}
                   <Input
                     type="number"
                     name="nik"
@@ -228,14 +270,15 @@ const RegisterForm = () => {
                     value={nik}
                     onChange={onChangeNik}
                   />
+                  <FormText color="danger">{labelNIK}</FormText>
                 </FormGroup>
               </Col>
               <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="nama">Nama</Label>
-                  <span class="font-weight-lighter ml-3" id="labelNamaAdd">
+                  {/* <span class="font-weight-lighter ml-3" id="labelNamaAdd">
                     {labelNama}
-                  </span>
+                  </span> */}
                   <Input
                     type="text"
                     name="nama"
@@ -244,9 +287,86 @@ const RegisterForm = () => {
                     value={namaLengkap}
                     onChange={onChangeNamaLengkap}
                   />
+                  <FormText color="danger">{labelNama}</FormText>
                 </FormGroup>
               </Col>
               <Col xs="12" sm="6">
+                <FormGroup>
+                  <Label for="nama">Jenis Kelamin</Label>
+                  <Input
+                    type="select"
+                    name="edKelamin"
+                    id="edKelamin"
+                    placeholder="Nama lengkap ..."
+                    value={kelamin}
+                    onChange={onChangeKelamin}
+                  >
+                    <option value="">Pilih salah satu </option>
+                    <option value="Perempuan">Perempuan </option>
+                    <option value="Laki-laki">Laki-laki </option>
+                  </Input>
+                  <FormText color="danger">
+                    {kelaminHelp}
+                  </FormText>
+                </FormGroup>
+              </Col>
+              <Col xs="12" sm="6">
+                <FormGroup>
+                  <Label for="username">Username</Label>
+                  {/* <span class="font-weight-lighter ml-3" id="labelUsernameAdd">
+                    {labelUsername}
+                  </span> */}
+                  <Input
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Username ..."
+                    value={username}
+                    onChange={onChangeUsername}
+                  />
+                  <FormText color="danger">{labelUsername}</FormText>
+                </FormGroup>
+              </Col>
+              <Col xs="12" sm="6">
+                <FormGroup>
+                  <Label for="password">Password</Label>
+                  {/* <span class="font-weight-lighter ml-3" id="labelPasswordAdd">
+                    {labelPassword}
+                  </span> */}
+
+                  <Input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Password ..."
+                    value={password}
+                    onChange={onChangePassword}
+                  />
+                  <FormText color="danger">{labelPassword}</FormText>
+                </FormGroup>
+              </Col>
+              <Col xs="12" sm="6">
+                <FormGroup>
+                  <Label for="password">Konfirmasi Password</Label>
+                  {/* <span
+                    class="font-weight-lighter ml-3"
+                    id="labelKonfirmasiPasswordAdd"
+                  >
+                    {labelKonfirmasiPassword}
+                  </span> */}
+
+                  <Input
+                    type="password"
+                    name="cpassword"
+                    id="cpassword"
+                    placeholder="Konfirmasi password ..."
+                    value={konfirmasiPassword}
+                    onChange={onChangeKonfirmasiPassword}
+                  />
+                  <FormText color="danger">{labelKonfirmasiPassword}</FormText>
+                </FormGroup>
+              </Col>
+              {/* <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="email">Email</Label>
                   <span class="font-weight-lighter ml-3" id="labelEmailAdd">
@@ -261,32 +381,16 @@ const RegisterForm = () => {
                     onChange={onChangeEmail}
                   />
                 </FormGroup>
-              </Col>
-              <Col xs="12" sm="6">
-                <FormGroup>
-                  <Label for="username">Username</Label>
-                  <span class="font-weight-lighter ml-3" id="labelUsernameAdd">
-                    {labelUsername}
-                  </span>
-                  <Input
-                    type="text"
-                    name="username"
-                    id="username"
-                    placeholder="Username ..."
-                    value={username}
-                    onChange={onChangeUsername}
-                  />
-                </FormGroup>
-              </Col>
+              </Col> */}
               <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="tempat_lahir">Tempat Lahir</Label>
-                  <span
+                  {/* <span
                     class="font-weight-lighter ml-3"
                     id="labelTempatLahirAdd"
                   >
                     {labelTempatLahir}
-                  </span>
+                  </span> */}
 
                   <Input
                     type="text"
@@ -296,17 +400,18 @@ const RegisterForm = () => {
                     value={tempatLahir}
                     onChange={onChangeTempatLahir}
                   />
+                  <FormText color="danger">{labelTempatLahir}</FormText>
                 </FormGroup>
               </Col>
               <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="tanggal_lahir">Tanggal Lahir</Label>
-                  <span
+                  {/* <span
                     class="font-weight-lighter ml-3"
                     id="labelTanggalLahirAdd"
                   >
                     {labelTanggalLahir}
-                  </span>
+                  </span> */}
 
                   <Input
                     type="date"
@@ -316,14 +421,15 @@ const RegisterForm = () => {
                     value={tanggalLahir}
                     onChange={onChangeTanggalLahir}
                   />
+                  <FormText color="danger">{labelTanggalLahir}</FormText>
                 </FormGroup>
               </Col>
               <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="alamat">Alamat</Label>
-                  <span class="font-weight-lighter ml-3" id="labelAlamatAdd">
+                  {/* <span class="font-weight-lighter ml-3" id="labelAlamatAdd">
                     {labelAlamat}
-                  </span>
+                  </span> */}
 
                   <Input
                     type="text"
@@ -333,14 +439,15 @@ const RegisterForm = () => {
                     value={alamat}
                     onChange={onChangeAlamat}
                   />
+                  <FormText color="danger">{labelAlamat}</FormText>
                 </FormGroup>
               </Col>
               <Col xs="12" sm="6">
                 <FormGroup>
                   <Label for="alamat">Telepon</Label>
-                  <span class="font-weight-lighter ml-3" id="labelTeleponAdd">
+                  {/* <span class="font-weight-lighter ml-3" id="labelTeleponAdd">
                     {labelTelepon}
-                  </span>
+                  </span> */}
 
                   <Input
                     type="text"
@@ -350,54 +457,19 @@ const RegisterForm = () => {
                     value={telepon}
                     onChange={onChangeTelepon}
                   />
-                </FormGroup>
-              </Col>
-              <Col xs="12" sm="6">
-                <FormGroup>
-                  <Label for="password">Password</Label>
-                  <span class="font-weight-lighter ml-3" id="labelPasswordAdd">
-                    {labelPassword}
-                  </span>
-
-                  <Input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Password ..."
-                    value={password}
-                    onChange={onChangePassword}
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs="12" sm="6">
-                <FormGroup>
-                  <Label for="password">Konfirmasi Password</Label>
-                  <span
-                    class="font-weight-lighter ml-3"
-                    id="labelKonfirmasiPasswordAdd"
-                  >
-                    {labelKonfirmasiPassword}
-                  </span>
-
-                  <Input
-                    type="password"
-                    name="cpassword"
-                    id="cpassword"
-                    placeholder="Konfirmasi password ..."
-                    value={konfirmasiPassword}
-                    onChange={onChangeKonfirmasiPassword}
-                  />
+                  <FormText color="danger">{labelTelepon}</FormText>
                 </FormGroup>
               </Col>
             </Row>
-            <FormGroup check>
+            {/* <FormGroup check>
               <Label check>
                 <Input type="checkbox" /> Check me out
                 <span className="form-check-sign">
                   <span className="check"></span>
                 </span>
               </Label>
-            </FormGroup>
+            </FormGroup> */}
+            <br></br>
             <Button
               color="primary"
               onClick={submitRegister}

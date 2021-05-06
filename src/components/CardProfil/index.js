@@ -22,7 +22,7 @@ import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 
 const CardProfil = () => {
-  let sessionData = JSON.parse(localStorage.getItem("userdata"));
+  const sessionData = JSON.parse(localStorage.getItem("userdata"));
   let idUser = sessionData.data.id;
 
   const [detailUser, setdetailUser] = useState({});
@@ -60,7 +60,19 @@ const CardProfil = () => {
   const [file, setFile] = useState(null);
   const [fotoProfil, setFoto] = useState("");
 
+  const authHeader = () => {
+    if(sessionData && sessionData.data.token){
+      return {
+        'authorization': `Bearer ${sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  }
+
   useEffect(() => {
+    authHeader();
     getAllDetailUser();
     getAllDonation();
     getAllDataSedangDisewa();
@@ -69,7 +81,7 @@ const CardProfil = () => {
   // let edNik = detailUser.nik
   const getAllDetailUser = () => {
     axios
-      .get("http://localhost:8080/user/get-detail/" + idUser)
+      .get("http://localhost:8080/user/get-detail/" + idUser, {headers: authHeader()})
       .then((response) => {
         //   this.setState({
         setdetailUser(response.data);
@@ -88,7 +100,7 @@ const CardProfil = () => {
   // mengambil buku yang sedang disewa
   const getAllDataSedangDisewa = () => {
     axios
-      .get("http://localhost:8080/api/v1/user/riwayat/sedangdisewa/" + idUser)
+      .get("http://localhost:8080/api/v1/user/riwayat/sedangdisewa/" + idUser, {headers: authHeader()})
       .then((response) => {
         setdataSewa(response.data.data);
       });
@@ -96,7 +108,7 @@ const CardProfil = () => {
   // get buku yang pernah didonasikan
   const getAllDonation = () => {
     axios
-      .get("http://localhost:8080/api/v1/user/buku/donasi/" + idUser)
+      .get("http://localhost:8080/api/v1/user/buku/donasi/" + idUser, {headers: authHeader()})
       .then((response) => {
         setdonations(response.data.data);
       });
@@ -108,7 +120,7 @@ const CardProfil = () => {
     let nowDate = new Date();
     data.map((value) => {
       let tempBatas = new Date(value.batasPinjam);
-      if (nowDate.getDate > tempBatas.getDate) {
+      if (nowDate.getDate() > tempBatas.getDate()) {
         denda = denda + 100;
       }
     });
@@ -241,7 +253,7 @@ const CardProfil = () => {
       };
       console.log(fileNull);
       axios
-        .put("http://localhost:8080/user/edit/" + detailUser.id, fileNull)
+        .put("http://localhost:8080/user/edit/" + detailUser.id, fileNull, {headers: authHeader()})
         .then((response) => {
           setEditModal(false);
           getAllDetailUser();
@@ -257,7 +269,7 @@ const CardProfil = () => {
     //feedback
     if (isValid === true) {
       axios
-        .post("http://localhost:8080/api/v1/files/uploadfoto", data)
+        .post("http://localhost:8080/api/v1/files/uploadfoto", data, {headers: authHeader()})
         .then((res) => {
           setFile(null);
           const detailDto = {
@@ -271,7 +283,7 @@ const CardProfil = () => {
             foto: res.data.name,
           };
           axios
-            .put("http://localhost:8080/user/edit/" + detailUser.id, detailDto)
+            .put("http://localhost:8080/user/edit/" + detailUser.id, detailDto, {headers: authHeader()})
             .then((response) => {
               setEditModal(false);
               getAllDetailUser();
@@ -354,7 +366,7 @@ const CardProfil = () => {
         password: passNow,
       };
       axios
-        .put("http://localhost:8080/auth/change", userDto)
+        .put("http://localhost:8080/auth/change", userDto, {headers: authHeader()})
         .then((response) => {
           setGantiPass(false);
           setPassNowHelp("");

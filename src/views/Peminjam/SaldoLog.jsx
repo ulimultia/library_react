@@ -4,8 +4,7 @@ import React from "react";
 
 // reactstrap components
 import {
-  Card,CardHeader,CardBody,CardTitle,
-  Table,Row,Col,
+  Card,CardBody,Row,Col,
 } from "reactstrap";
 
 class SaldoLog extends React.Component {
@@ -16,11 +15,24 @@ class SaldoLog extends React.Component {
             saldoLogs: [],
             data: {},
             rowTable: [],
-            columnTable: [{ label: 'Aktivitas Saldo', field: 'rincian'}]
+            columnTable: [{ label: 'Aktivitas Saldo', field: 'rincian'}],
+            sessionData: JSON.parse(localStorage.getItem("userdata")),
         }
     }
 
+    authHeader = () => {
+        if(this.state.sessionData && this.state.sessionData.data.token){
+          return {
+            'authorization': `Bearer ${this.state.sessionData.data.token}`
+          }
+        }
+        else{
+          return null;
+        }
+    } 
+
     componentDidMount(){
+        this.authHeader()
         this.getAllSaldoLog()
     }
 
@@ -29,7 +41,7 @@ class SaldoLog extends React.Component {
         let sessionData = JSON.parse(localStorage.getItem("userdata"))
         let idUser = sessionData.data.id
 
-        axios.get('http://localhost:8080/api/v1/user/riwayat/saldo/' + idUser)
+        axios.get('http://localhost:8080/api/v1/user/riwayat/saldo/' + idUser, {headers: this.authHeader()})
         .then(response => {
             this.setState({
                 saldoLogs: response.data.data
