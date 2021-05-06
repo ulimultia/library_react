@@ -61,7 +61,16 @@ class Genre extends React.Component {
     await this.getAllGenre();
     // this.handleGetAll(this.categories);
   }
-
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   // modal toggle tambah
   toggle = () => {
     if (this.state.modal === true) {
@@ -104,48 +113,56 @@ class Genre extends React.Component {
   };
   // get all data genre
   getAllGenre = () => {
-    axios.get("http://localhost:8080/api/v1/genre/all").then((response) => {
-      this.setState({
-        genres: response.data.data,
-      });
-      this.state.genres.map((value, key) => {
-        return this.state.newGenres.push({
-          no: key + 1,
-          genre: value.namaGenre,
-          aksi: (
-            <Row>
-              <Col sm="6">
-                <Button
-                  color="success"
-                  onClick={() => this.toggleEdit(value)}
-                  className="btn btn-sm"
-                >
-                  <i className="fas fa-pen-square"> </i>
-                </Button>
-              </Col>
-              <Col sm="6">
-                <Button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => this.handleDelete(value.id)}
-                >
-                  <i className="fas fa-trash"></i>
-                </Button>
-              </Col>
-            </Row>
-          ),
+    const userHeader = this.authHeader();
+
+    axios
+      .get("http://localhost:8080/api/v1/genre/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        this.setState({
+          genres: response.data.data,
         });
+        this.state.genres.map((value, key) => {
+          return this.state.newGenres.push({
+            no: key + 1,
+            genre: value.namaGenre,
+            aksi: (
+              <Row>
+                <Col sm="6">
+                  <Button
+                    color="success"
+                    onClick={() => this.toggleEdit(value)}
+                    className="btn btn-sm"
+                  >
+                    <i className="fas fa-pen-square"> </i>
+                  </Button>
+                </Col>
+                <Col sm="6">
+                  <Button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => this.handleDelete(value.id)}
+                  >
+                    <i className="fas fa-trash"></i>
+                  </Button>
+                </Col>
+              </Row>
+            ),
+          });
+        });
+        this.setState({
+          data: {
+            columns: [...this.state.columTable],
+            rows: [...this.state.newGenres],
+          },
+        });
+        console.log(this.state.newGenres);
       });
-      this.setState({
-        data: {
-          columns: [...this.state.columTable],
-          rows: [...this.state.newGenres],
-        },
-      });
-      console.log(this.state.newGenres);
-    });
   };
   // add and edit
   submitNow = (e) => {
+    const userHeader = this.authHeader();
+
     e.preventDefault();
     let isValid = true;
     // jika button tambah data
@@ -166,7 +183,9 @@ class Genre extends React.Component {
           namaGenre: this.state.namaGenre,
         };
         axios
-          .post("http://localhost:8080/api/v1/genre/add", genreDto)
+          .post("http://localhost:8080/api/v1/genre/add", genreDto, {
+            headers: userHeader,
+          })
           .then((response) => {
             this.setState({
               modal: false,
@@ -210,7 +229,9 @@ class Genre extends React.Component {
           namaGenre: this.state.editNamaGenre,
         };
         axios
-          .put("http://localhost:8080/api/v1/genre/edit", genreDto)
+          .put("http://localhost:8080/api/v1/genre/edit", genreDto, {
+            headers: userHeader,
+          })
           .then((response) => {
             this.setState({
               modalEdit: false,
@@ -236,6 +257,8 @@ class Genre extends React.Component {
   };
   // delete genre
   handleDelete = (id) => {
+    const userHeader = this.authHeader();
+
     MySwal.fire({
       title: "Anda Yakin?",
       text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -250,7 +273,9 @@ class Genre extends React.Component {
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
         axios
-          .delete("http://localhost:8080/api/v1/genre/delete/" + id)
+          .delete("http://localhost:8080/api/v1/genre/delete/" + id, {
+            headers: userHeader,
+          })
           .then((response) => {
             this.setState({
               genres: [],

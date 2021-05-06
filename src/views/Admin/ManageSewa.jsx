@@ -80,7 +80,16 @@ class Sewa extends React.Component {
     await this.getAllSewa();
     // this.handleGetAll(this.categories);
   }
-
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   // modal toggle tambah
   toggle = () => {
     if (this.state.modal === true) {
@@ -110,8 +119,12 @@ class Sewa extends React.Component {
   };
   // get all data genre
   getAllSewa = () => {
+    const userHeader = this.authHeader();
+
     axios
-      .get("http://localhost:8080/api/v1/kodebuku/all-available")
+      .get("http://localhost:8080/api/v1/kodebuku/all-available", {
+        headers: userHeader,
+      })
       .then((response) => {
         this.setState({
           kodeBuku: response.data.data,
@@ -136,6 +149,8 @@ class Sewa extends React.Component {
   };
   // add and edit
   submitNow = (e) => {
+    const userHeader = this.authHeader();
+
     console.log(this.state.kode);
 
     e.preventDefault();
@@ -165,7 +180,12 @@ class Sewa extends React.Component {
 
       if (isValid === true) {
         axios
-          .get("http://localhost:8080/api/v1/kodebuku/kode/" + this.state.kode)
+          .get(
+            "http://localhost:8080/api/v1/kodebuku/kode/" + this.state.kode,
+            {
+              headers: userHeader,
+            }
+          )
           .then((response) => {
             const kodeObj = { ["kodeBuku"]: this.state.kode };
             const penyewaObj = { ["username"]: this.state.penyewa };
@@ -178,7 +198,9 @@ class Sewa extends React.Component {
             };
             console.log(sewaDTO);
             axios
-              .post("http://localhost:8080/admin/peminjaman/sewa", sewaDTO)
+              .post("http://localhost:8080/admin/peminjaman/sewa", sewaDTO, {
+                headers: userHeader,
+              })
               .then((respon) => {
                 if (respon.status == 200) {
                   console.log(respon.message);

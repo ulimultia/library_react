@@ -64,8 +64,12 @@ const CardProfilAdmin = () => {
 
   // let edNik = detailUser.nik
   const getAllDetailUser = () => {
+    const userHeader = authHeader();
+
     axios
-      .get("http://localhost:8080/user/get-detail/" + idUser)
+      .get("http://localhost:8080/user/get-detail/" + idUser, {
+        headers: userHeader,
+      })
       .then((response) => {
         //   this.setState({
         setdetailUser(response.data);
@@ -78,6 +82,16 @@ const CardProfilAdmin = () => {
         setEdTelp(response.data.telp);
         setFoto(response.data.foto);
       });
+  };
+  const authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
   };
   //fungsi buka dan tutup modal
   const toggleEdit = () => setEditModal(!editModal);
@@ -127,6 +141,8 @@ const CardProfilAdmin = () => {
 
   // validasi dan feedback edit profil
   const editNow = () => {
+    const userHeader = authHeader();
+
     // console.log("klik edit profil");
     var isValid = true;
     // validasi NIK
@@ -207,7 +223,9 @@ const CardProfilAdmin = () => {
       };
       console.log(fileNull);
       axios
-        .put("http://localhost:8080/user/edit/" + detailUser.id, fileNull)
+        .put("http://localhost:8080/user/edit/" + detailUser.id, fileNull, {
+          headers: userHeader,
+        })
         .then((response) => {
           setEditModal(false);
           getAllDetailUser();
@@ -223,7 +241,9 @@ const CardProfilAdmin = () => {
     //feedback
     if (isValid === true) {
       axios
-        .post("http://localhost:8080/api/v1/files/uploadfoto", data)
+        .post("http://localhost:8080/api/v1/files/uploadfoto", data, {
+          headers: userHeader,
+        })
         .then((res) => {
           setFile(null);
           const detailDto = {
@@ -237,7 +257,13 @@ const CardProfilAdmin = () => {
             foto: res.data.name,
           };
           axios
-            .put("http://localhost:8080/user/edit/" + detailUser.id, detailDto)
+            .put(
+              "http://localhost:8080/user/edit/" + detailUser.id,
+              detailDto,
+              {
+                headers: userHeader,
+              }
+            )
             .then((response) => {
               setEditModal(false);
               getAllDetailUser();
@@ -277,6 +303,8 @@ const CardProfilAdmin = () => {
   };
   // === validasi dan feedback dari hasilpengecekan
   const editPassNow = () => {
+    const userHeader = authHeader();
+
     var isValid = true;
     // validasi pass saat ini
     if (passNow === "") {
@@ -316,7 +344,9 @@ const CardProfilAdmin = () => {
         password: passNow,
       };
       axios
-        .put("http://localhost:8080/auth/change", userDto)
+        .put("http://localhost:8080/auth/change", userDto, {
+          headers: userHeader,
+        })
         .then((response) => {
           setGantiPass(false);
           setPassNowHelp("");

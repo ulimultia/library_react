@@ -91,7 +91,16 @@ class Pinjam extends React.Component {
     await this.getAllPinjaman();
     // this.handleGetAll(this.categories);
   }
-
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   // modal toggle tambah
   toggle = () => {
     if (this.state.modal === true) {
@@ -110,8 +119,12 @@ class Pinjam extends React.Component {
     }
   };
   handlePengembalian = (id) => {
+    const userHeader = this.authHeader();
+
     axios
-      .get("http://localhost:8080/admin/peminjaman/get-by-id/" + id)
+      .get("http://localhost:8080/admin/peminjaman/get-by-id/" + id, {
+        headers: userHeader,
+      })
       .then((response) => {
         const pengembalianDTO = {
           id: id,
@@ -131,7 +144,10 @@ class Pinjam extends React.Component {
           axios
             .post(
               "http://localhost:8080/admin/peminjaman/pengembalian",
-              pengembalianDTO
+              pengembalianDTO,
+              {
+                headers: userHeader,
+              }
             )
             .then((respon) => {
               MySwal.fire(
@@ -147,7 +163,10 @@ class Pinjam extends React.Component {
           axios
             .post(
               "http://localhost:8080/admin/peminjaman/pengembalian",
-              pengembalianDTO
+              pengembalianDTO,
+              {
+                headers: userHeader,
+              }
             )
             .then((respon) => {
               console.log(respon.data.message);
@@ -198,8 +217,12 @@ class Pinjam extends React.Component {
   };
   // get all data genre
   getAllPinjaman = () => {
+    const userHeader = this.authHeader();
+
     axios
-      .get("http://localhost:8080/admin/peminjaman/get-all")
+      .get("http://localhost:8080/admin/peminjaman/get-all", {
+        headers: userHeader,
+      })
       .then((response) => {
         console.log(response);
         this.setState({

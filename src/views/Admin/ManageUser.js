@@ -89,13 +89,20 @@ class Tables extends React.Component {
   async componentDidMount() {
     await this.getAllUsers();
     await this.getSession();
-    // await this.getDetail();
-    // this.toggleEdit();
-    // await console.log(this.state.detailUser);
-    // await console.log(this.state.userNew);
-    // await console.log("a");
   }
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   handleReset = (id) => {
+    const userHeader = this.authHeader();
+
     const resetData = {
       password: "12345678",
     };
@@ -113,7 +120,9 @@ class Tables extends React.Component {
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
         axios
-          .put("http://localhost:8080/auth/reset/" + id, resetData)
+          .put("http://localhost:8080/auth/reset/" + id, resetData, {
+            headers: userHeader,
+          })
           .then((response) => {
             console.log(response);
           });
@@ -122,6 +131,8 @@ class Tables extends React.Component {
     });
   };
   handleDelete = (id1) => {
+    const userHeader = this.authHeader();
+
     MySwal.fire({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover the data!",
@@ -136,7 +147,9 @@ class Tables extends React.Component {
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
         axios
-          .delete("http://localhost:8080/user/delete/" + id1)
+          .delete("http://localhost:8080/user/delete/" + id1, {
+            headers: userHeader,
+          })
           .then((response) => {
             this.setState({
               userNew: [],
@@ -151,6 +164,8 @@ class Tables extends React.Component {
     });
   };
   handleEdit = (id) => {
+    const userHeader = this.authHeader();
+
     const editData = {
       nama: this.state.nama,
       kelamin: this.state.kelamin,
@@ -160,7 +175,9 @@ class Tables extends React.Component {
     };
     console.log(editData);
     axios
-      .put("http://localhost:8080/user/edit/" + id, editData)
+      .put("http://localhost:8080/user/edit/" + id, editData, {
+        headers: userHeader,
+      })
       .then((response) => {
         console.log(response);
       });
@@ -190,8 +207,12 @@ class Tables extends React.Component {
   };
 
   getDetail = (id) => {
+    const userHeader = this.authHeader();
+
     axios
-      .get("http://localhost:8080/user/get-detail/" + id)
+      .get("http://localhost:8080/user/get-detail/" + id, {
+        headers: userHeader,
+      })
       .then((response) => {
         this.setState({
           detailUser: response.data,
@@ -209,76 +230,54 @@ class Tables extends React.Component {
     console.log(this.state.detailUser);
   };
   getAllUsers = () => {
-    axios.get("http://localhost:8080/user/get-all").then((response) => {
-      this.setState({
-        userNew: response.data.data,
-      });
-      // console.log(this.state.userNew[1].roles[0].name);
+    const userHeader = this.authHeader();
 
-      this.state.userNew.map((el, key) => {
-        return this.state.userNew3.push({
-          no: key + 1,
-          username: el.username,
-          roles: el.roles[0].name,
-          action: (
-            <Row>
-              <Button
-                onClick={() => this.toggleEdit(el.id)}
-                className="btn btn-success btn-sm fa fa-edit mx-1"
-              ></Button>{" "}
-              <Button
-                onClick={() => this.handleDelete(el.id)}
-                className="btn btn-danger btn-sm fa fa-trash mx-1"
-              ></Button>{" "}
-              <ModalTopupUser
-                id={el.id}
-                classButtonModal="btn btn-info btn-sm fa fa-money-bill-wave mx-1"
-                modalName="Topup User"
-                namatopup={el.username}
-              ></ModalTopupUser>{" "}
-              <Button
-                onClick={() => this.handleReset(el.id)}
-                className="btn btn-warning btn-sm fa fa-key mx-1"
-              ></Button>
-            </Row>
-          ),
+    axios
+      .get("http://localhost:8080/user/get-all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        this.setState({
+          userNew: response.data.data,
+        });
+        // console.log(this.state.userNew[1].roles[0].name);
+
+        this.state.userNew.map((el, key) => {
+          return this.state.userNew3.push({
+            no: key + 1,
+            username: el.username,
+            roles: el.roles[0].name,
+            action: (
+              <Row>
+                <Button
+                  onClick={() => this.toggleEdit(el.id)}
+                  className="btn btn-success btn-sm fa fa-edit mx-1"
+                ></Button>{" "}
+                <Button
+                  onClick={() => this.handleDelete(el.id)}
+                  className="btn btn-danger btn-sm fa fa-trash mx-1"
+                ></Button>{" "}
+                <ModalTopupUser
+                  id={el.id}
+                  classButtonModal="btn btn-info btn-sm fa fa-money-bill-wave mx-1"
+                  modalName="Topup User"
+                  namatopup={el.username}
+                ></ModalTopupUser>{" "}
+                <Button
+                  onClick={() => this.handleReset(el.id)}
+                  className="btn btn-warning btn-sm fa fa-key mx-1"
+                ></Button>
+              </Row>
+            ),
+          });
+        });
+        this.setState({
+          data: {
+            columns: [...this.state.columTable],
+            rows: [...this.state.userNew3],
+          },
         });
       });
-      // this.state.userNew.forEach((el) => {
-      //   userNew2.push({
-      //     no: (number = number + 1),
-      //     username: el.username,
-      //     role: el.roles.name,
-      //     action: (
-      //       <div className="d-flex flex-wrap">
-      //         <Button
-      //           onClick={() => this.toggleEdit()}
-      //           className="btn btn-success btn-sm fa fa-edit mx-1"
-      //         ></Button>{" "}
-      //         <Button
-      //           onClick={() => this.handleDelete(el.id)}
-      //           className="btn btn-danger btn-sm fa fa-trash mx-1"
-      //         ></Button>{" "}
-      //         <ModalTopupUser
-      //           classButtonModal="btn btn-info btn-sm fa fa-money-bill-wave mx-1"
-      //           modalName="Topup User"
-      //           namatopup={el.username}
-      //         ></ModalTopupUser>{" "}
-      //         <Button
-      //           onClick={() => handleReset(el.id)}
-      //           className="btn btn-warning btn-sm fa fa-key mx-1"
-      //         ></Button>
-      //       </div>
-      //     ),
-      //   });
-      // });
-      this.setState({
-        data: {
-          columns: [...this.state.columTable],
-          rows: [...this.state.userNew3],
-        },
-      });
-    });
   };
 
   render() {
@@ -300,18 +299,6 @@ class Tables extends React.Component {
             <Col md="12">
               <Card>
                 <CardBody>
-                  {/* <ModalEditUser
-          open={this.state.modalEditOpen}
-          classButtonModal="btn btn-success btn-sm fa fa-edit mx-1"
-          id={this.state.idDetail}
-          modalName="Edit User"
-          nama={this.state.detailUser.nama}
-          kelamin={this.state.detailUser.kelamin}
-          tempat={this.state.detailUser.tempat_lahir}
-          tanggal_lahir={this.state.detailUser.tanggal_lahir}
-          alamat={this.state.detailUser.alamat}
-        ></ModalEditUser> */}
-
                   <MDBDataTableV5
                     striped
                     small

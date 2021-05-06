@@ -50,19 +50,46 @@ const ModalAddBuku = (props) => {
   const [files, setFiles] = useState([]);
   const [file, setFile] = useState(null);
   const [modal, setModal] = useState(false);
+  const authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   useEffect(() => {
-    axios.get("http://localhost:8080/api/v1/kategori/all").then((response) => {
-      setArrayKategori(response.data.data);
-    });
-    axios.get("http://localhost:8080/api/v1/genre/all").then((response) => {
-      setArrayGenre(response.data.data);
-    });
-    axios.get("http://localhost:8080/api/v1/penerbit/all").then((response) => {
-      setArrayPenerbit(response.data.data);
-    });
-    axios.get("http://localhost:8080/api/v1/lokasi/all").then((response) => {
-      setArrayLokasi(response.data.data);
-    });
+    const user = authHeader();
+    axios
+      .get("http://localhost:8080/api/v1/kategori/all", {
+        headers: user,
+      })
+      .then((response) => {
+        setArrayKategori(response.data.data);
+      });
+    axios
+      .get("http://localhost:8080/api/v1/genre/all", {
+        headers: user,
+      })
+      .then((response) => {
+        setArrayGenre(response.data.data);
+      });
+    axios
+      .get("http://localhost:8080/api/v1/penerbit/all", {
+        headers: user,
+      })
+      .then((response) => {
+        setArrayPenerbit(response.data.data);
+      });
+    axios
+      .get("http://localhost:8080/api/v1/lokasi/all", {
+        headers: user,
+      })
+      .then((response) => {
+        setArrayLokasi(response.data.data);
+      });
   }, []);
   const toggle = () => setModal(!modal);
 
@@ -99,25 +126,20 @@ const ModalAddBuku = (props) => {
   const onChangeSampul = (event) => {
     setSampul(event.target.value);
   };
-  const getFiles = () => {
-    axios.get("http://localhost:8080/api/v1/files").then((res) => {
-      console.log(res);
-      setFiles(null);
-      setFiles(res.data);
-    });
-  };
+
   const postFiles = (e) => {
-    // e.preventDefault();
+    const user = authHeader();
 
     const data = new FormData();
     data.append("file", file);
 
     axios
-      .post("http://localhost:8080/api/v1/files/uploadsampul", data)
+      .post("http://localhost:8080/api/v1/files/uploadsampul", data, {
+        headers: user,
+      })
       .then((res) => {
         console.log(res.data.name);
         setFiles(res.data.name);
-        // getFiles();
         setFile(null);
       });
   };
@@ -131,6 +153,8 @@ const ModalAddBuku = (props) => {
     await console.log(file);
   };
   const handleAdd = async () => {
+    const user = authHeader();
+
     const kategoriObj = { ["id"]: kategoriBuku };
     const penerbitObj = { ["id"]: penerbitBuku };
     const lokasiObj = { ["id"]: lokasiBuku };
@@ -216,7 +240,9 @@ const ModalAddBuku = (props) => {
     console.log(files);
     if (isValid === true) {
       axios
-        .post("http://localhost:8080/api/v1/buku/add", tambahBuku)
+        .post("http://localhost:8080/api/v1/buku/add", tambahBuku, {
+          headers: user,
+        })
         .then((response) => {
           console.log(response);
         });
