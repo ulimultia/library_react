@@ -37,6 +37,7 @@ import {
 } from "variables/charts.js";
 import axios from "axios";
 import { Link, Redirect } from "react-router-dom";
+import logoutfunc from "../../components/SessionDelete/index.js";
 
 class Dashboard extends React.Component {
   intervalID;
@@ -109,6 +110,19 @@ class Dashboard extends React.Component {
         this.setState({
           userLength: usertotal,
         });
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status == 401) {
+            logoutfunc();
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
       });
   };
   getAllBuku = () => {
@@ -127,6 +141,19 @@ class Dashboard extends React.Component {
         this.setState({
           bukuLength: bukutotal,
         });
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status == 401) {
+            logoutfunc();
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
       });
   };
   getAllPinjaman = () => {
@@ -145,6 +172,19 @@ class Dashboard extends React.Component {
         this.setState({
           pinjamanLength: pinjamantotal,
         });
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status == 401) {
+            logoutfunc();
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
       });
   };
   chartData = () => {
@@ -164,6 +204,19 @@ class Dashboard extends React.Component {
           this.state.chartLabel.push(perulangan.judul);
           this.state.dataChart.push(perulangan.total);
         });
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status == 401) {
+            logoutfunc();
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
       });
   };
   bukuClick = () => {

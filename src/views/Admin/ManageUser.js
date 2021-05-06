@@ -173,7 +173,6 @@ class Tables extends React.Component {
       tanggalLahir: this.state.tanggaLahir,
       alamat: this.state.alamat,
     };
-    console.log(editData);
     axios
       .put("http://localhost:8080/user/edit/" + id, editData, {
         headers: userHeader,
@@ -203,7 +202,6 @@ class Tables extends React.Component {
     this.setState({
       session: JSON.parse(obj),
     });
-    console.log(this.state.session.data.id);
   };
 
   getDetail = (id) => {
@@ -224,10 +222,7 @@ class Tables extends React.Component {
           tanggalLahir: response.data.tanggalLahir,
           tempatLahir: response.data.tempatLahir,
         });
-        console.log(this.state.nama);
       });
-
-    console.log(this.state.detailUser);
   };
   getAllUsers = () => {
     const userHeader = this.authHeader();
@@ -240,7 +235,6 @@ class Tables extends React.Component {
         this.setState({
           userNew: response.data.data,
         });
-        // console.log(this.state.userNew[1].roles[0].name);
 
         this.state.userNew.map((el, key) => {
           return this.state.userNew3.push({

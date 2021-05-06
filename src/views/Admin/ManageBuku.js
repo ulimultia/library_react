@@ -1,6 +1,6 @@
 import React from "react";
 import { MDBDataTableV5, MDBBtn } from "mdbreact";
-
+import logoutfunc from "../../components/SessionDelete/index.js";
 import ModalEditBuku from "../../components/Modal/ModalEditBuku/index";
 import ModalAddBuku from "../../components/Modal/ModalAddBuku/index";
 import ModalSewaBuku from "../../components/Modal/ModalSewaBuku/index";
@@ -286,36 +286,6 @@ class Tables extends React.Component {
               },
             ],
           });
-          // return this.state.bukuNew2.push({
-          //   no: key + 1,
-          //   judul: el.judul,
-          //   pengarang: el.pengarang,
-          //   tahunTerbit: el.tahunTerbit,
-          //   isbn: el.isbn,
-          //   harga: el.harga,
-          //   deskripsi: el.deskripsi,
-          //   sampul: (
-          //     <img
-          //       src={"http://localhost:8080/api/v1/files/download/" + el.sampul}
-          //     ></img>
-          //   ),
-          //   kategori: el.kategori.namaKategori,
-          //   penerbit: el.penerbit.namaPenerbit,
-          //   lokasi: el.lokasi.kodeLokasi,
-          //   genre: el.genre.namaGenre,
-          //   action: (
-          //     <Row>
-          //       <Button
-          //         onClick={() => this.toggleModal(el.id)}
-          //         className="btn btn-success btn-sm fa fa-edit mx-1"
-          //       ></Button>{" "}
-          //       <Button
-          //         onClick={() => this.handleDelete(el.id)}
-          //         className="btn btn-danger btn-sm fa fa-trash mx-1"
-          //       ></Button>{" "}
-          //     </Row>
-          //   ),
-          // });
         });
         this.setState({
           data: {
@@ -323,6 +293,19 @@ class Tables extends React.Component {
             rows: [...this.state.bukuNew2],
           },
         });
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status == 401) {
+            logoutfunc();
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
       });
   };
   // toogle modal generate kode buku
