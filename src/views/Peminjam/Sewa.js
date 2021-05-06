@@ -4,6 +4,7 @@ import {
 } from "reactstrap";
 import CardSedangDipinjam from "components/CardSedangDisewa/index"
 import axios from "axios";
+import LogoutFunction from "../../components/SessionDelete/index.js";
 
 class Sewa extends React.Component {
   constructor(){
@@ -37,6 +38,19 @@ class Sewa extends React.Component {
            dataSewa: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
 
   render() {

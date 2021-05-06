@@ -18,7 +18,7 @@ const BukuRekomendasi = (props) => {
   return (
     <div>
         <Card className="bg-dark text-white book-recomendation">
-            <CardImg src={dataBuku.sampul} alt="..." style={{opacity:"0.5"}} className="img-recomendation"/>
+            <CardImg src={"http://localhost:8080/api/v1/files/downloadsampul/" + dataBuku.sampul} alt="..." style={{opacity:"0.5"}} className="img-recomendation"/>
             {/* <CardImg src="https://images.wallpaperscraft.com/image/book_bouquet_cup_147482_3840x2160.jpg" alt="..." style={{opacity:"0.2"}} className="img-recomendation"/> */}
             <CardImgOverlay>
                 <CardTitle><h5><b>{cutTitle(dataBuku.judul)}</b></h5></CardTitle>

@@ -5,6 +5,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { MDBDataTableV5 } from "mdbreact";
+import LogoutFunction from "../../components/SessionDelete/index.js";
 
 class Riwayat extends React.Component {
   constructor(props){
@@ -109,6 +110,19 @@ class Riwayat extends React.Component {
         }
       })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
 
   handleTglKembali = (tgl) => {

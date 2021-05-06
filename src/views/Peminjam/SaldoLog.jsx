@@ -6,6 +6,7 @@ import React from "react";
 import {
   Card,CardBody,Row,Col,
 } from "reactstrap";
+import LogoutFunction from "../../components/SessionDelete/index.js";
 
 class SaldoLog extends React.Component {
     constructor(props){
@@ -76,6 +77,19 @@ class SaldoLog extends React.Component {
                 }
             })
         })
+        .catch((error) => {
+            // Error
+            if (error.response) {
+              if (error.response.status === 401) {
+                LogoutFunction()
+              }
+            } else if (error.request) {
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", error.message);
+            }
+          });
     }
     // handle return debit and kredit
     handleDebitKredit = (value) => {

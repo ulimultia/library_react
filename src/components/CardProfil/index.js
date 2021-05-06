@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import LogoutFunction from "../../components/SessionDelete/index.js";
 
 const MySwal = withReactContent(Swal);
 
@@ -94,7 +95,20 @@ const CardProfil = () => {
         setEdAlamat(response.data.alamat);
         setEdTelp(response.data.telp);
         setFoto(response.data.foto);
-      });
+    })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   };
 
   // mengambil buku yang sedang disewa
@@ -103,7 +117,20 @@ const CardProfil = () => {
       .get("http://localhost:8080/api/v1/user/riwayat/sedangdisewa/" + idUser, {headers: authHeader()})
       .then((response) => {
         setdataSewa(response.data.data);
-      });
+    })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   };
   // get buku yang pernah didonasikan
   const getAllDonation = () => {
@@ -111,6 +138,19 @@ const CardProfil = () => {
       .get("http://localhost:8080/api/v1/user/buku/donasi/" + idUser, {headers: authHeader()})
       .then((response) => {
         setdonations(response.data.data);
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status === 401) {
+            LogoutFunction()
+          }
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
       });
   };
 
@@ -262,6 +302,19 @@ const CardProfil = () => {
             title: "Sukses!!!",
             text: "Data berhasil diubah ....",
           });
+        })
+        .catch((error) => {
+          // Error
+          if (error.response) {
+            if (error.response.status === 401) {
+              LogoutFunction()
+            }
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
         });
     }
     const data = new FormData();
@@ -300,6 +353,19 @@ const CardProfil = () => {
                 text: error.response.data.message,
               });
             });
+        })
+        .catch((error) => {
+          // Error
+          if (error.response) {
+            if (error.response.status === 401) {
+              LogoutFunction()
+            }
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
         });
     } else {
       MySwal.fire({
@@ -386,6 +452,19 @@ const CardProfil = () => {
             text: error.response.data.message + " ....",
           });
           setPassNowHelp("Password salah");
+        })
+        .catch((error) => {
+          // Error
+          if (error.response) {
+            if (error.response.status === 401) {
+              LogoutFunction()
+            }
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
         });
     } else {
       MySwal.fire({

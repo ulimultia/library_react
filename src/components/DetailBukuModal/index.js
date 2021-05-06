@@ -51,7 +51,7 @@ const DetailBukuModal = (props) => {
         <ModalBody className="mx-4">
           <Row>
               <Col xs="12" sm ="4" className="my-4">
-                <img src={dataBuku.sampul} alt="" className="catalog-img-modal"/>
+                <img src={"http://localhost:8080/api/v1/files/downloadsampul/" + dataBuku.sampul} alt="" className="catalog-img-modal"/>
               </Col>
               <Col xs="12" sm ="8" className="mt-4">
                 <h3>{dataBuku.judul}</h3>

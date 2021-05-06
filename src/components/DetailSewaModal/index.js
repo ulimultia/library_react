@@ -21,7 +21,7 @@ const DetailSewaModal = (props) => {
         <ModalBody className="mx-4">
           <Row>
               <Col xs="12" sm ="4" className="my-4">
-                <img src={dataBuku.kodeBuku.buku.sampul} alt="" className="catalog-img-modal"/>
+                <img src={"http://localhost:8080/api/v1/files/downloadsampul/" + dataBuku.kodeBuku.buku.sampul} alt="" className="catalog-img-modal"/>
               </Col>
               <Col xs="12" sm ="8" className="mt-4">
                 <h3>{dataBuku.kodeBuku.buku.judul}</h3>

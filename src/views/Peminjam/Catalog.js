@@ -10,6 +10,7 @@ import {
 import DetailBukuModal from "../../components/DetailBukuModal/index"
 import CardRekomendasi from "../../components/CardRekomendasi/index"
 import CardFooter from "reactstrap/lib/CardFooter";
+import LogoutFunction from "../../components/SessionDelete/index.js";
 // import data from "../../assets/data/Catalog.json" untuk cek link hehehe
 
 class Catalog extends React.Component {
@@ -68,6 +69,19 @@ class Catalog extends React.Component {
             pagesCount: Math.ceil(response.data.data.length / this.state.dataPerPage),
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   // mengambil data buku terbaru
   getNewBooks = () => {
@@ -77,6 +91,19 @@ class Catalog extends React.Component {
             newBooks: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   // mengambil data buku terpopuler 
   getHotBooks = () => {
@@ -86,6 +113,19 @@ class Catalog extends React.Component {
             hotBooks: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   //  ambil data kategori untuk filter
   getAllKategori = () => {
@@ -95,6 +135,19 @@ class Catalog extends React.Component {
             categories: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   //  ambil data genre untuk filter
   getAllGenre = () => {
@@ -104,6 +157,19 @@ class Catalog extends React.Component {
             genres: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   handleSearch = (event) => {
     this.setState({
@@ -258,7 +324,7 @@ class Catalog extends React.Component {
                     <Col xs="6" sm="4" className="catalog-book">      
                       <Card className="card-stats">
                         {/* <a type="button" data-toggle="modal" data-target="#"> */}
-                          <img src={val.sampul} alt=" " className="card-img-top catalog-img "/>
+                          <img src={"http://localhost:8080/api/v1/files/downloadsampul/" + val.sampul} alt=" " className="card-img-top catalog-img "/>
                         {/* </a>  */}
                         <CardBody>
                           <a type="button" data-toggle="modal" data-target="#">

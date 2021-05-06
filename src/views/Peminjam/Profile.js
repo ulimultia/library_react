@@ -6,6 +6,7 @@ import {
   Row,Col,
 } from "reactstrap";
 import axios from "axios";
+import LogoutFunction from "../../components/SessionDelete/index.js";
 
 class User extends React.Component {
   constructor(){
@@ -47,6 +48,19 @@ class User extends React.Component {
         // roles: response.data.user.roles[0]
       })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   
   // handleTypeUser = (data) => {

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Row,Col } from "reactstrap";
 import WidgetDashboard from "components/WidgetDashboard/"
 import BukuRekomendasi from "components/BukuRekomendasiDashboard/index"
+import LogoutFunction from "../../components/SessionDelete/index.js";
 // react plugin used to create charts
 // import { Line, Pie } from "react-chartjs-2";
 // // reactstrap components
@@ -57,6 +58,19 @@ class Dashboard extends React.Component {
             newBooks: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   // mengambil data buku terpopuler 
   getHotBooks = () => {
@@ -66,6 +80,19 @@ class Dashboard extends React.Component {
             hotBooks: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction();
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   // mengambil buku yang sedang disewa
   getAllDataSedangDisewa = (id) => {
@@ -75,6 +102,19 @@ class Dashboard extends React.Component {
            dataSewa: response.data.data
         })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction();
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   //  mengambil semua riwayat buku yang sedang disewa
   getAllRiwayatSewa = () => {
@@ -87,6 +127,19 @@ class Dashboard extends React.Component {
         riwayats: response.data.data
       })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction();
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   // get detail user
   getDetailUser = () => {
@@ -96,6 +149,19 @@ class Dashboard extends React.Component {
         detailUser: response.data
       })
     })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction();
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
   //fungsi yang digunakan untuk memotong judul yang terlalu panjang
   cutTitle = (judul) => {

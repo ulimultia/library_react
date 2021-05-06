@@ -19,7 +19,7 @@ const CardDonasi = (props) => {
   return (
     <div>
         <Card className="catalog-book">
-            <img src={dataBuku.sampul} alt=" " className="card-img-top catalog-img "/>
+            <img src={"http://localhost:8080/api/v1/files/downloadsampul/" + dataBuku.sampul} alt=" " className="card-img-top catalog-img "/>
             <CardBody>
                 {/* <a type="button" data-toggle="modal" data-target="#"> */}
                 <p><b>{cutTitle(dataBuku.judul)}</b></p>

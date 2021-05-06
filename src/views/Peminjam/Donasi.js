@@ -7,6 +7,7 @@ import ModalCaraDonasi from "components/ModalCaraDonasi/index"
 import CardDonasi from "components/CardDonasi/index"
 import axios from "axios";
 import ReactPaginate from 'react-paginate'
+import LogoutFunction from "../../components/SessionDelete/index.js";
 
 class Donasi extends React.Component {
   constructor(){
@@ -45,7 +46,19 @@ class Donasi extends React.Component {
         pagesCount: Math.ceil(response.data.data.length / this.state.dataPerPage),
       })
     })
-      
+    .catch((error) => {
+      // Error
+      if (error.response) {
+        if (error.response.status === 401) {
+          LogoutFunction()
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    });
   }
 
   handlePageClick = (e) => {

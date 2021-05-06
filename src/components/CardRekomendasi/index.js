@@ -32,7 +32,7 @@ const CardRekomendasi = (props) => {
               return(
                 <Row className="my-1">
                   <Col xs="4">
-                      <img src={val.sampul} height="100px" width="auto" objectFit="cover" alt="rekomendasi-img"/>
+                      <img src={"http://localhost:8080/api/v1/files/downloadsampul/" + val.sampul} height="100px" width="auto" objectFit="cover" alt="rekomendasi-img"/>
                   </Col>
                   <Col xs="8">
                       <p>{val.judul}</p>
