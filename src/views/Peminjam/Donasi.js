@@ -21,12 +21,24 @@ class Donasi extends React.Component {
     }
   }
 
+  authHeader = () => {
+    if(this.state.sessionData && this.state.sessionData.data.token){
+      return {
+        'authorization': `Bearer ${this.state.sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  } 
+  
   componentDidMount(){
+    this.authHeader();
     this.getAllDonation(this.state.sessionData.data.id);
   }
   
   getAllDonation = (id) => {
-    axios.get('http://localhost:8080/api/v1/user/buku/donasi/' + id)
+    axios.get('http://localhost:8080/api/v1/user/buku/donasi/' + id , {headers: this.authHeader()})
     .then((response) => {
       this.setState({
         donations: response.data.data,
@@ -46,7 +58,7 @@ class Donasi extends React.Component {
   }
 
   render() {
-    const { donations, pagesArray } = this.state
+    const { donations } = this.state
     const currentData = donations.slice(this.state.offset, this.state.offset + this.state.dataPerPage)
     return (
       <>

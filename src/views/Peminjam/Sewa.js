@@ -14,12 +14,24 @@ class Sewa extends React.Component {
     }
   }
 
+  authHeader = () => {
+    if(this.state.sessionData && this.state.sessionData.data.token){
+      return {
+        'authorization': `Bearer ${this.state.sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  } 
+
   componentDidMount(){
+    this.authHeader()
     this.getAllDataSedangDisewa(this.state.sessionData.data.id)
   }
 
   getAllDataSedangDisewa = (id) => {
-    axios.get('http://localhost:8080/api/v1/user/riwayat/sedangdisewa/' + id)
+    axios.get('http://localhost:8080/api/v1/user/riwayat/sedangdisewa/' + id, {headers: this.authHeader()})
     .then((response) => {
         this.setState({
            dataSewa: response.data.data

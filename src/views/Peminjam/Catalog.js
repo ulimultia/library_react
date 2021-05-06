@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import ReactDOM from 'react-dom';
 import ReactPaginate from 'react-paginate';
 // reactstrap components
 import {
@@ -11,7 +10,6 @@ import {
 import DetailBukuModal from "../../components/DetailBukuModal/index"
 import CardRekomendasi from "../../components/CardRekomendasi/index"
 import CardFooter from "reactstrap/lib/CardFooter";
-import { data } from "jquery";
 // import data from "../../assets/data/Catalog.json" untuk cek link hehehe
 
 class Catalog extends React.Component {
@@ -33,13 +31,26 @@ class Catalog extends React.Component {
       currentPage: 0,
       offset: 0,
       dataPerPage : 9,
+      sessionData: JSON.parse(localStorage.getItem("userdata")),
     }
     this.handlePageClick = this
             .handlePageClick
             .bind(this);
   }
 
+  authHeader = () => {
+    if(this.state.sessionData && this.state.sessionData.data.token){
+      return {
+        'authorization': `Bearer ${this.state.sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  } 
+
   componentDidMount(){
+    this.authHeader();
     //panggil fungsi getAllCatalog diawal
     this.getAllCatalog();
     this.getNewBooks();
@@ -50,7 +61,7 @@ class Catalog extends React.Component {
 
   // mengambil semua buku yang belum dihapus
   getAllCatalog = () => {
-    axios.get('http://localhost:8080/api/v1/user/buku/all')
+    axios.get('http://localhost:8080/api/v1/user/buku/all', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             catalogs: response.data.data,
@@ -60,7 +71,7 @@ class Catalog extends React.Component {
   }
   // mengambil data buku terbaru
   getNewBooks = () => {
-    axios.get('http://localhost:8080/api/v1/user/buku/terbaru')
+    axios.get('http://localhost:8080/api/v1/user/buku/terbaru', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             newBooks: response.data.data
@@ -69,7 +80,7 @@ class Catalog extends React.Component {
   }
   // mengambil data buku terpopuler 
   getHotBooks = () => {
-    axios.get('http://localhost:8080/api/v1/user/buku/terpopuler')
+    axios.get('http://localhost:8080/api/v1/user/buku/terpopuler', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             hotBooks: response.data.data
@@ -78,7 +89,7 @@ class Catalog extends React.Component {
   }
   //  ambil data kategori untuk filter
   getAllKategori = () => {
-    axios.get('http://localhost:8080/api/v1/kategori/all')
+    axios.get('http://localhost:8080/api/v1/kategori/all', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             categories: response.data.data
@@ -87,7 +98,7 @@ class Catalog extends React.Component {
   }
   //  ambil data genre untuk filter
   getAllGenre = () => {
-    axios.get('http://localhost:8080/api/v1/genre/all')
+    axios.get('http://localhost:8080/api/v1/genre/all', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             genres: response.data.data

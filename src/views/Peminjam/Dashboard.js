@@ -27,19 +27,31 @@ class Dashboard extends React.Component {
     }
   }
 
+  authHeader = () => {
+    if(this.state.sessionData && this.state.sessionData.data.token){
+      return {
+        'authorization': `Bearer ${this.state.sessionData.data.token}`
+      }
+    }
+    else{
+      return null;
+    }
+  }
   componentDidMount(){
     //panggil fungsi getAllCatalog diawal
+    this.authHeader();
     this.getNewBooks();
     this.getHotBooks();
     this.getAllDataSedangDisewa(this.state.sessionData.data.id)
     this.getAllRiwayatSewa();
     this.getDetailUser();
-    console.log(this.state.detailUser);
+    // console.log(this.state.detailUser);
   }
 
   // mengambil data buku terbaru
   getNewBooks = () => {
-    axios.get('http://localhost:8080/api/v1/user/buku/terbaru')
+    // console.log(this.authHeader());
+    axios.get('http://localhost:8080/api/v1/user/buku/terbaru', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             newBooks: response.data.data
@@ -48,7 +60,7 @@ class Dashboard extends React.Component {
   }
   // mengambil data buku terpopuler 
   getHotBooks = () => {
-    axios.get('http://localhost:8080/api/v1/user/buku/terpopuler')
+    axios.get('http://localhost:8080/api/v1/user/buku/terpopuler', {headers: this.authHeader()})
     .then((response) => {
         this.setState({
             hotBooks: response.data.data
@@ -57,7 +69,7 @@ class Dashboard extends React.Component {
   }
   // mengambil buku yang sedang disewa
   getAllDataSedangDisewa = (id) => {
-    axios.get('http://localhost:8080/api/v1/user/riwayat/sedangdisewa/' + id)
+    axios.get('http://localhost:8080/api/v1/user/riwayat/sedangdisewa/' + id, {headers: this.authHeader()})
     .then((response) => {
         this.setState({
            dataSewa: response.data.data
@@ -69,7 +81,7 @@ class Dashboard extends React.Component {
     // hanya riwayat sewa yang sudah selesai
     // axios.get('http://localhost:8080/api/v1/user/riwayat/selesai/' + this.state.sessionData.data.id)
     // semua riwayat sewa yang selesai atau masih dipinjam
-    axios.get('http://localhost:8080/api/v1/user/riwayat/sewa/' + this.state.sessionData.data.id)
+    axios.get('http://localhost:8080/api/v1/user/riwayat/sewa/' + this.state.sessionData.data.id, {headers: this.authHeader()})
     .then(response => {
       this.setState({
         riwayats: response.data.data
@@ -78,7 +90,7 @@ class Dashboard extends React.Component {
   }
   // get detail user
   getDetailUser = () => {
-    axios.get('http://localhost:8080/user/get-detail/' + this.state.sessionData.data.id)
+    axios.get('http://localhost:8080/user/get-detail/' + this.state.sessionData.data.id , {headers: this.authHeader()})
     .then(response => {
       this.setState({
         detailUser: response.data
@@ -100,7 +112,7 @@ class Dashboard extends React.Component {
     let nowDate = new Date()
     data.map(value => {
       let tempBatas = new Date(value.batasPinjam)
-      if(nowDate.getDate > tempBatas.getDate){
+      if(nowDate.getDate() > tempBatas.getDate()){
         denda = denda + 100
       }
     })
