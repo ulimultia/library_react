@@ -118,6 +118,16 @@ class Tables extends React.Component {
     await this.getSession();
     // this.toggleEdit();
   }
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   toggleModal = async (id) => {
     await this.setState({
       modalTest: !this.state.modalTest,
@@ -133,6 +143,7 @@ class Tables extends React.Component {
     console.log(this.state.session.data.id);
   };
   handleDelete = (id1) => {
+    const user = this.authHeader();
     MySwal.fire({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover the data!",
@@ -147,7 +158,9 @@ class Tables extends React.Component {
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
         axios
-          .delete("http://localhost:8080/api/v1/buku/delete/" + id1)
+          .delete("http://localhost:8080/api/v1/buku/delete/" + id1, {
+            headers: user,
+          })
           .then((response) => {
             this.setState({
               bukuNew: [],
@@ -178,128 +191,139 @@ class Tables extends React.Component {
   };
 
   getDetail = (id) => {
-    axios.get("http://localhost:8080/api/v1/buku/id/" + id).then((response) => {
-      this.setState({
-        judul: response.data.data.judul,
-        pengarang: response.data.data.pengarang,
-        tahunTerbit: response.data.data.tahunTerbit,
-        isbn: response.data.data.isbn,
-        harga: response.data.data.harga,
-        deskripsi: response.data.data.deskripsi,
-        sampul: response.data.data.sampul,
-        sampulModal: response.data.data.sampul,
-        kategori: response.data.data.kategori.id,
-        penerbit: response.data.data.penerbit.id,
-        lokasi: response.data.data.lokasi.id,
-        genre: response.data.data.genre.id,
-        idDetail: id,
-      });
-      console.log(this.state.sampulModal);
+    const user = this.authHeader();
+    axios
+      .get("http://localhost:8080/api/v1/buku/id/" + id, {
+        headers: user,
+      })
+      .then((response) => {
+        this.setState({
+          judul: response.data.data.judul,
+          pengarang: response.data.data.pengarang,
+          tahunTerbit: response.data.data.tahunTerbit,
+          isbn: response.data.data.isbn,
+          harga: response.data.data.harga,
+          deskripsi: response.data.data.deskripsi,
+          sampul: response.data.data.sampul,
+          sampulModal: response.data.data.sampul,
+          kategori: response.data.data.kategori.id,
+          penerbit: response.data.data.penerbit.id,
+          lokasi: response.data.data.lokasi.id,
+          genre: response.data.data.genre.id,
+          idDetail: id,
+        });
+        console.log(this.state.sampulModal);
 
-      console.log("get detail: " + id);
-      console.log("get id detail: " + this.state.idDetail);
-    });
+        console.log("get detail: " + id);
+        console.log("get id detail: " + this.state.idDetail);
+      });
   };
   getAllBuku = () => {
+    const user = this.authHeader();
     this.setState({
       bukuNew: [],
       bukuNew2: [],
       data: {},
     });
-    axios.get("http://localhost:8080/api/v1/buku/all").then((response) => {
-      this.setState({
-        bukuNew: response.data.data,
-      });
-      console.log(this.state.bukuNew);
-
-      this.state.bukuNew.map((el, key) => {
+    axios
+      .get("http://localhost:8080/api/v1/buku/all", {
+        headers: user,
+      })
+      .then((response) => {
         this.setState({
-          bukuNew2: [
-            ...this.state.bukuNew2,
-            {
-              no: key + 1,
-              judul: el.judul,
-              pengarang: el.pengarang,
-              tahunTerbit: el.tahunTerbit,
-              isbn: el.isbn,
-              harga: el.harga,
-              deskripsi: el.deskripsi,
-              sampul: (
-                <img
-                  src={
-                    "http://localhost:8080/api/v1/files/download/" + el.sampul
-                  }
-                  alt="sampulBuku"
-                  className=""
-                  style={{ width: "50px", height: "70px" }}
-                ></img>
-              ),
-              kategori: el.kategori.namaKategori,
-              penerbit: el.penerbit.namaPenerbit,
-              lokasi: el.lokasi.kodeLokasi,
-              genre: el.genre.namaGenre,
-              action: (
-                <Row>
-                  <Button
-                    className="btn btn-sm"
-                    style={{ backgroundColor: "purple" }}
-                    onClick={() => {
-                      this.toggleGenerate(el.id);
-                    }}
-                  >
-                    <i className="fas fa-barcode"></i>
-                  </Button>
-                  <Button
-                    onClick={() => this.toggleModal(el.id)}
-                    className="btn btn-success btn-sm fa fa-edit mx-1"
-                  ></Button>{" "}
-                  <Button
-                    onClick={() => this.handleDelete(el.id)}
-                    className="btn btn-danger btn-sm fa fa-trash mx-1"
-                  ></Button>{" "}
-                </Row>
-              ),
-            },
-          ],
+          bukuNew: response.data.data,
         });
-        // return this.state.bukuNew2.push({
-        //   no: key + 1,
-        //   judul: el.judul,
-        //   pengarang: el.pengarang,
-        //   tahunTerbit: el.tahunTerbit,
-        //   isbn: el.isbn,
-        //   harga: el.harga,
-        //   deskripsi: el.deskripsi,
-        //   sampul: (
-        //     <img
-        //       src={"http://localhost:8080/api/v1/files/download/" + el.sampul}
-        //     ></img>
-        //   ),
-        //   kategori: el.kategori.namaKategori,
-        //   penerbit: el.penerbit.namaPenerbit,
-        //   lokasi: el.lokasi.kodeLokasi,
-        //   genre: el.genre.namaGenre,
-        //   action: (
-        //     <Row>
-        //       <Button
-        //         onClick={() => this.toggleModal(el.id)}
-        //         className="btn btn-success btn-sm fa fa-edit mx-1"
-        //       ></Button>{" "}
-        //       <Button
-        //         onClick={() => this.handleDelete(el.id)}
-        //         className="btn btn-danger btn-sm fa fa-trash mx-1"
-        //       ></Button>{" "}
-        //     </Row>
-        //   ),
-        // });
+        console.log(this.state.bukuNew);
+
+        this.state.bukuNew.map((el, key) => {
+          this.setState({
+            bukuNew2: [
+              ...this.state.bukuNew2,
+              {
+                no: key + 1,
+                judul: el.judul,
+                pengarang: el.pengarang,
+                tahunTerbit: el.tahunTerbit,
+                isbn: el.isbn,
+                harga: el.harga,
+                deskripsi: el.deskripsi,
+                sampul: (
+                  <img
+                    src={
+                      "http://localhost:8080/api/v1/files/downloadsampul/" +
+                      el.sampul
+                    }
+                    alt="sampulBuku"
+                    className=""
+                    style={{ width: "50px", height: "70px" }}
+                  ></img>
+                ),
+                kategori: el.kategori.namaKategori,
+                penerbit: el.penerbit.namaPenerbit,
+                lokasi: el.lokasi.kodeLokasi,
+                genre: el.genre.namaGenre,
+                action: (
+                  <Row>
+                    <Button
+                      className="btn btn-sm"
+                      style={{ backgroundColor: "purple" }}
+                      onClick={() => {
+                        this.toggleGenerate(el.id);
+                      }}
+                    >
+                      <i className="fas fa-barcode"></i>
+                    </Button>
+                    <Button
+                      onClick={() => this.toggleModal(el.id)}
+                      className="btn btn-success btn-sm fa fa-edit mx-1"
+                    ></Button>{" "}
+                    <Button
+                      onClick={() => this.handleDelete(el.id)}
+                      className="btn btn-danger btn-sm fa fa-trash mx-1"
+                    ></Button>{" "}
+                  </Row>
+                ),
+              },
+            ],
+          });
+          // return this.state.bukuNew2.push({
+          //   no: key + 1,
+          //   judul: el.judul,
+          //   pengarang: el.pengarang,
+          //   tahunTerbit: el.tahunTerbit,
+          //   isbn: el.isbn,
+          //   harga: el.harga,
+          //   deskripsi: el.deskripsi,
+          //   sampul: (
+          //     <img
+          //       src={"http://localhost:8080/api/v1/files/download/" + el.sampul}
+          //     ></img>
+          //   ),
+          //   kategori: el.kategori.namaKategori,
+          //   penerbit: el.penerbit.namaPenerbit,
+          //   lokasi: el.lokasi.kodeLokasi,
+          //   genre: el.genre.namaGenre,
+          //   action: (
+          //     <Row>
+          //       <Button
+          //         onClick={() => this.toggleModal(el.id)}
+          //         className="btn btn-success btn-sm fa fa-edit mx-1"
+          //       ></Button>{" "}
+          //       <Button
+          //         onClick={() => this.handleDelete(el.id)}
+          //         className="btn btn-danger btn-sm fa fa-trash mx-1"
+          //       ></Button>{" "}
+          //     </Row>
+          //   ),
+          // });
+        });
+        this.setState({
+          data: {
+            columns: [...this.state.columTable],
+            rows: [...this.state.bukuNew2],
+          },
+        });
       });
-      this.setState({
-        data: {
-          columns: [...this.state.columTable],
-          rows: [...this.state.bukuNew2],
-        },
-      });
-    });
   };
   // toogle modal generate kode buku
   toggleGenerate = (id) => {
@@ -325,6 +349,7 @@ class Tables extends React.Component {
   };
   // submit generate kode buku
   submitNow = () => {
+    const user = this.authHeader();
     const kodeBukuDto = {
       buku: {
         id: this.state.idBuku,
@@ -334,7 +359,9 @@ class Tables extends React.Component {
       },
     };
     axios
-      .post("http://localhost:8080/api/v1/kodebuku/add", kodeBukuDto)
+      .post("http://localhost:8080/api/v1/kodebuku/add", kodeBukuDto, {
+        headers: user,
+      })
       .then((response) => {
         if (response.data.status === 201) {
           // this.getAllKodeBuku();
@@ -379,11 +406,6 @@ class Tables extends React.Component {
             <Col md="12">
               <Card>
                 <CardBody>
-                  <ModalSewaBuku
-                    classButton="btn-primary btn-sm fa fa-plus float-right"
-                    modalName="Sewa Buku"
-                    buttonLabel=" Sewa Buku"
-                  />
                   <ModalAddBuku
                     classButton="btn-primary btn-sm fa fa-plus float-right"
                     modalName="Tambah Buku"

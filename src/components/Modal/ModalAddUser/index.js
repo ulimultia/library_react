@@ -40,7 +40,16 @@ const ModalAddUser = (props) => {
   const [labelPassword, setLabelPassword] = useState("");
   const [modal, setModal] = useState(false);
   const [file, setFile] = useState(null);
-
+  const authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   const onChangeNIK = (event) => {
     setNIK(event.target.value);
   };
@@ -85,6 +94,8 @@ const ModalAddUser = (props) => {
     console.log(file);
   };
   const handleAdd = () => {
+    const userHeader = authHeader();
+
     var isValid = true;
     // validasi NIK
 
@@ -160,7 +171,9 @@ const ModalAddUser = (props) => {
 
     if (isValid === true) {
       axios
-        .post("http://localhost:8080/api/v1/files/uploadfoto", data)
+        .post("http://localhost:8080/api/v1/files/uploadfoto", data, {
+          headers: userHeader,
+        })
         .then((res) => {
           setFile(null);
           const register = {
@@ -178,7 +191,9 @@ const ModalAddUser = (props) => {
             tempatLahir: tempatAdd,
           };
           axios
-            .post("http://localhost:8080/auth/register", register) // memasukkan inputan ke post api
+            .post("http://localhost:8080/auth/register", register, {
+              headers: userHeader,
+            }) // memasukkan inputan ke post api
             .then((res) => {
               console.log(res); // menampilkan hasil response dari data inputan yang dikirim
               MySwal.fire({

@@ -60,7 +60,6 @@ var routesAdmin = [
     layout: "/admin",
   },
   {
-
     path: "/kodebuku",
     name: "Kode Buku",
     icon: "fa fa-copy",
@@ -85,13 +84,6 @@ var routesAdmin = [
     icon: "fa fa-exchange-alt",
     component: Pengembalian,
 
-    layout: "/admin",
-  },
-  {
-    path: "/pinjaman",
-    name: "Daftar Pinjaman",
-    icon: "fa fa-exchange-alt",
-    component: TabelPengembalian,
     layout: "/admin",
   },
   {

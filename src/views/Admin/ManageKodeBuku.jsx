@@ -86,6 +86,16 @@ class KodeBuku extends React.Component {
   async componentDidMount() {
     await this.getAllKodeBuku();
   }
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   // modal toggle edit
   toggleEdit = (value) => {
     if (this.state.modalEdit === true) {
@@ -137,65 +147,71 @@ class KodeBuku extends React.Component {
   };
 
   getAllKodeBuku = () => {
-    axios.get("http://localhost:8080/api/v1/kodebuku/all").then((response) => {
-      this.setState({
-        dataKodeBuku: response.data.data,
-      });
-      this.state.dataKodeBuku.map((value, key) => {
-        return this.state.rowTable.push({
-          no: key + 1,
-          sampul: (
-            <img
-              src={
-                "http://localhost:8080/api/v1/files/download/" +
-                value.buku.sampul
-              }
-              alt="sampulBuku"
-              className=""
-              style={{ width: "50px", height: "70px" }}
-            />
-          ),
-          kode: value.kodeBuku,
-          judul: value.buku.judul,
-          tanggal: this.handleTgl(value.createdAt),
-          donasi: this.handleDonatur(value.donatur),
-          status: this.handleAvailable(value.isAvailable),
-          aksi: (
-            <Row>
-              <Col sm="6">
-                <Button
-                  color="success"
-                  onClick={() => this.toggleEdit(value)}
-                  className="btn btn-sm"
-                >
-                  <i className="fas fa-pen-square"> </i>
-                </Button>
-              </Col>
-              <Col sm="6">
-                <Button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => this.handleDelete(value.id)}
-                >
-                  <i className="fas fa-trash"></i>
-                </Button>
-              </Col>
-            </Row>
-          ),
+    const userHeader = this.authHeader();
+    axios
+      .get("http://localhost:8080/api/v1/kodebuku/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        this.setState({
+          dataKodeBuku: response.data.data,
         });
+        this.state.dataKodeBuku.map((value, key) => {
+          return this.state.rowTable.push({
+            no: key + 1,
+            sampul: (
+              <img
+                src={
+                  "http://localhost:8080/api/v1/files/downloadsampul/" +
+                  value.buku.sampul
+                }
+                alt="sampulBuku"
+                className=""
+                style={{ width: "50px", height: "70px" }}
+              />
+            ),
+            kode: value.kodeBuku,
+            judul: value.buku.judul,
+            tanggal: this.handleTgl(value.createdAt),
+            donasi: this.handleDonatur(value.donatur),
+            status: this.handleAvailable(value.isAvailable),
+            aksi: (
+              <Row>
+                <Col sm="6">
+                  <Button
+                    color="success"
+                    onClick={() => this.toggleEdit(value)}
+                    className="btn btn-sm"
+                  >
+                    <i className="fas fa-pen-square"> </i>
+                  </Button>
+                </Col>
+                <Col sm="6">
+                  <Button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => this.handleDelete(value.id)}
+                  >
+                    <i className="fas fa-trash"></i>
+                  </Button>
+                </Col>
+              </Row>
+            ),
+          });
+        });
+        this.setState({
+          data: {
+            columns: [...this.state.columnTable],
+            rows: [...this.state.rowTable],
+          },
+        });
+        console.log(this.state.data);
+        console.log(this.state.dataKodeBuku);
       });
-      this.setState({
-        data: {
-          columns: [...this.state.columnTable],
-          rows: [...this.state.rowTable],
-        },
-      });
-      console.log(this.state.data);
-      console.log(this.state.dataKodeBuku);
-    });
   };
 
   submitNow = () => {
     // e.preventDefault();
+    const userHeader = this.authHeader();
     const kodeBukuDto = {
       id: this.state.idKodeBuku,
       donatur: {
@@ -203,7 +219,9 @@ class KodeBuku extends React.Component {
       },
     };
     axios
-      .put("http://localhost:8080/api/v1/kodebuku/edit", kodeBukuDto)
+      .put("http://localhost:8080/api/v1/kodebuku/edit", kodeBukuDto, {
+        headers: userHeader,
+      })
       .then((response) => {
         if (response.data.status === 200) {
           this.setState({
@@ -237,6 +255,7 @@ class KodeBuku extends React.Component {
   };
   // delete kategori
   handleDelete = (id) => {
+    const userHeader = this.authHeader();
     MySwal.fire({
       title: "Anda Yakin?",
       text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -251,7 +270,9 @@ class KodeBuku extends React.Component {
     }).then((willDelete) => {
       if (willDelete.isConfirmed) {
         axios
-          .delete("http://localhost:8080/api/v1/kodebuku/delete/" + id)
+          .delete("http://localhost:8080/api/v1/kodebuku/delete/" + id, {
+            headers: userHeader,
+          })
           .then((response) => {
             this.setState({
               categories: [],
@@ -277,34 +298,6 @@ class KodeBuku extends React.Component {
             <Col xs="12" sm="12">
               <Card>
                 <CardBody>
-                  {/* <Row>
-                                <Col xs="12" sm="12" className = "text-right">
-                                    <Button onClick={this.toggle} className="btn btn-sm" style={{backgroundColor: "navy"}}><i className="fas fa-plus"> </i>  Tambah</Button>
-                                    <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm" id="modalTambah">
-                                        <ModalHeader toggle={this.toggle} style={{backgroundImage: "linear-gradient(to left, #44a08d, #093637)",color: "#ffffff"}}>Tambah Kategori Buku</ModalHeader>
-                                        <form id="form">
-                                        <ModalBody className="mx-4">
-                                            <FormGroup>
-                                                <Input type="number" name="idKategori" id="idKategori" value={this.state.idKategori} hidden={true}/>
-                                            </FormGroup>
-                                            <FormGroup>
-                                                <Label for="namaKategori">Kategori</Label>
-                                                <Input type="text" name="namaKategori" id="namaKategori" placeholder="Contoh: Buku"
-                                                value={this.state.namaKategori}
-                                                onChange = {this.onChangeInput}
-                                                />
-                                                <FormText color="danger">{this.state.kategoriHelp}</FormText>
-                                            </FormGroup>
-                                        </ModalBody>
-                                        <ModalFooter>
-                                            <Button type="reset" color="secondary" onClick={this.toggle}>Tutup</Button>
-                                            <Button  color="info" onClick={this.submitNow}>{this.state.btn}</Button>
-                                        </ModalFooter>
-                                        </form>
-                                    </Modal>
-                                </Col>
-                            </Row>
-                            <hr/> */}
                   <MDBDataTableV5
                     striped
                     small
@@ -360,7 +353,6 @@ class KodeBuku extends React.Component {
                   value={this.state.editUsernameDonatur}
                   onChange={this.onChangeInput}
                 />
-                {console.log(this.state.editUsernameDonatur)}
                 <FormText color="danger">{this.state.unameHelp}</FormText>
               </FormGroup>
             </ModalBody>
