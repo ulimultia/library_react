@@ -54,46 +54,49 @@ const ModalEditBuku = (props) => {
   const [file64, setBaseFile] = useState(null);
 
   //   console.log("id buku : " + idDetail);
-
+  const authHeader = () => {
+    const userHeader = JSON.parse(localStorage.getItem("userdata"));
+    if (userHeader && userHeader.data.token) {
+      return {
+        authorization: `Bearer ${userHeader.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   useEffect(() => {
-    axios.get("http://localhost:8080/api/v1/kategori/all").then((response) => {
-      setArrayKategori(response.data.data);
-    });
-    axios.get("http://localhost:8080/api/v1/genre/all").then((response) => {
-      setArrayGenre(response.data.data);
-    });
-    axios.get("http://localhost:8080/api/v1/penerbit/all").then((response) => {
-      setArrayPenerbit(response.data.data);
-    });
-    axios.get("http://localhost:8080/api/v1/lokasi/all").then((response) => {
-      setArrayLokasi(response.data.data);
-    });
-  }, []);
-  const getFiles = () => {
-    axios.get("http://localhost:8080/api/v1/files").then((res) => {
-      console.log(res);
-      setFiles(null);
-      setFiles(res.data);
-    });
-  };
-  const postFiles = async (e) => {
-    // e.preventDefault();
-    console.log(file);
-    const data = new FormData();
-    data.append("file", file);
+    const userHeader = authHeader();
 
-    await axios
-      .post("http://localhost:8080/api/v1/files/uploadsampul", data)
-      .then((res) => {
-        console.log(res.data.name);
-        setFiles(res.data.name);
-        // getFiles();
-        setFile(null);
+    axios
+      .get("http://localhost:8080/api/v1/kategori/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        setArrayKategori(response.data.data);
       });
-  };
-  const postfile = () => {
-    postFiles();
-  };
+    axios
+      .get("http://localhost:8080/api/v1/genre/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        setArrayGenre(response.data.data);
+      });
+    axios
+      .get("http://localhost:8080/api/v1/penerbit/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        setArrayPenerbit(response.data.data);
+      });
+    axios
+      .get("http://localhost:8080/api/v1/lokasi/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        setArrayLokasi(response.data.data);
+      });
+  }, []);
+
   const fileChange = async (e) => {
     console.log(e.target.files);
     console.log(e);
@@ -107,6 +110,8 @@ const ModalEditBuku = (props) => {
     console.log(file);
   };
   const handleEdit = () => {
+    const userHeader = authHeader();
+
     console.log("id buku : " + idDetail);
     const kategoriObj = { ["id"]: kategoriBuku };
     const penerbitObj = { ["id"]: penerbitBuku };
@@ -166,7 +171,9 @@ const ModalEditBuku = (props) => {
       };
       console.log(fileNull);
       axios
-        .put("http://localhost:8080/api/v1/buku/edit/", fileNull)
+        .put("http://localhost:8080/api/v1/buku/edit/", fileNull, {
+          headers: userHeader,
+        })
         .then((response) => {
           console.log(response);
           MySwal.fire({
@@ -184,7 +191,9 @@ const ModalEditBuku = (props) => {
 
     if (isValid === true) {
       axios
-        .post("http://localhost:8080/api/v1/files/uploadsampul", data)
+        .post("http://localhost:8080/api/v1/files/uploadsampul", data, {
+          headers: userHeader,
+        })
         .then((res) => {
           setFile(null);
           const editBuku = {
@@ -204,7 +213,9 @@ const ModalEditBuku = (props) => {
           if (res.status == 200) {
             console.log(editBuku);
             axios
-              .put("http://localhost:8080/api/v1/buku/edit/", editBuku)
+              .put("http://localhost:8080/api/v1/buku/edit/", editBuku, {
+                headers: userHeader,
+              })
               .then((response) => {
                 MySwal.fire({
                   title: "Berhasil!!!",

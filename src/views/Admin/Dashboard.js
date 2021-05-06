@@ -39,6 +39,7 @@ import axios from "axios";
 import { Link, Redirect } from "react-router-dom";
 
 class Dashboard extends React.Component {
+  intervalID;
   constructor(props) {
     super(props);
     this.state = {
@@ -52,59 +53,89 @@ class Dashboard extends React.Component {
       labelChart: [],
       dataChart: [],
       chart: [],
-      chartData: [],
       chartLabel: [],
+      session: JSON.parse(localStorage.getItem("userdata")),
       tesarray: ["a", "b"],
-      data: (canvas) => {
-        return {
-          labels: this.state.chartLabel,
-          datasets: [
-            {
-              borderColor: "#6bd098",
-              backgroundColor: "#6bd098",
-              pointRadius: 0,
-              pointHoverRadius: 0,
-              borderWidth: 3,
-              data: this.state.chartData,
-            },
-          ],
-        };
-      },
     };
   }
   componentDidMount() {
+    this.authHeader();
     this.chartData();
     this.getAllUser();
     this.getAllBuku();
     this.getAllPinjaman();
   }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.dataChart !== this.state.dataChart) {
+  //     this.chartData();
+  //   }
+  //   // console.log(prevState.dataChart);
+  //   // console.log(this.state.dataChart);
+  //   if (!prevState.dataChart) {
+  //     this.chartData();
+  //   }
+  // }
+  componentWillUnmount() {
+    /*
+      stop getData() from continuing to run even
+      after unmounting this component. Notice we are calling
+      'clearTimeout()` here rather than `clearInterval()` as
+      in the previous example.
+    */
+    clearTimeout(this.intervalID);
+  }
+  authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   getAllUser = () => {
-    axios.get("http://localhost:8080/user/get-all").then((response) => {
-      this.setState({
-        userAll: response.data.data,
-      });
+    const userHeader = this.authHeader();
+    axios
+      .get("http://localhost:8080/user/get-all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        this.setState({
+          userAll: response.data.data,
+        });
 
-      const usertotal = this.state.userAll.length;
-      this.setState({
-        userLength: usertotal,
+        const usertotal = this.state.userAll.length;
+        this.setState({
+          userLength: usertotal,
+        });
       });
-    });
   };
   getAllBuku = () => {
-    axios.get("http://localhost:8080/api/v1/buku/all").then((response) => {
-      this.setState({
-        bukuAll: response.data.data,
-      });
+    const userHeader = this.authHeader();
 
-      const bukutotal = this.state.bukuAll.length;
-      this.setState({
-        bukuLength: bukutotal,
+    axios
+      .get("http://localhost:8080/api/v1/buku/all", {
+        headers: userHeader,
+      })
+      .then((response) => {
+        this.setState({
+          bukuAll: response.data.data,
+        });
+
+        const bukutotal = this.state.bukuAll.length;
+        this.setState({
+          bukuLength: bukutotal,
+        });
       });
-    });
   };
   getAllPinjaman = () => {
+    const userHeader = this.authHeader();
+
     axios
-      .get("http://localhost:8080/admin/peminjaman/get-all")
+      .get("http://localhost:8080/admin/peminjaman/get-all", {
+        headers: userHeader,
+      })
       .then((response) => {
         this.setState({
           pinjamanAll: response.data.data,
@@ -114,12 +145,15 @@ class Dashboard extends React.Component {
         this.setState({
           pinjamanLength: pinjamantotal,
         });
-        console.log(this.state.pinjamanLength);
       });
   };
   chartData = () => {
+    const userHeader = this.authHeader();
+
     axios
-      .get("http://localhost:8080/admin/peminjaman/buku/terpopuler")
+      .get("http://localhost:8080/admin/peminjaman/buku/terpopuler", {
+        headers: userHeader,
+      })
       .then((response) => {
         console.log(response.data.data);
         this.setState({
@@ -127,19 +161,71 @@ class Dashboard extends React.Component {
         });
         const perulangan = this.state.chart;
         perulangan.forEach((perulangan) => {
-          // this.setState(...this.state.chartLabel.push(perulangan.judul));
           this.state.chartLabel.push(perulangan.judul);
-          this.state.chartData.push(perulangan.total);
+          this.state.dataChart.push(perulangan.total);
         });
-        console.log(this.state.chartLabel);
-        console.log(this.state.chartData);
       });
-    // console.log(this.state.chartData);
   };
   bukuClick = () => {
     return <Redirect to="admin/buku" />;
   };
   render() {
+    const data = {
+      labels: this.state.chartLabel,
+      datasets: [
+        {
+          borderColor: "#6bd098",
+          backgroundColor: "#6bd098",
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          borderWidth: 3,
+          data: this.state.dataChart,
+        },
+      ],
+    };
+    const options = {
+      legend: {
+        display: false,
+      },
+
+      tooltips: {
+        enabled: false,
+      },
+
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              fontColor: "#9f9f9f",
+              beginAtZero: false,
+              maxTicksLimit: 1,
+              //padding: 20
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "#ccc",
+              color: "rgba(255,255,255,0.05)",
+            },
+          },
+        ],
+
+        xAxes: [
+          {
+            barPercentage: 1.6,
+            gridLines: {
+              drawBorder: false,
+              color: "rgba(255,255,255,0.1)",
+              zeroLineColor: "transparent",
+              display: false,
+            },
+            ticks: {
+              padding: 20,
+              fontColor: "#9f9f9f",
+            },
+          },
+        ],
+      },
+    };
     return (
       <>
         <div className="content">
@@ -193,7 +279,7 @@ class Dashboard extends React.Component {
                 <CardFooter>
                   <hr />
                   <div className="stats" style={{ textAlign: "center" }}>
-                    <a class="button" href="/admin/buku">
+                    <a className="button" href="/admin/buku">
                       More info <i className="fas fa-arrow-circle-right"></i>
                     </a>
                   </div>
@@ -266,22 +352,18 @@ class Dashboard extends React.Component {
                   <CardTitle tag="h5">
                     Buku Yang Paling Banyak Dipinjam
                   </CardTitle>
-                  <p className="card-category">Data Selama 24 Jam</p>
+                  <p className="card-category">5 Buku Teratas</p>
                 </CardHeader>
                 <CardBody>
                   <Line
-                    data={this.state.data}
-                    options={dashboard24HoursPerformanceChart.options}
+                    redraw={true}
+                    data={data}
+                    options={options}
                     width={400}
                     height={100}
                   />
                 </CardBody>
-                <CardFooter>
-                  <hr />
-                  <div className="stats">
-                    <i className="fa fa-history" /> Updated 3 minutes ago
-                  </div>
-                </CardFooter>
+                <CardFooter></CardFooter>
               </Card>
             </Col>
           </Row>
