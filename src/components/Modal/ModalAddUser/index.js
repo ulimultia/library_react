@@ -13,7 +13,7 @@ import withReactContent from "sweetalert2-react-content";
 
 const MySwal = withReactContent(Swal);
 const ModalAddUser = (props) => {
-  const { buttonLabel, classButton, modalName, className } = props;
+  const { buttonLabel, iconName, classButton, modalName, className } = props;
 
   const [nikAdd, setNIK] = useState("");
   const [labelNIK, setLabelNIK] = useState("");
@@ -217,7 +217,7 @@ const ModalAddUser = (props) => {
 
   return (
     <div>
-      <Button className={classButton} onClick={toggle}>
+      <Button className={classButton} onClick={toggle} style={{ backgroundColor: "navy" }}><i className={iconName}></i>
         {buttonLabel}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>

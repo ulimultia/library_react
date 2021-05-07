@@ -63,6 +63,7 @@ class Tables extends React.Component {
         {
           label: "Sampul",
           field: "sampul",
+          align: "center",
           width: 150,
           attributes: {
             "aria-controls": "DataTable",
@@ -78,25 +79,25 @@ class Tables extends React.Component {
           label: "Kategori",
           field: "kategori",
           // sort: 'disabled',
-          width: 150,
+          width: 100,
         },
         {
           label: "Genre",
           field: "genre",
           // sort: 'disabled',
-          width: 150,
+          width: 100,
         },
         {
           label: "Harga",
           field: "harga",
           // sort: 'disabled',
-          width: 150,
+          width: 100,
         },
         {
           label: "Lokasi",
           field: "lokasi",
           // sort: 'disabled',
-          width: 150,
+          width: 100,
         },
         {
           label: "Action",
@@ -245,7 +246,7 @@ class Tables extends React.Component {
                 pengarang: el.pengarang,
                 tahunTerbit: el.tahunTerbit,
                 isbn: el.isbn,
-                harga: el.harga,
+                harga: "Rp " + el.harga + ",-",
                 deskripsi: el.deskripsi,
                 sampul: (
                   <img
@@ -386,11 +387,12 @@ class Tables extends React.Component {
       <>
         <div className="content">
           <Row>
-            <Col md="12">
+            {/* <Col md="12">
               <Card>
                 <CardBody>
                   <ModalAddBuku
-                    classButton="btn-primary btn-sm fa fa-plus float-right"
+                    classButton="btn btn-sm float-right"
+                    iconName="fas fa-plus "
                     modalName="Tambah Buku"
                     buttonLabel=" Tambah Buku"
                     onChangeModal={this.onChangeBuku}
@@ -398,10 +400,23 @@ class Tables extends React.Component {
                   />
                 </CardBody>
               </Card>
-            </Col>
+            </Col> */}
             <Col md="12">
               <Card>
                 <CardBody>
+                  <Row>
+                    <Col xs="12" sm="12" className="text-right">
+                      <ModalAddBuku
+                          classButton="btn btn-sm float-right"
+                          iconName="fas fa-plus "
+                          modalName="Tambah Buku"
+                          buttonLabel=" Tambah Buku"
+                          onChangeModal={this.onChangeBuku}
+                          getAll={this.getAllBuku}
+                        />
+                    </Col>
+                  </Row>
+                  <hr/>
                   <MDBDataTableV5
                     striped
                     small

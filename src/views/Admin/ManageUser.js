@@ -279,20 +279,32 @@ class Tables extends React.Component {
       <>
         <div className="content">
           <Row>
-            <Col md="12">
+            {/* <Col md="12">
               <Card>
                 <CardBody>
                   <ModalAddUser
-                    classButton="btn-primary btn-sm fa fa-plus float-right"
+                    classButton="btn btn-sm float-right"
+                    iconName= "fas fa-plus"
                     modalName="Tambah User"
                     buttonLabel="Tambah User"
                   />
                 </CardBody>
               </Card>
-            </Col>
+            </Col> */}
             <Col md="12">
               <Card>
                 <CardBody>
+                  <Row>
+                    <Col xs="12" sm="12" className="text-right">
+                      <ModalAddUser
+                        classButton="btn btn-sm float-right"
+                        iconName= "fas fa-plus"
+                        modalName="Tambah User"
+                        buttonLabel="Tambah User"
+                      />
+                    </Col>
+                  </Row>
+                  <hr/>
                   <MDBDataTableV5
                     striped
                     small

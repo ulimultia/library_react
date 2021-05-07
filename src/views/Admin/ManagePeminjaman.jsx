@@ -53,7 +53,7 @@ class Pinjam extends React.Component {
         {
           label: "Kode Buku",
           field: "kode",
-          width: 200,
+          width: 100,
         },
         {
           label: "Peminjam",
@@ -63,7 +63,7 @@ class Pinjam extends React.Component {
         {
           label: "Lokasi",
           field: "pencatat",
-          width: 200,
+          width: 100,
         },
         {
           label: "Tanggal Pinjam",
@@ -73,10 +73,10 @@ class Pinjam extends React.Component {
         {
           label: "Batas Pinjam",
           field: "batas",
-          width: 150,
+          width: 200,
         },
         {
-          label: "Action",
+          label: "Aksi",
           field: "action",
           // sort: 'disabled',
           width: 80,
@@ -234,10 +234,8 @@ class Pinjam extends React.Component {
             kode: value.kodeBuku.kodeBuku,
             peminjam: value.user.username,
             pencatat: value.kodeBuku.buku.lokasi.kodeLokasi,
-            batas: moment(value.batasPinjam).format("MMMM Do YYYY"),
-            tanggalPinjam: moment(value.tanggalPinjam).format(
-              "MMMM Do YYYY, h:mm:ss a"
-            ),
+            batas: this.handleTgl(value.batasPinjam),
+            tanggalPinjam: this.handleTgl(value.tanggalPinjam),
             action: (
               <Row>
                 <Button
@@ -257,7 +255,10 @@ class Pinjam extends React.Component {
         });
       });
   };
-
+  handleTgl = (tgl) => {
+    if(tgl === null) return "-";
+    else return new Intl.DateTimeFormat('en-GB', {dateStyle: 'full'}).format(new Date(tgl))
+  }
   render() {
     return (
       <>
@@ -269,7 +270,6 @@ class Pinjam extends React.Component {
                   <Row>
                     <Col xs="12" sm="12" className="text-right"></Col>
                   </Row>
-                  <hr />
                   <MDBDataTableV5
                     striped
                     small

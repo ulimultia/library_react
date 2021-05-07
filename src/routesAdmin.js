@@ -32,17 +32,17 @@ import Logout from "views/Admin/Logout.js";
 
 var routesAdmin = [
   {
-    path: "/profile",
-    name: "Profile",
-    icon: "fa fa-user",
-    component: Profile,
-    layout: "/admin",
-  },
-  {
     path: "/dashboard",
     name: "Dashboard",
     icon: "fa fa-chart-line",
     component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    icon: "fa fa-user",
+    component: Profile,
     layout: "/admin",
   },
   {

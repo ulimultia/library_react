@@ -19,6 +19,7 @@ const ModalAddBuku = (props) => {
     modalName,
     className,
     onChangeModal,
+    iconName,
     getAll,
   } = props;
   const [judulBuku, setJudul] = useState("");
@@ -257,7 +258,8 @@ const ModalAddBuku = (props) => {
   };
   return (
     <div>
-      <Button className={classButton} onClick={toggle}>
+      <Button className={classButton} onClick={toggle} style={{ backgroundColor: "navy" }}>
+        <i className={iconName}></i>
         {buttonLabel}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>

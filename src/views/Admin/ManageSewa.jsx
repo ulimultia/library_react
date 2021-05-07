@@ -31,6 +31,12 @@ class Sewa extends React.Component {
       newKodeBuku: [],
       modal: false,
       modalEdit: false,
+      modalSewakan: false,
+      judulSewa: "",
+      hargaSewa:"",
+      inputUsername:"",
+      inputUsernameHelp: "",
+      idKodeBuku: "", //kode buku yg digenerate
       idSewa: null,
       statuscode: "",
       editNamaGenre: "",
@@ -51,24 +57,29 @@ class Sewa extends React.Component {
           width: 40,
         },
         {
-          label: "Judul",
-          field: "judul",
-          width: 400,
-        },
-        {
           label: "Kode Buku",
           field: "kode",
-          width: 200,
+          width: 100,
+        },
+        {
+          label: "Judul",
+          field: "judul",
+          width: 300,
         },
         {
           label: "Harga Sewa",
           field: "harga",
-          width: 200,
+          width: 100,
         },
+        // {
+        //   label: "Donatur",
+        //   field: "donatur",
+        //   width: 100,
+        // },
         {
-          label: "Donatur",
-          field: "donatur",
-          width: 400,
+          label: "Aksi",
+          field: "aksi",
+          width: 100,
         },
       ],
       data: {},
@@ -135,7 +146,11 @@ class Sewa extends React.Component {
             judul: value.buku.judul,
             kode: value.kodeBuku,
             donatur: this.handleDonatur(value.donatur),
-            harga: value.buku.harga,
+            harga: "Rp " + value.buku.harga + ",-",
+            aksi: <Button className="btn btn-sm btn-primary"
+                    onClick={ ()=> this.toggleSewakan(value)}>
+                    <i className="fas fa-money-check-alt"></i> sewakan
+                  </Button>
           });
         });
         console.log(this.state.newKodeBuku);
@@ -146,6 +161,33 @@ class Sewa extends React.Component {
           },
         });
       });
+  };
+  // modal toggle sewakan
+  toggleSewakan = (value) => {
+    if (this.state.modalSewakan === true) {
+      this.setState({
+        modalSewakan: false,
+        inputUsername: "",
+        inputUsernameHelp: "",
+        idKodeBuku: "",
+        judulSewa: "",
+        hargaSewa: ""
+      });
+    } else {
+      this.setState({
+        modalSewakan: true,
+        idKodeBuku: value.kodeBuku,
+        judulSewa: value.buku.judul,
+        hargaSewa: value.buku.harga
+      });
+    }
+  };
+  onChangeInputUsername= (event) => {
+    this.setState({
+      inputUsername: event.target.value,
+      // namaGenre: event.target.value,
+      // editNamaGenre: event.target.value
+    });
   };
   // add and edit
   submitNow = (e) => {
@@ -260,6 +302,83 @@ class Sewa extends React.Component {
     }
   };
 
+  submitSewa = (e) => {
+    const userHeader = this.authHeader();
+
+    e.preventDefault();
+    let isValid = true;
+    if (this.state.inputUsername === "") {
+      isValid = false;
+      this.setState({
+        inputUsernameHelp: "Tidak boleh kosong",
+      });
+    } else {
+      this.setState({
+        inputUsernameHelp: "",
+      });
+    }
+
+    if (isValid === true) {
+      const sewaDto = {
+        kodeBuku: {kodeBuku : this.state.idKodeBuku},
+        peminjam: {username: this.state.inputUsername},
+        pencatat: {id: this.state.session.data.id},
+        harga: this.state.hargaSewa,
+      };
+      console.log(sewaDto)
+      axios.post("http://localhost:8080/admin/peminjaman/sewa", sewaDto, {
+        headers: userHeader,
+      })
+      .then((respon) => {
+        if (respon.status === 200) {
+          // console.log(respon.message);
+          MySwal.fire({
+            icon: "success",
+            title: "Sukses!!!",
+            text: "Buku berhasil disewa ....",
+          });
+          this.toggleSewakan();
+        }
+        this.getAllSewa();
+      })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+          if (error.response.status === 400) {
+            MySwal.fire({
+              icon: "error",
+              title: "Gagal!!!",
+              text: "Saldo anda tidak mencukupi!",
+            });
+          }
+          if (error.response.status === 410) {
+            MySwal.fire({
+              icon: "error",
+              title: "Gagal!!!",
+              text: "Buku tidak tersedia atau sudah dipinjam",
+            });
+          }
+        } else if (error.request) {
+          console.log(error.request);
+
+          MySwal.fire({
+            icon: "error",
+            title: "Gagal!!!",
+            text: "Kode buku salah!",
+          });
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          MySwal.fire({
+            icon: "error",
+            title: "Gagal!!!",
+            text: "Kode buku salah!",
+          });
+          console.log("Error", error.message);
+        }
+      });
+    }
+  }
+
   render() {
     return (
       <>
@@ -369,6 +488,69 @@ class Sewa extends React.Component {
             </Col>
           </Row>
         </div>
+        <Modal
+          isOpen={this.state.modalSewakan}
+          toggle={this.toggleSewakan}
+          className="modal-sm"
+        >
+          <ModalHeader
+            toggle={this.toggleSewakan}
+            style={{
+              backgroundImage: "linear-gradient(to left, #44a08d, #093637)",
+              color: "#ffffff",
+            }}
+          >
+            Sewa Buku
+          </ModalHeader>
+          <form id="form">
+            <ModalBody className="mx-4">
+              <FormGroup>
+                <Label for="kodeBuku">Kode Buku</Label>
+                <Input
+                  type="text"
+                  name="kodeBuku"
+                  id="kodeBuku"
+                  value={this.state.idKodeBuku}
+                  hidden={false}
+                  readOnly={true}
+                />
+                {console.log(this.state.idKodeBuku)}
+              </FormGroup>
+              <FormGroup>
+                <Label for="jdlBukuSewa">Judul Buku</Label>
+                <Input
+                  type="text"
+                  name="jdlBukuSewa"
+                  id="jdlBukuSewa"
+                  value={this.state.judulSewa}
+                  hidden={false}
+                  readOnly={true}
+                />
+                {/* {console.log(this.state.judulSewa)} */}
+              </FormGroup>
+              <FormGroup>
+                <Label for="namaKategori">Penyewa</Label>
+                <Input
+                  type="text"
+                  name="inputUsername"
+                  id="inputUsername"
+                  placeholder="username"
+                  value={this.state.inputUsername}
+                  onChange={this.onChangeInputUsername}
+                />
+                <FormText color="danger">{this.state.inputUsernameHelp}</FormText>
+              </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+              <Button type="reset" color="secondary" onClick={this.toggleSewakan}>
+                Tutup
+              </Button>
+              <Button color="info" onClick={this.submitSewa}>
+                Sewakan
+              </Button>
+            </ModalFooter>
+          </form>
+        </Modal>
       </>
     );
   }

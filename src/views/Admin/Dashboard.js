@@ -350,7 +350,7 @@ class Dashboard extends React.Component {
                     </Col>
                     <Col md="8" xs="7">
                       <div className="numbers">
-                        <p className="card-category">Total Peminjaman Buku</p>
+                        <p className="card-category">Total Sewa Buku</p>
                         <CardTitle tag="p">
                           {this.state.pinjamanLength}
                         </CardTitle>
