@@ -30,24 +30,42 @@ const ModalTopupUser = (props) => {
   const onChangeTopup = (event) => {
     setTopup(event.target.value);
   };
+  const authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("userdata"));
+    if (user && user.data.token) {
+      return {
+        authorization: `Bearer ${user.data.token}`,
+      };
+    } else {
+      return null;
+    }
+  };
   const toggle = () => {
     setModal(!modal);
   };
   useEffect(() => {
+    const userHeader = authHeader();
+
     axios
-      .get("http://localhost:8080/user/get-detail/" + id)
+      .get("http://localhost:8080/user/get-detail/" + id, {
+        headers: userHeader,
+      })
       .then((response) => {
         setCurrentSaldo(response.data.saldo);
       });
   }, []);
 
   const handleTopup = () => {
+    const userHeader = authHeader();
+
     const topup = {
       transaksi: "topup",
       saldo: nominal,
     };
     axios
-      .put("http://localhost:8080/user/tambahsaldo/" + id, topup)
+      .put("http://localhost:8080/user/tambahsaldo/" + id, topup, {
+        headers: userHeader,
+      })
       .then((response) => {
         console.log(response);
         setCurrentSaldo(response.data.data.saldo);
