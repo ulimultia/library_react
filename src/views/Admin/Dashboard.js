@@ -200,7 +200,7 @@ class Dashboard extends React.Component {
           chart: response.data.data,
         });
         const perulangan = this.state.chart;
-        perulangan.forEach((perulangan) => {
+        perulangan.slice(-4).forEach((perulangan) => {
           this.state.chartLabel.push(perulangan.judul);
           this.state.dataChart.push(perulangan.total);
         });
@@ -229,7 +229,7 @@ class Dashboard extends React.Component {
         {
           borderColor: "#6bd098",
           backgroundColor: "#6bd098",
-          pointRadius: 0,
+          pointRadius: 3,
           pointHoverRadius: 0,
           borderWidth: 3,
           data: this.state.dataChart,
@@ -274,6 +274,9 @@ class Dashboard extends React.Component {
             ticks: {
               padding: 20,
               fontColor: "#9f9f9f",
+              autoSkip: false,
+              maxRotation: 70,
+              minRotation: 70,
             },
           },
         ],

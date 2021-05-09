@@ -279,7 +279,7 @@ class TabelUser extends React.Component {
                     defaultValue={this.state.detailUser.kelamin}
                   >
                     <option defaultChecked>Pilih Salah Satu</option>
-                    <option value="Laki-Laki">Laki-Laki</option>
+                    <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                   </select>
                   <div class="input-group-append">

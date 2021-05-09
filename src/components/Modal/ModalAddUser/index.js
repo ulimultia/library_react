@@ -217,7 +217,12 @@ const ModalAddUser = (props) => {
 
   return (
     <div>
-      <Button className={classButton} onClick={toggle} style={{ backgroundColor: "navy" }}><i className={iconName}></i>
+      <Button
+        className={classButton}
+        onClick={toggle}
+        style={{ backgroundColor: "navy" }}
+      >
+        <i className={iconName}></i>
         {buttonLabel}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
@@ -344,7 +349,7 @@ const ModalAddUser = (props) => {
                   onChange={onChangeKelamin}
                 >
                   <option value="Pilih Salah Satu">Pilih Salah Satu</option>
-                  <option value="Laki-Laki">Laki-Laki</option>
+                  <option value="Laki-laki">Laki-laki</option>
                   <option value="Perempuan">Perempuan</option>
                 </select>
                 <div class="input-group-append">

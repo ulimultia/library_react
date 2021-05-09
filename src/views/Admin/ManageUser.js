@@ -298,13 +298,13 @@ class Tables extends React.Component {
                     <Col xs="12" sm="12" className="text-right">
                       <ModalAddUser
                         classButton="btn btn-sm float-right"
-                        iconName= "fas fa-plus"
+                        iconName="fas fa-plus"
                         modalName="Tambah User"
                         buttonLabel="Tambah User"
                       />
                     </Col>
                   </Row>
-                  <hr/>
+                  <hr />
                   <MDBDataTableV5
                     striped
                     small
@@ -378,7 +378,7 @@ class Tables extends React.Component {
                     onChange={this.onChangeUser}
                   >
                     <option defaultChecked>Pilih Salah Satu</option>
-                    <option value="Laki-Laki">Laki-Laki</option>
+                    <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                   </select>
                   <div class="input-group-append">
