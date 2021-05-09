@@ -1,11 +1,32 @@
-import React from 'react'
+import React from "react";
 
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, Route } from "react-router-dom";
+import LayoutAdmin from "../../views/Admin/Dashboard";
 
 const cekRoles = () => {
-  const rolee = localStorage.getItem('userdata');
-  if(rolee===null) {
-      return <Redirect to="/"/>
+  const admin = ["ADMIN"];
+  const peminjam = ["PEMINJAM"];
+  const rolee = localStorage.getItem("userdata");
+  const user = JSON.parse(localStorage.getItem("userdata"));
+  if (rolee === null) {
+    return <Redirect to="/" />;
   }
-}
+  if (JSON.stringify(user.data.role) == JSON.stringify(admin)) {
+    console.log("admin");
+
+    return (
+      <Route
+        path="/admin/dashboard"
+        render={(props) => <LayoutAdmin {...props} />}
+      />
+    );
+    // return <Redirect to="admin/dashboard" />;
+    // return <Redirect push to="/admin/dashboard" />;
+    // return <Link to="/admin/dashboard"></Link>;
+    // return (window.location.href = "/admin/dashboard");
+  }
+  if (JSON.stringify(user.data.role) == JSON.stringify(peminjam)) {
+    return <Redirect to="peminjam/dashboard" />;
+  }
+};
 export default cekRoles;

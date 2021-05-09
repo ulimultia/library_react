@@ -37,7 +37,7 @@ const RegisterForm = () => {
   const [labelNIK, setLabelNIK] = useState("");
   const [labelNama, setLabelNama] = useState("");
   const [labelEmail, setLabelEmail] = useState("");
-  const [kelaminHelp, setkelaminHelp] = useState("")
+  const [kelaminHelp, setkelaminHelp] = useState("");
   const [labelUsername, setLabelUsername] = useState("");
   const [labelTempatLahir, setLabelTempatLahir] = useState("");
   const [labelTanggalLahir, setLabelTanggalLahir] = useState("");
@@ -101,25 +101,24 @@ const RegisterForm = () => {
   };
 
   const submitRegister = () => {
+    setFoto("person-icon.png");
+    setRole(["PEMINJAM"]);
     let isValid = true;
     // validasi NIK
     if (nik === "") {
-      isValid=false;
+      isValid = false;
       setLabelNIK("Tidak boleh kosong");
-    }
-    else if(nik.length !== 16) {
-      isValid=false;
+    } else if (nik.length !== 16) {
+      isValid = false;
       setLabelNIK("Harus 16 digit");
-    }
-    else if(isNaN(nik) === true){
-      isValid=false;
+    } else if (isNaN(nik) === true) {
+      isValid = false;
       setLabelNIK("Harus angka");
-    }
-    else {
+    } else {
       setLabelNIK("");
     }
     if (namaLengkap === "") {
-      isValid=false;
+      isValid = false;
       setLabelNama("Tidak boleh kosong");
     } else {
       setLabelNama("");
@@ -130,72 +129,68 @@ const RegisterForm = () => {
     // } else {
     //   setLabelEmail("");
     // }
-    if(kelamin === ""){
-      isValid=false;
+    if (kelamin === "") {
+      isValid = false;
       setkelaminHelp("Tidak boleh kosong");
     } else {
       setkelaminHelp("");
     }
     if (username === "") {
-      isValid=false;
+      isValid = false;
       setLabelUsername("Tidak boleh kosong");
-    } else if(username.length < 6){
-      isValid=false;
+    } else if (username.length < 6) {
+      isValid = false;
       setLabelUsername("Minimal 8 karakter");
     } else {
       setLabelUsername("");
     }
     if (tempatLahir === "") {
-      isValid=false;
+      isValid = false;
       setLabelTempatLahir("Tidak boleh kosong");
     } else {
       setLabelTempatLahir("");
     }
     if (tanggalLahir === "") {
-      isValid=false;
+      isValid = false;
       setLabelTanggalLahir("Tidak boleh kosong");
     } else {
       setLabelTanggalLahir("");
     }
     if (alamat === "") {
-      isValid=false;
+      isValid = false;
       setLabelAlamat("Tidak boleh kosong");
     } else {
       setLabelAlamat("");
     }
     if (telepon === "") {
-      isValid=false;
+      isValid = false;
       setLabelTelepon("Tidak boleh kosong");
     } else {
       setLabelTelepon("");
     }
     if (password === "") {
-      isValid=false;
+      isValid = false;
       setLabelPassword("Tidak boleh kosong");
-    } else if(password.length < 6 ){
-      isValid=false;
+    } else if (password.length < 6) {
+      isValid = false;
       setLabelPassword("Minimal 6 karakter");
     } else {
       setLabelPassword("");
     }
     if (konfirmasiPassword === "") {
-      isValid=false;
+      isValid = false;
       setLabelKonfirmasiPassword("Tidak boleh kosong");
-    } else if(konfirmasiPassword !== password){
-      isValid=false;
+    } else if (konfirmasiPassword !== password) {
+      isValid = false;
       setLabelKonfirmasiPassword("Tidak sesuai");
-    } else if(password.length < 6 ){
-      isValid=false;
+    } else if (password.length < 6) {
+      isValid = false;
       setLabelPassword("Minimal 6 karakter");
     } else {
       setLabelKonfirmasiPassword("");
     }
 
-    if(isValid === true){
-      setFoto(
-        "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png"
-      );
-      setRole(["PEMINJAM"]);
+    if (isValid === true) {
       const data = {
         //kiri sesuain api kanan dari fungsinya
         username: username,
@@ -210,37 +205,44 @@ const RegisterForm = () => {
         telp: telepon,
         tempatLahir: tempatLahir,
       };
-  
-      axios.post("http://localhost:8080/auth/register", data) // memasukkan inputan ke post api
-      .then((res) => {
-        console.log(res); // menampilkan hasil response dari data inputan yang dikirim
-        if(res.data.status === 201){
+
+      axios
+        .post("http://localhost:8080/auth/register", data) // memasukkan inputan ke post api
+        .then((res) => {
+          console.log(res); // menampilkan hasil response dari data inputan yang dikirim
+          if (res.data.status === 201) {
+            MySwal.fire({
+              title: "Sukses!!!",
+              icon: "success",
+              text: "Resgitrasi akun Anda berhasil ...",
+            });
+            setNik("");
+            setNamaLengkap("");
+            setKelamin("");
+            setUsername("");
+            setPassword("");
+            setKonfirmasiPassword("");
+            setTempatLahir("");
+            setTanggalLahir("");
+            setAlamat("");
+            setTelepon("");
+          }
+          return <Redirect to="/" />;
+        })
+        .catch(function (error) {
           MySwal.fire({
-            title: "Sukses!!!",
-            icon: "success",
-            text: "Resgitrasi akun Anda berhasil ...",
+            icon: "error",
+            title: "Gagal!!!",
+            text: error.response.data.message,
           });
-          setNik("");setNamaLengkap("");setKelamin("");setUsername("");setPassword("");setKonfirmasiPassword("");
-          setTempatLahir("");setTanggalLahir(""); setAlamat(""); setTelepon("");
-        }
-        return <Redirect to="/" />;
-      })
-      .catch(function (error) {
-        MySwal.fire({
-          icon: "error",
-          title: "Gagal!!!",
-          text: error.response.data.message,
         });
-      });
-    }
-    else {
+    } else {
       MySwal.fire({
         title: "Gagal!!!",
         icon: "error",
         text: "Cek kembali kelengkapan data Anda ...",
       });
     }
-    
   };
   return (
     <>
@@ -305,9 +307,7 @@ const RegisterForm = () => {
                     <option value="Perempuan">Perempuan </option>
                     <option value="Laki-laki">Laki-laki </option>
                   </Input>
-                  <FormText color="danger">
-                    {kelaminHelp}
-                  </FormText>
+                  <FormText color="danger">{kelaminHelp}</FormText>
                 </FormGroup>
               </Col>
               <Col xs="12" sm="6">
