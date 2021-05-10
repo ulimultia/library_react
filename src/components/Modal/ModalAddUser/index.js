@@ -29,7 +29,7 @@ const ModalAddUser = (props) => {
   const [labelTanggal, setLabelTanggal] = useState("");
   const [alamatAdd, setAlamat] = useState("");
   const [labelAlamat, setLabelAlamat] = useState("");
-  const [fotoAdd, setFoto] = useState("");
+  const [fotoAdd, setFoto] = useState("person-icon.png");
   const [labelFoto, setLabelFoto] = useState("");
   const [roleAdd, setRole] = useState([]);
   const [labelRole, setLabelRole] = useState("");
@@ -39,7 +39,7 @@ const ModalAddUser = (props) => {
   const [passwordAdd, setPassword] = useState("");
   const [labelPassword, setLabelPassword] = useState("");
   const [modal, setModal] = useState(false);
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const authHeader = () => {
     const user = JSON.parse(localStorage.getItem("userdata"));
     if (user && user.data.token) {
@@ -81,19 +81,20 @@ const ModalAddUser = (props) => {
     setPassword(event.target.value);
   };
   const toggle = () => setModal(!modal);
-  const fileChange = async (e) => {
-    console.log(e.target.files);
-    console.log(e);
-    console.log(file);
+  // const fileChange = async (e) => {
+  //   console.log(e.target.files);
+  //   console.log(e);
+  //   console.log(file);
 
-    await setFile(e.target.files[0]);
-    // await setFiles([]);
-    // await this.setState({
-    //   file: e.target.files[0],
-    // });
-    console.log(file);
-  };
+  //   await setFile(e.target.files[0]);
+  //   // await setFiles([]);
+  //   // await this.setState({
+  //   //   file: e.target.files[0],
+  //   // });
+  //   console.log(file);
+  // };
   const handleAdd = () => {
+    setFoto("person-icon.png");
     const userHeader = authHeader();
 
     var isValid = true;
@@ -160,56 +161,56 @@ const ModalAddUser = (props) => {
     } else {
       setLabelPassword("");
     }
-    const data = new FormData();
-    data.append("file", file);
-    if (file == null) {
-      isValid = false;
-      setLabelFoto("Tidak boleh kosong");
-    } else {
-      setLabelFoto("");
-    }
+    // const data = new FormData();
+    // data.append("file", file);
+    // if (file == null) {
+    //   isValid = false;
+    //   setLabelFoto("Tidak boleh kosong");
+    // } else {
+    //   setLabelFoto("");
+    // }
 
     if (isValid === true) {
+      const register = {
+        //kiri sesuain api kanan dari fungsinya
+        username: usernameAdd,
+        password: passwordAdd,
+        role: role,
+        nama: namaAdd,
+        alamat: alamatAdd,
+        foto: fotoAdd,
+        kelamin: kelaminAdd,
+        nik: nikAdd,
+        tanggalLahir: tanggalAdd,
+        telp: teleponAdd,
+        tempatLahir: tempatAdd,
+      };
       axios
-        .post("http://localhost:8080/api/v1/files/uploadfoto", data, {
+        .post("http://localhost:8080/auth/register", register, {
           headers: userHeader,
-        })
+        }) // memasukkan inputan ke post api
         .then((res) => {
-          setFile(null);
-          const register = {
-            //kiri sesuain api kanan dari fungsinya
-            username: usernameAdd,
-            password: passwordAdd,
-            role: role,
-            nama: namaAdd,
-            alamat: alamatAdd,
-            foto: res.data.name,
-            kelamin: kelaminAdd,
-            nik: nikAdd,
-            tanggalLahir: tanggalAdd,
-            telp: teleponAdd,
-            tempatLahir: tempatAdd,
-          };
-          axios
-            .post("http://localhost:8080/auth/register", register, {
-              headers: userHeader,
-            }) // memasukkan inputan ke post api
-            .then((res) => {
-              console.log(res); // menampilkan hasil response dari data inputan yang dikirim
-              MySwal.fire({
-                title: "Berhasil!!!",
-                icon: "success",
-                text: "Berhasil Menambahkan User",
-              });
-              toggle();
-            })
-            .catch(function (error) {
-              if (error.response) {
-                console.log(error.response.data);
-              }
-            });
+          console.log(res); // menampilkan hasil response dari data inputan yang dikirim
+          MySwal.fire({
+            title: "Berhasil!!!",
+            icon: "success",
+            text: "Berhasil Menambahkan User",
+          });
+          toggle();
+        })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data);
+          }
         });
-      console.log(role);
+      // axios
+      //   .post("http://localhost:8080/api/v1/files/uploadfoto", data, {
+      //     headers: userHeader,
+      //   })
+      //   .then((res) => {
+      //     // setFile(null);
+      //   });
+      // console.log(role);
 
       //   return <Redirect to="/admin/user" />;
     }
@@ -439,7 +440,7 @@ const ModalAddUser = (props) => {
                 </div>
               </div>
 
-              <div class="input-group mb-2">
+              {/* <div class="input-group mb-2">
                 <label for="labelFileAdd">Foto</label>
                 <span class="font-weight-lighter ml-3" id="labelFileAdd">
                   {labelFoto}
@@ -464,7 +465,7 @@ const ModalAddUser = (props) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <ModalFooter>
                 <Button
                   type="button"
