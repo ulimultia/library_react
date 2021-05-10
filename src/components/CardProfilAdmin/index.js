@@ -140,7 +140,8 @@ const CardProfilAdmin = () => {
   };
 
   // validasi dan feedback edit profil
-  const editNow = () => {
+  const editNow = (e) => {
+    e.preventDefault();
     const userHeader = authHeader();
 
     // console.log("klik edit profil");
@@ -210,7 +211,7 @@ const CardProfilAdmin = () => {
     } else {
       setEdKelaminHelp("");
     }
-    if (file == null) {
+    if (file === null && isValid === true) {
       const fileNull = {
         nik: edNik,
         nama: edNama,

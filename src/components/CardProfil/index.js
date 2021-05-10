@@ -212,7 +212,8 @@ const CardProfil = () => {
   };
 
   // validasi dan feedback edit profil
-  const editNow = () => {
+  const editNow = (e) => {
+    e.preventDefault();
     var isValid = true;
     // validasi NIK
     if (isNaN(edNik) === true) {
@@ -280,7 +281,7 @@ const CardProfil = () => {
       setEdKelaminHelp("");
     }
 
-    if (file == null) {
+    if (file === null && isValid=== true) {
       const fileNull = {
         nik: edNik,
         nama: edNama,
