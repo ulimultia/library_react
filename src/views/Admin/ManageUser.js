@@ -47,6 +47,11 @@ class Tables extends React.Component {
       tempatLahir: "",
       tanggalLahir: "",
       alamat: "",
+      labelNama: "",
+      labelKelamin: "",
+      labelTempatLahir: "",
+      labelTanggalLahir: "",
+      labelAlamat: "",
       columTable: [
         {
           label: "No",
@@ -169,26 +174,79 @@ class Tables extends React.Component {
 
   handleEdit = (id) => {
     const userHeader = this.authHeader();
+    var isValid = true;
 
-    const editData = {
-      nama: this.state.nama,
-      kelamin: this.state.kelamin,
-      tempatLahir: this.state.tempatLahir,
-      tanggalLahir: this.state.tanggalLahir,
-      alamat: this.state.alamat,
-      telp: this.state.telp,
-      nik: this.state.nik,
-      foto: this.state.foto,
-    };
-    axios
-      .put("http://localhost:8080/user/edit/" + id, editData, {
-        headers: userHeader,
-      })
-      .then((response) => {
-        console.log(response);
+    if (this.state.nama === "") {
+      isValid = false;
+      this.setState({
+        labelNama: "Tidak boleh kosong",
       });
-    MySwal.fire("Success", "Berhasil Mengubah Data", "success");
-    this.toggleEdit();
+    } else {
+      this.setState({
+        labelNama: "",
+      });
+    }
+    if (this.state.alamat === "") {
+      isValid = false;
+      this.setState({
+        labelAlamat: "Tidak boleh kosong",
+      });
+    } else {
+      this.setState({
+        labelAlamat: "",
+      });
+    }
+    if (this.state.kelamin === "") {
+      isValid = false;
+      this.setState({
+        labelKelamin: "Tidak boleh kosong",
+      });
+    } else {
+      this.setState({
+        labelKelamin: "",
+      });
+    }
+    if (this.state.tempatLahir === "") {
+      isValid = false;
+      this.setState({
+        labelTempatLahir: "Tidak boleh kosong",
+      });
+    } else {
+      this.setState({
+        labelTempatLahir: "",
+      });
+    }
+    if (this.state.tanggalLahir === "") {
+      isValid = false;
+      this.setState({
+        labelTanggalLahir: "Tidak boleh kosong",
+      });
+    } else {
+      this.setState({
+        labelTanggalLahir: "",
+      });
+    }
+    if (isValid === true) {
+      const editData = {
+        nama: this.state.nama,
+        kelamin: this.state.kelamin,
+        tempatLahir: this.state.tempatLahir,
+        tanggalLahir: this.state.tanggalLahir,
+        alamat: this.state.alamat,
+        telp: this.state.telp,
+        nik: this.state.nik,
+        foto: this.state.foto,
+      };
+      axios
+        .put("http://localhost:8080/user/edit/" + id, editData, {
+          headers: userHeader,
+        })
+        .then((response) => {
+          console.log(response);
+        });
+      MySwal.fire("Success", "Berhasil Mengubah Data", "success");
+      this.toggleEdit();
+    }
   };
   toggleEdit = (id) => {
     if (this.state.modalEdit === true) {
@@ -355,10 +413,9 @@ class Tables extends React.Component {
                 <label for="nama" class="col-form-label">
                   Nama
                 </label>
-                <span
-                  class="font-weight-lighter ml-3"
-                  id="labelNamaEdit"
-                ></span>
+                <span class="font-weight-lighter ml-3" id="labelNamaEdit">
+                  {this.state.labelNama}
+                </span>
                 <div class="input-group">
                   <input
                     type="text"
@@ -375,10 +432,9 @@ class Tables extends React.Component {
                   </div>
                 </div>
                 <label for="labelKelamin">Jenis Kelamin</label>
-                <span
-                  class="font-weight-lighter ml-3"
-                  id="labelKelaminEdit"
-                ></span>
+                <span class="font-weight-lighter ml-3" id="labelKelaminEdit">
+                  {this.state.labelKelamin}
+                </span>
                 <div class="input-group">
                   <select
                     class="custom-select"
@@ -403,7 +459,9 @@ class Tables extends React.Component {
                 <span
                   class="font-weight-lighter ml-3"
                   id="labelTempatLahirEdit"
-                ></span>
+                >
+                  {this.state.labelTempatLahir}
+                </span>
                 <div class="input-group">
                   <input
                     type="text"
@@ -425,7 +483,9 @@ class Tables extends React.Component {
                 <span
                   class="font-weight-lighter ml-3"
                   id="labelTanggalLahirEdit"
-                ></span>
+                >
+                  {this.state.labelTanggalLahir}
+                </span>
                 <div class="input-group">
                   <input
                     type="date"
@@ -442,10 +502,9 @@ class Tables extends React.Component {
                 <label for="alamat" class="col-form-label">
                   Alamat:
                 </label>
-                <span
-                  class="font-weight-lighter ml-3"
-                  id="labelAlamatEdit"
-                ></span>
+                <span class="font-weight-lighter ml-3" id="labelAlamatEdit">
+                  {this.state.labelAlamat}
+                </span>
                 <div class="input-group">
                   <input
                     type="text"
