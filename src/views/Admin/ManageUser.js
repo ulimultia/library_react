@@ -39,10 +39,13 @@ class Tables extends React.Component {
       detailUser: [],
       session: {},
       btn: "",
+      nik: "",
+      telp: "",
+      foto: "",
       nama: "",
       kelamin: "",
       tempatLahir: "",
-      tanggaLahir: "",
+      tanggalLahir: "",
       alamat: "",
       columTable: [
         {
@@ -163,6 +166,7 @@ class Tables extends React.Component {
       console.log(this.state.userNew);
     });
   };
+
   handleEdit = (id) => {
     const userHeader = this.authHeader();
 
@@ -170,8 +174,11 @@ class Tables extends React.Component {
       nama: this.state.nama,
       kelamin: this.state.kelamin,
       tempatLahir: this.state.tempatLahir,
-      tanggalLahir: this.state.tanggaLahir,
+      tanggalLahir: this.state.tanggalLahir,
       alamat: this.state.alamat,
+      telp: this.state.telp,
+      nik: this.state.nik,
+      foto: this.state.foto,
     };
     axios
       .put("http://localhost:8080/user/edit/" + id, editData, {
@@ -221,6 +228,9 @@ class Tables extends React.Component {
           alamat: response.data.alamat,
           tanggalLahir: response.data.tanggalLahir,
           tempatLahir: response.data.tempatLahir,
+          nik: response.data.nik,
+          foto: response.data.foto,
+          telp: response.data.telp,
         });
       });
   };

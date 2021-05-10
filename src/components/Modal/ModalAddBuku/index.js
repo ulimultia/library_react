@@ -151,7 +151,7 @@ const ModalAddBuku = (props) => {
     // await this.setState({
     //   file: e.target.files[0],
     // });
-    await console.log(file);
+    // await console.log(file);
   };
   const handleAdd = async () => {
     const user = authHeader();
@@ -223,42 +223,60 @@ const ModalAddBuku = (props) => {
     } else {
       setLabelDeskripsi("");
     }
-    postFiles();
-    const tambahBuku = {
-      judul: judulBuku,
-      pengarang: pengarangBuku,
-      tahunTerbit: tahunTerbit,
-      sampul: files,
-      isbn: isbnBuku,
-      harga: hargaBuku,
-      deskripsi: deskripsiBuku,
-      kategori: kategoriObj,
-      penerbit: penerbitObj,
-      lokasi: lokasiObj,
-      genre: genreObj,
-    };
-    console.log(tambahBuku);
-    console.log(files);
+    const data = new FormData();
+    data.append("file", file);
+    if (file == null) {
+      isValid = false;
+      setLabelSampul("Tidak boleh kosong");
+    } else {
+      setLabelSampul("");
+    }
+
+    // console.log(files);
     if (isValid === true) {
       axios
-        .post("http://localhost:8080/api/v1/buku/add", tambahBuku, {
+        .post("http://localhost:8080/api/v1/files/uploadsampul", data, {
           headers: user,
         })
-        .then((response) => {
-          console.log(response);
+        .then((res) => {
+          setFile(null);
+          const tambahBuku = {
+            judul: judulBuku,
+            pengarang: pengarangBuku,
+            tahunTerbit: tahunTerbit,
+            sampul: res.data.name,
+            isbn: isbnBuku,
+            harga: hargaBuku,
+            deskripsi: deskripsiBuku,
+            kategori: kategoriObj,
+            penerbit: penerbitObj,
+            lokasi: lokasiObj,
+            genre: genreObj,
+          };
+          axios
+            .post("http://localhost:8080/api/v1/buku/add", tambahBuku, {
+              headers: user,
+            })
+            .then((response) => {
+              toggle();
+              getAll();
+              console.log(response);
+            });
+          MySwal.fire({
+            title: "Berhasil!!!",
+            icon: "success",
+            text: "Berhasil Menambahkan Buku",
+          });
         });
-      MySwal.fire({
-        title: "Berhasil!!!",
-        icon: "success",
-        text: "Berhasil Menambahkan Buku",
-      });
-      toggle();
-      getAll();
     }
   };
   return (
     <div>
-      <Button className={classButton} onClick={toggle} style={{ backgroundColor: "navy" }}>
+      <Button
+        className={classButton}
+        onClick={toggle}
+        style={{ backgroundColor: "navy" }}
+      >
         <i className={iconName}></i>
         {buttonLabel}
       </Button>
