@@ -21,6 +21,12 @@ Nantinya versi dari npm anda akan tertampil pada command line masing2
 - Setelah npm terpasang, silahkan buka directory repository library_react yang sudah anda pull sebelumnya
 - Pada command line directory terkait, silahkan menjalankan perintah
 
+`$ npm install`
+
+Lama proses installasi akan bervariasi tergantung kecepatan internet masing2 user
+
+- Setelah proses selesai, silahkan menjalankan perintah
+
 `$ npm start`
 
 *Sebelum menjalankan perintah ini, anda sudah harus menjalankan backend java spring yang disebutkan di atas sebelumnya!*
